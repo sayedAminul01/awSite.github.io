@@ -1,0 +1,865 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+/* General body transition for smooth color change */
+
+
+body {
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+
+
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #363a3b;
+    color: white;
+}
+
+/* Header, search bar, and hero section for dark mode */
+.header, .search-bar, .hero {
+    transition: background-color 0.3s ease;
+}
+
+.header.dark-mode, .search-bar.dark-mode, .hero.dark-mode {
+    background-color: #1f1f1f;
+}
+
+/* Navigation links */
+.nav-links a {
+    color: black; /* Default light mode color */
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #30bb34;
+}
+
+.nav-links a.dark-mode {
+    color: white;
+}
+
+.nav-links a.dark-mode:hover {
+    color: #4CAF50;
+}
+
+/* Toggle Button Styles */
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 5px;
+    background-color: #4b4949;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: #000000;
+    transform: scale(1.1);
+}
+
+#theme-icon {
+    width: 24px;
+    height: 20px;
+}
+
+/* Dark Mode Button Style */
+body.dark-mode .theme-toggle {
+    background-color: #444;
+}
+
+body.dark-mode .theme-toggle:hover {
+    background-color: #666;
+}
+
+
+/* Dark Mode Styles  End */
+
+
+/* Navbar Section */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensures the header stays above other content */
+    width: 100%;
+
+
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 2.2rem;
+    flex: 1;
+    color: #e7e7e7;
+
+}
+
+.logo a {
+    text-decoration: none;
+    color: #3aa33f;
+}
+
+.logo a:hover {
+    color: #f0f0f0;
+}
+
+nav {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+}
+
+.nav-links li {
+    margin: 0 1rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #4CAF50;
+}
+
+.search-bar {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.search-bar input {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 3px 0 0 3px;
+}
+
+
+
+.search-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+
+
+
+
+
+.search-bar button {
+    padding: 0.5rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+    background-color: #253126;
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.menu-toggle:hover {
+    opacity: 0.8;
+}
+
+.menu-toggle span {
+    height: 3px;
+    width: 25px;
+    background-color: white;
+    margin: 2px 0;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.menu-toggle:hover span {
+    background-color: #4CAF50;
+}
+
+@media screen and (max-width: 768px) {
+    .header {
+        justify-content: space-between;
+    }
+
+    .logo {
+        flex: none;
+    }
+
+    nav {
+        flex: none;
+        width: 100%;
+        order: 3;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .nav-links {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        margin-top: 1rem;
+        transition: max-height 0.4s ease, opacity 0.4s ease;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+    }
+
+    .nav-links.active {
+        display: flex;
+        max-height: 300px;
+        opacity: 1;
+    }
+
+    .nav-links li {
+        margin: 0.5rem 0;
+    }
+
+    .search-bar {
+        width: 100%;
+        margin-top: 1rem;
+        order: 4;
+        justify-content: flex-start;
+    }
+
+    .search-bar input {
+        flex-grow: 1;
+    }
+}
+
+/* Transformations when menu is active */
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+
+
+/* Add this to your existing styles.css */
+
+#search-results {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 20px;
+    padding: 10px;
+    display: none;
+}
+
+#search-results h3 {
+    margin-top: 0;
+}
+
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+
+
+
+/* Existing styles... */
+
+/* Hero Section */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.hero-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.hero-slider img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.1);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.hero-slider img.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.hero-slider img.next {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.hero-content {
+    position: absolute;
+    top: 27%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.884); /* Semi-transparent background */
+    padding: 20px;
+    border-radius: 10px;
+    opacity: 10;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.hero-content.show {
+    opacity: 2;
+    transform: translate(-50%, -50%);
+}
+
+.zoom-in.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+
+
+.hero-content h1 {
+    font-size: 3vw;
+    margin-bottom: .3rem;
+}
+
+
+.hero-content p {
+    font-size: 1.4vw;
+    margin-bottom: 1rem;
+}
+
+.hero-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 1vw;
+    color: white;
+    background-color: #4CAF50;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.hero-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+
+
+
+
+
+/* Main Content */
+#content {
+    max-width: 800px;
+    margin: 5rem auto;
+    padding: 0 1rem;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: hwb(122 30% 31%) 30% 31%;
+}
+
+p {
+    font-size: 1.1rem;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+}
+
+.cta-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #45a049;
+}
+
+
+/* Responsive Design Adjustments */
+@media screen and (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 3vw;
+    }
+
+    .hero-content p,
+    .hero-button {
+        font-size: 1.7vw;
+    }
+
+    .hero-content {
+        padding: 10px;
+    }
+
+    .hero-button {
+        padding: 0.5rem .8rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 4vw;
+    }
+
+    .hero-content p,
+    .hero-button {
+        font-size: 1.5vw;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .hero {
+        height: 50vh;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .cta-button {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+}
+
+
+
+
+
+/* WhatsApp Button Styles */
+.whatsapp-button {
+    position: fixed;
+    bottom: 80px; /* Position above the dark mode toggle button */
+    right: 20px;
+    background-color: #25D366;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 1001; /* Ensure it's on top of other elements */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+    padding: 6px;
+}
+
+.whatsapp-button img {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.whatsapp-button:hover {
+    background-color: #1DA851;
+    transform: scale(1.1);
+}
+
+
+
+
+/* Services Section */
+.services {
+    /* padding: 4rem 2rem; */
+    padding-top: 128px;
+    margin-top: -202px;
+    /* background-color: #f5f5f5; */
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #1DA851;
+}
+
+.service-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.service-card {
+    background-color: #272525;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.service-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover img {
+    transform: scale(1.1);
+}
+
+.service-card h3 {
+    font-size: 1.5rem;
+    margin: 1rem;
+    color: #b4b0b0;
+}
+
+.service-card p {
+    font-size: 1rem;
+    margin: 0 1rem 1rem;
+    color: #948a8a;
+}
+
+.service-btn {
+    display: block;
+    width: calc(100% - 2rem);
+    margin: 1rem;
+    padding: 0.8rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.service-btn:hover {
+    background-color: #45a049;
+}
+
+@media screen and (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .service-card {
+        width: 100%;
+        max-width: 350px;
+    }
+}
+
+
+
+
+/* About Us */
+
+.about-us {
+    padding: 60px 20px;
+    /* background-color: #f9f9f9; */
+}
+
+.about-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-image {
+    flex: 1;
+    min-width: 300px;
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.about-content {
+    flex: 2;
+    padding: 20px;
+    text-align: left;
+}
+
+.about-content h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.about-content p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.service-btn {
+    display: inline-block;
+    text-align: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+
+}
+
+.about-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #45a049;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.service-btn a {
+    text-decoration: none;
+    color: white;
+}
+
+.about-btn:hover {
+    background-color: #336836;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-content {
+        padding: 20px 0;
+    }
+
+    .about-content h2 {
+        font-size: 1.8em;
+    }
+
+    .about-content p {
+        font-size: 1.1em;
+    }
+}
+
+
+
+/* Contact us CSS */
+.contact-us {
+    width: 100%;
+    min-height: 200px; /* Set your desired minimum height */
+    background-color: #272626;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.contact-container {
+    text-align: center;
+}
+
+.contact-us h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.contact-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #45a049;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.contact-btn:hover {
+    background-color: #313233;
+    color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .contact-us h2 {
+        font-size: 2em;
+    }
+
+    .contact-btn {
+        font-size: 1em;
+        padding: 12px 25px;
+    }
+}
+
+
+/* Footer Styles */
+.footer {
+    background-color: #333;
+    color: #45a049;
+    padding: 3rem 0 1rem;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.footer-section {
+    flex: 1;
+    margin-bottom: 2rem;
+    min-width: 200px;
+}
+
+.footer-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.footer-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: #45a049;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-icons a {
+    color: #ccc;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #45a049;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #555;
+}
+
+@media screen and (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+    }
+
+    .footer-section {
+        margin-bottom: 1.5rem;
+    }
+}
+
+
+
+
+
+
+
+
+/* Existing search results styles... */
+
+
