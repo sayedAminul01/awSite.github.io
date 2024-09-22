@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alien Institute of Computer CS Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body class="font-sans min-h-screen flex items-center justify-center">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-2xl p-8 max-w-3xl mx-auto">
+            <h1 class="text-5xl font-bold text-center mb-8 text-indigo-400">Alien Institute of Computer</h1>
+            <h2 class="text-2xl font-bold text-center mb-8 text-indigo-600">Computer Basic Fundamentals Test - I</h2>
+            
+            <div id="start-screen" class="text-center">
+                <h2 class="text-2xl font-semibold mb-4">Welcome to the Test!</h2>
+                <input type="text" id="user-name" placeholder="Hey! Enter your name here" class="w-full p-2 mb-4 border rounded">
+                <button id="start-button" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                    Start Test
+                </button>
+            </div>
+
+            <div id="quiz-screen" class="hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-lg font-semibold">Welcome, <span id="user-name-display"></span>!</p>
+                    <div class="timer" id="timer">Time: 30:00</div>
+                </div>
+                <div class="mb-4">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-indigo-600 h-2.5 rounded-full progress-bar" style="width: 0%"></div>
+                    </div>
+                    <p class="text-right text-sm text-gray-600 mt-1">Question <span id="current-question">1</span>/50</p>
+                </div>
+                <div id="quiz-container"></div>
+            </div>
+
+            <div id="result-container" class="hidden text-center">
+                <h2 class="text-3xl font-bold mb-4 text-indigo-600">Results</h2>
+                <p class="text-xl mb-2">Congratulations, <strong><span id="result-name"></span>!</p></strong>
+                <p class="text-xl">Correct Answers: <span id="correct-answers" class="font-bold text-green-600"></span></p>
+                <p class="text-xl">Incorrect Answers: <span id="incorrect-answers" class="font-bold text-red-600"></span></p>
+                <p class="text-xl">Percentage: <span id="percentage" class="font-bold text-blue-600"></span>%</p>
+                <p class="text-2xl mt-4">Grade: <span id="grade" class="font-bold text-purple-600"></span></p>
+                <p id="motivation-message" class="text-lg mt-4 italic"></p>
+                <button id="restart-button" class="mt-6 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                    Restart Test
+                </button>
+                <br>
+                <br>
+                <br>
+
+                <ul class="header-ul">
+                    <li><a href="../index.html">AlienWeb</a></li>
+                    <li><a href="../learningZone/index.html">Learning Zone</a></li>
+                    <li><a href="../index.html">AlienWeb</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="quiz.js"></script>
+</body>
+</html>
