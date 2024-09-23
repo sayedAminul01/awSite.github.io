@@ -60,6 +60,7 @@ nav ul li a {
     margin-bottom: 20px;
     width: calc(33% - 20px);
     box-sizing: border-box;
+    text-align: center;
 }
 
 .card a {
