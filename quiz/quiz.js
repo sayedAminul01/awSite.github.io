@@ -356,13 +356,13 @@ function calculateGrade(percentage) {
 function getGradeMessage(grade, name) {
     switch (grade) {
         case 'A':
-            return `Exceptional work, ${name}! Your grasp of computer science fundamentals is truly stellar. The Alien Institute of Computer Science is proud to have such a brilliant mind. Keep pushing the boundaries of technology!`;
+            return `${name}, your tech brilliance at the Alien Institute of Computer is just the beginning. Keep innovating, and the stars will follow!`;
         case 'B':
-            return `Great job, ${name}! You've shown a strong understanding of CS concepts. The Alien Institute sees great potential in you. Keep exploring and you'll soon be creating groundbreaking algorithms!`;
+            return `${name}, your passion for CS is shining bright. The Alien Institute believes you’ll be coding galaxies soon!`;
         case 'C':
-            return `Good effort, ${name}. You're on the right track in your CS journey at the Alien Institute. With more practice, you'll be decoding alien technologies in no time. Keep your curiosity alive!`;
+            return `${name}, great minds like yours unlock the future. Keep learning and the Alien Institute will watch you conquer tech universes!`;
         case 'D':
-            return `${name}, you've taken the first steps in understanding CS at the Alien Institute. Remember, even alien software has bugs sometimes. Keep debugging your knowledge, and you'll unlock new programming dimensions!`;
+            return `${name}, you've taken the first steps in understanding CS at the Alien Institute of Computer. Remember, even alien software has bugs sometimes. Keep debugging your knowledge, and you'll unlock new programming dimensions!`;
         default:
             return `${name}, your CS journey at the Alien Institute is just beginning. Every great programmer started somewhere. With determination, you'll be writing interstellar code before you know it. The universe of programming awaits you!`;
     }
