@@ -741,7 +741,10 @@ p {
 .contact-container {
     text-align: center;
 }
-
+.contact-container a {
+    color: white;
+    text-decoration: none;
+}
 .contact-us h2 {
     font-size: 2.5em;
     margin-bottom: 20px;
