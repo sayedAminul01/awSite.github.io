@@ -1,170 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WMKS0HEFNV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-WMKS0HEFNV');
-</script>
-
+    <head>
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WMKS0HEFNV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-WMKS0HEFNV');
+    </script>
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>alienweb.in</title>
+    <meta name="description" content="AlienWeb - Your Gateway to Web Development and Technology">
+    <meta name="keywords" content="web development, technology, programming, tutorials, blogs">
+    <title>AlienWeb - Rural Gateway to Technology</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="search.css">
+    <link rel="stylesheet" href="./categorySection/category.css">
+    <link rel="stylesheet" href="./heroSection/hero.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
 
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-        rel="stylesheet">
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3056427584192481"
-     crossorigin="anonymous"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-
-    <!-- Navbar section -->
-    <header class="header">
-        <div class="logo">
-            <a href="index.html">alienweb.in</a></div>
-        <div class="menu-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/" class="logo">alienweb.in</a>
         </div>
-        <nav>
+        
+        <div class="nav-content">
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="service.html">Services</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-                <li id="learningZone"><a href="./learningZone/index.html">Learning Zone</a></li>
-
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/blog">Blog</a></li>
             </ul>
-        </nav>
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search...">
-            <button id="search-button">Search</button>
         </div>
-    </header>
-    <div id="search-results"></div>
 
-    <section class="hero">
-        <div class="hero-slider">
-            <img src="images/OPENSCHOOL.jpg" alt="Slider Image 1" class="active">
-            <img src="images/computercourses.jpg" alt="Slider Image 2">
-            <img src="images/webDevv.jpg" alt="Slider Image 3">
+        <div class="nav-actions">
+            <button class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div class="search-container">
+                <button class="search-toggle">
+                    <i class="fas fa-search"></i>
+                </button>
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <button class="search-submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-        <div class="hero-content">
-            <h1 id="hero-title">Open Schooling </h1>
-            <p id="hero-description">Our flexible open schooling program allows students to complete their education in
-                Arts, Science, or Commerce, at their own pace..</p>
-            <a href="#services" class="hero-button" id="hero-button">Explore Our Services</a>
+    </nav>
+
+    <div class="search-overlay"></div>
+    <div class="mobile-menu">
+        <ul class="mobile-nav-links">
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="/services">Services</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/blog">Blog</a></li>
+        </ul>
+    </div>
+
+
+
+<!-- Hero section -->
+<section class="hero-carousel">
+    <div class="carousel-container">
+        <!-- Slides -->
+        <div class="slide active" aria-label="Slide 1">
+            <img src="./images/openSchooling.jpg" alt="Modern tech workspace" class="slide-image">
+            <div class="slide-content">
+                <h1>Discover Innovation</h1>
+                <p>Explore the future of technology with our cutting-edge solutions</p>
+                <button class="cta-button">Learn More</button>
+            </div>
         </div>
+        
+        <div class="slide" aria-label="Slide 2">
+            <img src="./images/computercourses.jpg" alt="Creative collaboration space" class="slide-image">
+            <div class="slide-content">
+                <h1>Create Together</h1>
+                <p>Join our community of creators and build something amazing</p>
+                <button class="cta-button">Join Now</button>
+            </div>
+        </div>
+        
+        <div class="slide" aria-label="Slide 3">
+            <img src="./images/vocational.jpg" alt="Abstract ideas visualization" class="slide-image">
+            <div class="slide-content">
+                <h1>Transform Ideas</h1>
+                <p>Turn your vision into reality with our powerful platform</p>
+                <button class="cta-button">Get Started</button>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button class="nav-button prev" aria-label="Previous slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 18l-6-6 6-6"></path>
+            </svg>
+        </button>
+        <button class="nav-button next" aria-label="Next slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6"></path>
+            </svg>
+        </button>
+
+        <!-- Slide Indicators -->
+        <div class="slide-indicators" role="tablist">
+            <button class="indicator active" aria-label="Go to slide 1" aria-selected="true"></button>
+            <button class="indicator" aria-label="Go to slide 2" aria-selected="false"></button>
+            <button class="indicator" aria-label="Go to slide 3" aria-selected="false"></button>
+        </div>
+    </div>
+</section>
+<!-- Hero section end -->
+
+
+    <!-- Browse by category -->
+
+    <section class="categories-section" aria-label="Blog categories">
+        <div class="container">
+            <h2>Browse by Topic</h2>
+            <div class="categories-filter">
+                <input type="text" id="categorySearch" placeholder="Search categories..."
+                    aria-label="Search categories">
+            </div>
+            <div class="categories-grid" id="categoriesContainer">
+                <!-- Categories will be dynamically inserted here -->
+            </div>
+        </div>
+
 
     </section>
+    <!-- Browse by category End -->
 
-
-    <section class="services">
-        <h2 class="section-title">Our Services</h2>
-        <div class="service-container">
-            <div class="service-card">
-                <img src="images/vocational.jpg" alt="Computer Vocational Courses">
-                <h3>Computer Vocational Courses</h3>
-                <p>Master practical computer skills with our industry-focused vocational courses.</p>
-                <button class="service-btn"><a href="./courses/course.html">Learn More</a></button>
-            </div>
-            <div class="service-card">
-                <img src="images/OPENSCHOOL.jpg" alt="Open Schooling">
-                <h3>Open Schooling</h3>
-                <p>Flexible education options for those seeking an alternative to traditional schooling.</p>
-                <button class="service-btn">Explore Programs</button>
-            </div>
-            <div class="service-card">
-                <img src="images/virtual_Assistant.jpg" alt="Freelancing Services">
-                <h3>Freelancing Services</h3>
-                <p>Connect with skilled professionals for your project needs across various domains.</p>
-                <button class="service-btn">Hire Freelancers</button>
-            </div>
-            <div class="service-card">
-                <img src="images/webdevelopment.jpg" alt="Web Development">
-                <h3>Web Development</h3>
-                <p>Custom web solutions tailored to your business needs, from simple sites to complex applications.</p>
-                <button class="service-btn">Get Started</button>
-            </div>
-            <div class="service-card">
-                <img src="images/webdevelopment.jpg" alt="Web Development">
-                <h3>Learning Zone</h3>
-                <p>Here you can learn new skills, High school Courses, Grammar and Computer by giving MCQs.  </p>
-                <button class="service-btn"><a href="./learningZone/index.html">Get Started</a></button>
-
-            </div>
-        </div>
-        <br>
-        <a href="service.html" class="service-btn">Explore more services</a>
-    </section>
-
-
-    <main id="content">
-        <h1>About Us</h1>
-    </main>
-
-
-    <section class="about-us">
-        <div class="about-container">
-            <div class="about-image">
-                <img src="images/aboutus.jpg" alt="About Us">
-            </div>
-            <div class="about-content">
-                <h2>Who we are</h2>
-                <p>
-                    Welcome to Alienweb! We are a passionate team dedicated to delivering the best web development and
-                    technology solutions to help businesses grow and thrive in the digital world. Our mission is to
-                    provide innovative and scalable services that empower our clients to achieve their goals.
-                </p>
-                <a href="about.html" class="about-btn">Know More About Us</a>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Contact us section  -->
-    <section class="contact-us">
-        <div class="contact-container">
-            <h2>Contact Us</h2>
-            <a href="https://forms.gle/em2NEbqM5qd7iYzn8" class="contact-btn">Get in Touch</a>
-        </div>
-    </section>
 
     
-    <!-- Contact us section  end-->
-
-
-
-
-    <!-- WhatsApp Button -->
-    <a href="https://wa.me/+919365489154" class="whatsapp-button" target="_blank">
-        <img src="icons/whatsapp.svg" alt="WhatsApp">
-    </a>
-
-    <!-- Dark Mode Toggle Button -->
-    <button class="theme-toggle" id="theme-toggle">
-        <img id="theme-icon" src="icons/darkMode.svg" alt="Dark Mode Icon">
-    </button>
-
-
-
-
     <!-- Footer section -->
     <footer class="footer">
         <div class="footer-container">
@@ -230,23 +215,35 @@
             <p>&copy; 2024 Alienweb.in All rights reserved.</p>
         </div>
     </footer>
+    <!-- Footer section end -->
 
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
+    <script src="search.js"></script>
+    <script src="./categorySection/category.js"></script>
+    <script src="./heroSection/hero.js"></script>
 
-    <!-- Adsense -->
+
+
+
+
+
+
+
+
+        <!-- Adsense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3056427584192481"
-     crossorigin="anonymous"></script>
+crossorigin="anonymous"></script>
 <!-- Responsive ads -->
 <ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-3056427584192481"
-     data-ad-slot="8403934392"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
+style="display:block"
+data-ad-client="ca-pub-3056427584192481"
+data-ad-slot="8403934392"
+data-ad-format="auto"
+data-full-width-responsive="true"></ins>
 <script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
+(adsbygoogle = window.adsbygoogle || []).push({});
 
+     
 </body>
-
 </html>
