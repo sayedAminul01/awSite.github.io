@@ -1,196 +1,287 @@
-// Search functionality with content indexing and result display
-class WebsiteSearch {
-    constructor() {
-        this.searchIndex = {};
-        this.pages = [];
-        this.searchResults = null;
-        this.init();
+// DOM Elements
+const root = document.documentElement;
+const navToggle = document.querySelector('.nav-toggle');
+const mobileMenu = document.querySelector('.mobile-menu');
+const themeToggle = document.querySelector('.theme-toggle');
+const searchToggle = document.querySelector('.search-toggle');
+const searchBox = document.querySelector('.search-box');
+const searchOverlay = document.querySelector('.search-overlay');
+const searchInput = document.querySelector('.search-box input');
+const searchSubmit = document.querySelector('.search-submit');
+
+// Theme Toggle with smooth transition
+function toggleTheme() {
+    const currentTheme = root.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    // Add transition class
+    document.body.classList.add('theme-transitioning');
+    
+    // Update theme
+    root.setAttribute('data-theme', newTheme);
+    
+    // Update theme toggle icon with transition
+    const themeIcon = themeToggle.querySelector('i');
+    themeIcon.style.transform = 'rotate(180deg)';
+    
+    setTimeout(() => {
+        themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        themeIcon.style.transform = 'rotate(0deg)';
+    }, 150);
+    
+    // Save theme preference
+    localStorage.setItem('theme', newTheme);
+    
+    // Remove transition class
+    setTimeout(() => {
+        document.body.classList.remove('theme-transitioning');
+    }, 300);
+}
+
+// Load saved theme
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    root.setAttribute('data-theme', savedTheme);
+    themeToggle.querySelector('i').className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+// Mobile Navigation Toggle with smooth transition
+function toggleNav() {
+    const navIcon = navToggle.querySelector('i');
+    
+    // Animate icon transition
+    navIcon.style.transform = 'rotate(180deg)';
+    setTimeout(() => {
+        navIcon.classList.toggle('fa-bars');
+        navIcon.classList.toggle('fa-times');
+        navIcon.style.transform = 'rotate(0deg)';
+    }, 150);
+    
+    // Toggle mobile menu
+    mobileMenu.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+}
+
+// Search Functionality with improved animations
+function toggleSearch(event) {
+    event?.stopPropagation();
+    
+    const isClosing = searchBox.classList.contains('active');
+    
+    if (!isClosing) {
+        searchBox.style.display = 'flex';
+        requestAnimationFrame(() => {
+            searchBox.classList.add('active');
+            searchOverlay.classList.add('active');
+        });
+    } else {
+        searchBox.classList.remove('active');
+        searchOverlay.classList.remove('active');
+        setTimeout(() => {
+            searchBox.style.display = 'none';
+            searchInput.value = ''; // Clear search input on close
+        }, 300);
     }
-
-    async init() {
-        // Initialize search UI elements
-        this.createSearchResultsContainer();
-        this.initializeEventListeners();
-        // Load and index website content
-        await this.indexWebsiteContent();
+    
+    if (!isClosing) {
+        searchInput.focus();
     }
+}
 
-    createSearchResultsContainer() {
-        // Create search results container if it doesn't exist
-        if (!document.querySelector('.search-results-container')) {
-            const resultsContainer = document.createElement('div');
-            resultsContainer.className = 'search-results-container';
-            document.body.appendChild(resultsContainer);
-        }
-        this.searchResults = document.querySelector('.search-results-container');
-    }
-
-    async indexWebsiteContent() {
-        // Simulated page content - In real implementation, this would be your actual pages
-        this.pages = [
-            {
-                url: '/',
-                title: 'Home',
-                content: 'Welcome to AlienWeb - Your gateway to web development and technology',
-                tags: ['home', 'welcome', 'web development', 'technology']
-            },
-            {
-                url: '/services',
-                title: 'Our Services',
-                content: 'Web development, app development, UI/UX design, and consulting services',
-                tags: ['services', 'web development', 'app development', 'design', 'consulting']
-            },
-            {
-                url: '/blog',
-                title: 'Blog',
-                content: 'Latest articles about web development, technology trends, and programming tips',
-                tags: ['blog', 'articles', 'web development', 'technology', 'programming']
-            }
-            // Add more pages as needed
-        ];
-
-        // Index content for search
-        this.pages.forEach(page => {
-            const content = `${page.title} ${page.content} ${page.tags.join(' ')}`.toLowerCase();
-            const words = content.split(/\s+/);
+// Enhanced search handling with feedback
+function handleSearch(event) {
+    event.preventDefault();
+    const searchTerm = searchInput.value.trim();
+    
+    if (searchTerm) {
+        // Visual feedback for search button
+        searchSubmit.classList.add('searching');
+        searchSubmit.querySelector('i').className = 'fas fa-spinner fa-spin';
+        
+        // Simulate search delay and provide feedback
+        setTimeout(() => {
+            // Implement your actual search logic here
+            console.log('Searching for:', searchTerm);
             
-            words.forEach(word => {
-                if (word.length > 2) { // Skip very short words
-                    if (!this.searchIndex[word]) {
-                        this.searchIndex[word] = new Set();
-                    }
-                    this.searchIndex[word].add(page);
-                }
-            });
-        });
+            // Reset search button
+            searchSubmit.classList.remove('searching');
+            searchSubmit.querySelector('i').className = 'fas fa-search';
+            
+            // Clear and close search
+            searchInput.value = '';
+            toggleSearch();
+            
+            // Example: Redirect to search results page
+            // window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+        }, 800);
     }
+}
 
-    search(query) {
-        const searchTerms = query.toLowerCase().split(/\s+/);
-        const results = new Map();
-
-        searchTerms.forEach(term => {
-            if (term.length > 2) {
-                for (const [indexTerm, pages] of Object.entries(this.searchIndex)) {
-                    if (indexTerm.includes(term)) {
-                        pages.forEach(page => {
-                            const score = this.calculateRelevanceScore(page, searchTerms);
-                            results.set(page, (results.get(page) || 0) + score);
-                        });
-                    }
-                }
-            }
-        });
-
-        return Array.from(results.entries())
-            .sort((a, b) => b[1] - a[1])
-            .map(([page]) => page);
-    }
-
-    calculateRelevanceScore(page, searchTerms) {
-        let score = 0;
-        const content = `${page.title} ${page.content} ${page.tags.join(' ')}`.toLowerCase();
-
-        searchTerms.forEach(term => {
-            // Title matches are worth more
-            if (page.title.toLowerCase().includes(term)) {
-                score += 10;
-            }
-            // Tag matches are worth more than content matches
-            if (page.tags.some(tag => tag.toLowerCase().includes(term))) {
-                score += 5;
-            }
-            // Content matches
-            const termCount = (content.match(new RegExp(term, 'g')) || []).length;
-            score += termCount;
-        });
-
-        return score;
-    }
-
-    displayResults(results) {
-        if (!results.length) {
-            this.searchResults.innerHTML = `
-                <div class="search-no-results">
-                    <p>No results found. Try different keywords.</p>
-                </div>`;
-            return;
+// Smooth scroll functionality
+function smoothScroll(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href');
+    if (targetId === '#') return;
+    
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+        // Close mobile menu if open
+        if (mobileMenu.classList.contains('active')) {
+            toggleNav();
         }
-
-        const resultsHTML = results.map(page => `
-            <div class="search-result-item">
-                <h3><a href="${page.url}">${page.title}</a></h3>
-                <p>${this.highlightSearchTerms(page.content)}</p>
-                <div class="search-result-tags">
-                    ${page.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                </div>
-            </div>
-        `).join('');
-
-        this.searchResults.innerHTML = resultsHTML;
-    }
-
-    highlightSearchTerms(content) {
-        const searchInput = document.querySelector('.search-box input');
-        if (!searchInput.value.trim()) return content;
-
-        const terms = searchInput.value.toLowerCase().split(/\s+/);
-        let highlightedContent = content;
-
-        terms.forEach(term => {
-            if (term.length > 2) {
-                const regex = new RegExp(`(${term})`, 'gi');
-                highlightedContent = highlightedContent.replace(regex, '<mark>$1</mark>');
-            }
-        });
-
-        return highlightedContent;
-    }
-
-    initializeEventListeners() {
-        const searchInput = document.querySelector('.search-box input');
-        const searchSubmit = document.querySelector('.search-submit');
-        const searchBox = document.querySelector('.search-box');
-
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.trim();
-            if (query.length >= 2) {
-                const results = this.search(query);
-                this.displayResults(results);
-                this.searchResults.classList.add('active');
-            } else {
-                this.searchResults.classList.remove('active');
-            }
-        });
-
-        searchSubmit.addEventListener('click', (e) => {
-            e.preventDefault();
-            const query = searchInput.value.trim();
-            if (query) {
-                const results = this.search(query);
-                this.displayResults(results);
-                this.searchResults.classList.add('active');
-            }
-        });
-
-        // Close search results when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!searchBox.contains(e.target) && !this.searchResults.contains(e.target)) {
-                this.searchResults.classList.remove('active');
-            }
-        });
-
-        // Handle keyboard navigation
-        this.searchResults.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                this.searchResults.classList.remove('active');
-                searchInput.value = '';
-            }
+        
+        targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
         });
     }
 }
 
-// Initialize search functionality
-document.addEventListener('DOMContentLoaded', () => {
-    window.websiteSearch = new WebsiteSearch();
-});
+// Active link highlighting
+function updateActiveLink() {
+    const scrollPosition = window.scrollY;
+    
+    document.querySelectorAll('section[id]').forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+        const sectionId = section.getAttribute('id');
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${sectionId}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
+}
+
+// Event Listeners
+function initEventListeners() {
+    themeToggle.addEventListener('click', toggleTheme);
+    navToggle.addEventListener('click', toggleNav);
+    searchToggle.addEventListener('click', toggleSearch);
+    searchSubmit.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSearch(e);
+    });
+    
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', smoothScroll);
+    });
+    
+    // Click outside handlers
+    document.addEventListener('click', (e) => {
+        const isSearchActive = searchBox.classList.contains('active');
+        const isMenuActive = mobileMenu.classList.contains('active');
+        
+        if (isSearchActive && 
+            !searchBox.contains(e.target) && 
+            !searchToggle.contains(e.target)) {
+            toggleSearch();
+        }
+        
+        if (isMenuActive && 
+            !mobileMenu.contains(e.target) && 
+            !navToggle.contains(e.target)) {
+            toggleNav();
+        }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (searchBox.classList.contains('active')) {
+                toggleSearch();
+            }
+            if (mobileMenu.classList.contains('active')) {
+                toggleNav();
+            }
+        }
+    });
+    
+    // Scroll event for active link highlighting
+    window.addEventListener('scroll', updateActiveLink);
+    
+    // Resize event handling
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (window.innerWidth > 768) {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }, 250);
+    });
+}
+
+// Initialize everything
+function init() {
+    initTheme();
+    initEventListeners();
+    updateActiveLink();
+}
+
+// Run initialization
+document.addEventListener('DOMContentLoaded', init);
+
+
+
+
+// Hero slider script
+// Hero slider content
+const heroContent = [
+    {
+        title: "Open Schooling",
+        description: "Our flexible open schooling program allows students to complete their education in Arts, Science, or Commerce, at their own pace...",
+        buttonText: "Explore Our Services",
+        buttonLink: "#services"
+    },
+    {
+        title: "Computer Vocational Courses",
+        description: "We offer a variety of courses that equip students with practical, job-ready skills in fields like web development, graphic design, and digital marketing..",
+        buttonText: "Learn More",
+        buttonLink: "#about"
+    },
+    {
+        title: "Freelancing Services",
+        description: "From virtual assistance to Web Development, social media management, our team is ready to help you manage your business more efficiently, so you can focus on what you do best..",
+        buttonText: "Contact Us",
+        buttonLink: "#contact"
+    }
+];
+
+let currentSlide = 0;
+const images = document.querySelectorAll('.hero-slider img');
+const titleElement = document.getElementById('hero-title');
+const descriptionElement = document.getElementById('hero-description');
+const buttonElement = document.getElementById('hero-button');
+const heroContentElement = document.querySelector('.hero-content');
+
+function changeSlide() {
+    // Hide the current content
+    heroContentElement.classList.remove('show');
+    heroContentElement.classList.add('hide');
+
+    setTimeout(() => {
+        // Change the slide
+        images[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % images.length;
+        images[currentSlide].classList.add('active');
+
+        // Update content
+        titleElement.textContent = heroContent[currentSlide].title;
+        descriptionElement.textContent = heroContent[currentSlide].description;
+        buttonElement.textContent = heroContent[currentSlide].buttonText;
+        buttonElement.href = heroContent[currentSlide].buttonLink;
+
+        // Show the new content
+        heroContentElement.classList.remove('hide');
+        heroContentElement.classList.add('show');
+    }, 600); // Time matches the transition duration
+}
+
+setInterval(changeSlide, 5000); // Change every 5 seconds
