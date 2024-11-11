@@ -1,145 +1,196 @@
-// Existing menu toggle code
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
-
-menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    menuToggle.classList.toggle('active');
-});
-
-// New search functionality
-const searchInput = document.getElementById('search-input');
-const searchButton = document.getElementById('search-button');
-const content = document.getElementById('content');
-const searchResults = document.getElementById('search-results');
-
-function performSearch() {
-    const searchTerm = searchInput.value.toLowerCase();
-    if (searchTerm.length < 2) {
-        searchResults.style.display = 'none';
-        return;
+// Search functionality with content indexing and result display
+class WebsiteSearch {
+    constructor() {
+        this.searchIndex = {};
+        this.pages = [];
+        this.searchResults = null;
+        this.init();
     }
 
-    const contentText = content.innerHTML;
-    const regex = new RegExp(searchTerm, 'gi');
-    const highlightedText = contentText.replace(regex, match => `<span class="highlight">${match}</span>`);
+    async init() {
+        // Initialize search UI elements
+        this.createSearchResultsContainer();
+        this.initializeEventListeners();
+        // Load and index website content
+        await this.indexWebsiteContent();
+    }
 
-    const matchCount = (highlightedText.match(/<span class="highlight">/g) || []).length;
+    createSearchResultsContainer() {
+        // Create search results container if it doesn't exist
+        if (!document.querySelector('.search-results-container')) {
+            const resultsContainer = document.createElement('div');
+            resultsContainer.className = 'search-results-container';
+            document.body.appendChild(resultsContainer);
+        }
+        this.searchResults = document.querySelector('.search-results-container');
+    }
 
-    if (matchCount > 0) {
-        content.innerHTML = highlightedText;
-        searchResults.innerHTML = `<h3>Search Results</h3><p>Found ${matchCount} match${matchCount > 1 ? 'es' : ''} for "${searchTerm}"</p>`;
-        searchResults.style.display = 'block';
-    } else {
-        searchResults.innerHTML = `<h3>Search Results</h3><p>No matches found for "${searchTerm}"</p>`;
-        searchResults.style.display = 'block';
+    async indexWebsiteContent() {
+        // Simulated page content - In real implementation, this would be your actual pages
+        this.pages = [
+            {
+                url: '/',
+                title: 'Home',
+                content: 'Welcome to AlienWeb - Your gateway to web development and technology',
+                tags: ['home', 'welcome', 'web development', 'technology']
+            },
+            {
+                url: '/services',
+                title: 'Our Services',
+                content: 'Web development, app development, UI/UX design, and consulting services',
+                tags: ['services', 'web development', 'app development', 'design', 'consulting']
+            },
+            {
+                url: '/blog',
+                title: 'Blog',
+                content: 'Latest articles about web development, technology trends, and programming tips',
+                tags: ['blog', 'articles', 'web development', 'technology', 'programming']
+            }
+            // Add more pages as needed
+        ];
+
+        // Index content for search
+        this.pages.forEach(page => {
+            const content = `${page.title} ${page.content} ${page.tags.join(' ')}`.toLowerCase();
+            const words = content.split(/\s+/);
+            
+            words.forEach(word => {
+                if (word.length > 2) { // Skip very short words
+                    if (!this.searchIndex[word]) {
+                        this.searchIndex[word] = new Set();
+                    }
+                    this.searchIndex[word].add(page);
+                }
+            });
+        });
+    }
+
+    search(query) {
+        const searchTerms = query.toLowerCase().split(/\s+/);
+        const results = new Map();
+
+        searchTerms.forEach(term => {
+            if (term.length > 2) {
+                for (const [indexTerm, pages] of Object.entries(this.searchIndex)) {
+                    if (indexTerm.includes(term)) {
+                        pages.forEach(page => {
+                            const score = this.calculateRelevanceScore(page, searchTerms);
+                            results.set(page, (results.get(page) || 0) + score);
+                        });
+                    }
+                }
+            }
+        });
+
+        return Array.from(results.entries())
+            .sort((a, b) => b[1] - a[1])
+            .map(([page]) => page);
+    }
+
+    calculateRelevanceScore(page, searchTerms) {
+        let score = 0;
+        const content = `${page.title} ${page.content} ${page.tags.join(' ')}`.toLowerCase();
+
+        searchTerms.forEach(term => {
+            // Title matches are worth more
+            if (page.title.toLowerCase().includes(term)) {
+                score += 10;
+            }
+            // Tag matches are worth more than content matches
+            if (page.tags.some(tag => tag.toLowerCase().includes(term))) {
+                score += 5;
+            }
+            // Content matches
+            const termCount = (content.match(new RegExp(term, 'g')) || []).length;
+            score += termCount;
+        });
+
+        return score;
+    }
+
+    displayResults(results) {
+        if (!results.length) {
+            this.searchResults.innerHTML = `
+                <div class="search-no-results">
+                    <p>No results found. Try different keywords.</p>
+                </div>`;
+            return;
+        }
+
+        const resultsHTML = results.map(page => `
+            <div class="search-result-item">
+                <h3><a href="${page.url}">${page.title}</a></h3>
+                <p>${this.highlightSearchTerms(page.content)}</p>
+                <div class="search-result-tags">
+                    ${page.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        this.searchResults.innerHTML = resultsHTML;
+    }
+
+    highlightSearchTerms(content) {
+        const searchInput = document.querySelector('.search-box input');
+        if (!searchInput.value.trim()) return content;
+
+        const terms = searchInput.value.toLowerCase().split(/\s+/);
+        let highlightedContent = content;
+
+        terms.forEach(term => {
+            if (term.length > 2) {
+                const regex = new RegExp(`(${term})`, 'gi');
+                highlightedContent = highlightedContent.replace(regex, '<mark>$1</mark>');
+            }
+        });
+
+        return highlightedContent;
+    }
+
+    initializeEventListeners() {
+        const searchInput = document.querySelector('.search-box input');
+        const searchSubmit = document.querySelector('.search-submit');
+        const searchBox = document.querySelector('.search-box');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            if (query.length >= 2) {
+                const results = this.search(query);
+                this.displayResults(results);
+                this.searchResults.classList.add('active');
+            } else {
+                this.searchResults.classList.remove('active');
+            }
+        });
+
+        searchSubmit.addEventListener('click', (e) => {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query) {
+                const results = this.search(query);
+                this.displayResults(results);
+                this.searchResults.classList.add('active');
+            }
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchBox.contains(e.target) && !this.searchResults.contains(e.target)) {
+                this.searchResults.classList.remove('active');
+            }
+        });
+
+        // Handle keyboard navigation
+        this.searchResults.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.searchResults.classList.remove('active');
+                searchInput.value = '';
+            }
+        });
     }
 }
 
-searchButton.addEventListener('click', performSearch);
-
-searchInput.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') {
-        performSearch();
-    }
+// Initialize search functionality
+document.addEventListener('DOMContentLoaded', () => {
+    window.websiteSearch = new WebsiteSearch();
 });
-
-// Existing menu toggle and search functionality...
-
-// Hero slider content
-const heroContent = [
-    {
-        title: "Open Schooling",
-        description: "Our flexible open schooling program allows students to complete their education in Arts, Science, or Commerce, at their own pace...",
-        buttonText: "Explore Our Services",
-        buttonLink: "#services"
-    },
-    {
-        title: "Computer Vocational Courses",
-        description: "We offer a variety of courses that equip students with practical, job-ready skills in fields like web development, graphic design, and digital marketing..",
-        buttonText: "Learn More",
-        buttonLink: "#about"
-    },
-    {
-        title: "Freelancing Services",
-        description: "From virtual assistance to Web Development, social media management, our team is ready to help you manage your business more efficiently, so you can focus on what you do best..",
-        buttonText: "Contact Us",
-        buttonLink: "#contact"
-    }
-];
-
-let currentSlide = 0;
-const images = document.querySelectorAll('.hero-slider img');
-const titleElement = document.getElementById('hero-title');
-const descriptionElement = document.getElementById('hero-description');
-const buttonElement = document.getElementById('hero-button');
-const heroContentElement = document.querySelector('.hero-content');
-
-function changeSlide() {
-    // Hide the current content
-    heroContentElement.classList.remove('show');
-    heroContentElement.classList.add('hide');
-
-    setTimeout(() => {
-        // Change the slide
-        images[currentSlide].classList.remove('active');
-        currentSlide = (currentSlide + 1) % images.length;
-        images[currentSlide].classList.add('active');
-
-        // Update content
-        titleElement.textContent = heroContent[currentSlide].title;
-        descriptionElement.textContent = heroContent[currentSlide].description;
-        buttonElement.textContent = heroContent[currentSlide].buttonText;
-        buttonElement.href = heroContent[currentSlide].buttonLink;
-
-        // Show the new content
-        heroContentElement.classList.remove('hide');
-        heroContentElement.classList.add('show');
-    }, 600); // Time matches the transition duration
-}
-
-setInterval(changeSlide, 5000); // Change every 5 seconds
-
-// Dark mode functionality
-const themeToggleBtn = document.getElementById('theme-toggle');
-const body = document.body;
-
-// Check for saved theme on page load
-const currentTheme = localStorage.getItem('theme');
-if (currentTheme === 'dark-mode') {
-    body.classList.add('dark-mode');
-    document.getElementById('theme-icon').setAttribute('stroke', '#FFD700'); // Dark mode icon color
-} else {
-    document.getElementById('theme-icon').setAttribute('stroke', '#000'); // Light mode icon color
-}
-
-// Toggle theme and update icon
-themeToggleBtn.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    const themeIcon = document.getElementById('theme-icon');
-    
-    if (body.classList.contains('dark-mode')) {
-        themeIcon.setAttribute('stroke', '#FFD700'); // Dark mode icon color
-        localStorage.setItem('theme', 'dark-mode');
-    } else {
-        themeIcon.setAttribute('stroke', '#000'); // Light mode icon color
-        localStorage.setItem('theme', 'light-mode');
-    }
-});
-    
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    const topBarAlert = document.getElementById('topBarAlert');
-    
-    // Show the alert after a 5-second delay
-    setTimeout(function() {
-        topBarAlert.classList.add('show');
-        
-        // Hide the alert after 5 seconds
-        setTimeout(function() {
-            topBarAlert.classList.remove('show');
-        }, 5000);
-    }, 5000);
-});
-
