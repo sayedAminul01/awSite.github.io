@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-cubes',
             postCount: 19,
             description: 'Development tools',
-            url: '/learningZone/index.html'
+            url: './learningZone/index.html'
         }
 
     ];
