@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-school',
             postCount: 31,
             description: 'Backend development',
-            url: '/category/node'
+            url: './learningZone/layout.html'
         },
         {
             id: 'react',
