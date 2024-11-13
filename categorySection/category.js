@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-laptop-code',
             postCount: 38,
             description: 'Styling and animations',
-            url: '/category/css'
+            url: './learningZone/computerZone.html'
         },
         {
             id: 'javascript',
