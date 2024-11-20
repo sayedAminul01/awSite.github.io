@@ -1,108 +1,153 @@
 const questions = [
-    { question: "Which command is used to list all files in the current directory?", options: ["ls", "cd", "pwd", "cp"], correctAnswer: 0 },
-    { question: "What is the purpose of the 'cd' command in Linux?", options: ["To copy files", "To change directories", "To delete files", "To list files"], correctAnswer: 1 },
-    { question: "Which command is used to display the current working directory?", options: ["ls", "cd", "pwd", "dir"], correctAnswer: 2 },
-    { question: "What does the 'rm' command do?", options: ["Moves files", "Renames files", "Removes files", "Reads files"], correctAnswer: 2 },
-    { question: "What does the 'mkdir' command do?", options: ["Makes a directory", "Moves files", "Deletes files", "Renames files"], correctAnswer: 0 },
-    { question: "How do you display the contents of a text file?", options: ["cat", "rm", "ls", "mv"], correctAnswer: 0 },
-    { question: "Which command is used to copy files?", options: ["mv", "cp", "rm", "cat"], correctAnswer: 1 },
-    { question: "What does the command 'chmod' change?", options: ["File permissions", "File ownership", "File content", "File size"], correctAnswer: 0 },
-    { question: "What does the 'ps' command do?", options: ["Lists running processes", "Shows directory contents", "Changes file permissions", "Pings a server"], correctAnswer: 0 },
-    { question: "Which command is used to rename a file?", options: ["rename", "cp", "mv", "ls"], correctAnswer: 2 },
-    { question: "Which command shows detailed information about the files in a directory?", options: ["ls", "ls -l", "cd", "pwd"], correctAnswer: 1 },
-    { question: "What does the command 'df' display?", options: ["Disk usage", "File contents", "Memory usage", "CPU usage"], correctAnswer: 0 },
-    { question: "How do you check free memory in Linux?", options: ["free", "df", "mem", "ls"], correctAnswer: 0 },
-    { question: "Which command is used to compare the contents of two files?", options: ["cmp", "rm", "cp", "cat"], correctAnswer: 0 },
-    { question: "What does the command 'kill' do?", options: ["Lists processes", "Terminates processes", "Copies processes", "Renames processes"], correctAnswer: 1 },
-    { question: "Which symbol is used to redirect output to a file?", options: ["&", "|", ">", "<"], correctAnswer: 2 },
-    { question: "What does the 'touch' command do?", options: ["Creates a file", "Copies a file", "Removes a file", "Renames a file"], correctAnswer: 0 },
-    { question: "Which command is used to change file ownership?", options: ["chown", "chmod", "chgrp", "cp"], correctAnswer: 0 },
-    { question: "What does 'grep' command do?", options: ["Copies files", "Searches for text patterns", "Displays system usage", "Lists files"], correctAnswer: 1 },
-    { question: "Which file contains user account information?", options: ["/etc/passwd", "/etc/hosts", "/usr/bin", "/home/user"], correctAnswer: 0 },
-    { question: "What is the root user's home directory?", options: ["/root", "/home", "/etc", "/usr"], correctAnswer: 0 },
-    { question: "How do you view the manual of a command?", options: ["man", "info", "help", "cat"], correctAnswer: 0 },
-    { question: "What does 'sudo' allow a user to do?", options: ["Run commands as root", "Copy files", "List files", "Rename files"], correctAnswer: 0 },
-    { question: "Which command is used to display network configuration?", options: ["ifconfig", "netstat", "ping", "ftp"], correctAnswer: 0 },
-    { question: "Which command lists open files?", options: ["lsof", "open", "ls", "df"], correctAnswer: 0 },
-    { question: "How do you search for a file in Linux?", options: ["find", "search", "ls", "grep"], correctAnswer: 0 },
-    { question: "What does 'tar' command do?", options: ["Creates compressed archives", "Deletes files", "Moves files", "Copies files"], correctAnswer: 0 },
-    { question: "What is the purpose of the /etc directory?", options: ["Contains configuration files", "Contains user data", "Stores system logs", "Holds user binaries"], correctAnswer: 0 },
-    { question: "Which command is used to create a symbolic link?", options: ["ln -s", "link", "symlink", "cp -s"], correctAnswer: 0 },
-    { question: "Which command shows disk usage by directories?", options: ["du", "df", "ls", "fdisk"], correctAnswer: 0 },
-    { question: "What is 'nano' in Linux?", options: ["Text editor", "Compiler", "Debugger", "Shell"], correctAnswer: 0 },
-    { question: "Which command is used to view system logs?", options: ["dmesg", "logs", "view", "syslog"], correctAnswer: 0 },
-    { question: "What does 'hostname' command show?", options: ["System's name", "User's name", "File's name", "Directory's name"], correctAnswer: 0 },
-    { question: "What does 'uname -r' display?", options: ["Kernel version", "OS name", "Current user", "Home directory"], correctAnswer: 0 },
-    { question: "Which command is used to reboot the system?", options: ["reboot", "shutdown", "halt", "restart"], correctAnswer: 0 },
-    { question: "What does the command 'echo' do?", options: ["Displays text", "Copies text", "Removes text", "Searches text"], correctAnswer: 0 },
-    { question: "Which command is used to check disk errors?", options: ["fsck", "df", "diskchk", "check"], correctAnswer: 0 },
-    { question: "How do you switch to the root user in Linux?", options: ["su", "login", "root", "admin"], correctAnswer: 0 },
-    { question: "What does 'ping' command do?", options: ["Tests network connection", "Lists open ports", "Displays CPU usage", "Checks disk space"], correctAnswer: 0 },
-    { question: "Which command is used to view memory usage by processes?", options: ["top", "df", "ps", "mem"], correctAnswer: 0 },
-    { question: "What is 'swap' space?", options: ["Virtual memory", "Temporary storage", "User space", "File space"], correctAnswer: 0 },
-    { question: "Which command displays active network connections?", options: ["netstat", "ping", "ftp", "top"], correctAnswer: 0 },
-    { question: "What is the maximum file size on a 32-bit system?", options: ["4 GB", "2 GB", "16 GB", "1 TB"], correctAnswer: 0 },
-    { question: "What does 'ls -a' show?", options: ["All files including hidden", "Only directories", "Large files", "All directories"], correctAnswer: 0 },
-    { question: "Which command is used to schedule tasks?", options: ["cron", "time", "schedule", "task"], correctAnswer: 0 },
-    { question: "What is the default shell in most Linux distributions?", options: ["Bash", "Zsh", "Fish", "Ksh"], correctAnswer: 0 },
-    { question: "Which command displays user information?", options: ["who", "whoami", "ls", "ps"], correctAnswer: 1 },
-    { question: "What does 'chmod 755' do?", options: ["Sets file permissions", "Changes file ownership", "Moves files", "Renames files"], correctAnswer: 0 },
-    { question: "How do you view system uptime?", options: ["uptime", "time", "sysinfo", "system"], correctAnswer: 0 },
-    { question: "Which command deletes a directory?", options: ["rmdir", "rm -d", "rm -dir", "del"], correctAnswer: 0 },
-    { question: "How do you exit the current shell?", options: ["exit", "quit", "close", "logout"], correctAnswer: 0 },
-    { question: "What does 'history' command show?", options: ["Command history", "File history", "Directory history", "User history"], correctAnswer: 0 },
-    { question: "Which key combination stops a process?", options: ["Ctrl+C", "Ctrl+Z", "Ctrl+X", "Ctrl+V"], correctAnswer: 0 },
-    { question: "What does the command 'locate' do?", options: ["Finds files", "Copies files", "Deletes files", "Moves files"], correctAnswer: 0 },
-    { question: "Which file contains the system boot log?", options: ["/var/log/boot.log", "/etc/boot.log", "/home/boot.log", "/usr/boot.log"], correctAnswer: 0 },
-    { question: "What does 'sudo' stand for?", options: ["Super User Do", "System User Do", "Switch User Do", "Safe User Do"], correctAnswer: 0 },
-    { question: "What is a 'daemon' in Linux?", options: ["Background process", "User command", "System file", "Text editor"], correctAnswer: 0 },
-    
-    { question: "Which command is used to view the contents of a file page by page?", options: ["more", "cat", "ls", "tail"], correctAnswer: 0 },
-    { question: "What does the 'tail' command do?", options: ["Displays the last lines of a file", "Shows file permissions", "Copies the file", "Deletes the file"], correctAnswer: 0 },
-    { question: "What is the function of 'ln' command in Linux?", options: ["Creates links", "Lists directories", "Changes permissions", "Compresses files"], correctAnswer: 0 },
-    { question: "How do you terminate a running process by its ID?", options: ["kill <PID>", "stop <PID>", "halt <PID>", "terminate <PID>"], correctAnswer: 0 },
-    { question: "Which command is used to modify file timestamps?", options: ["touch", "mtime", "chgrp", "settime"], correctAnswer: 0 },
-    { question: "What does the command 'sort' do?", options: ["Sorts text in files", "Deletes files", "Finds text in files", "Counts lines in files"], correctAnswer: 0 },
-    { question: "How do you count the lines, words, and characters in a file?", options: ["wc", "count", "ls -l", "char"], correctAnswer: 0 },
-    { question: "Which command allows you to replace text within a file?", options: ["sed", "grep", "mv", "rm"], correctAnswer: 0 },
-    { question: "How do you view hidden files in a directory?", options: ["ls -a", "ls -h", "show", "ls -l"], correctAnswer: 0 },
-    { question: "What does 'useradd' command do?", options: ["Creates a new user account", "Deletes a user", "Lists user accounts", "Modifies user account"], correctAnswer: 0 },
-    { question: "How do you compress a file with gzip?", options: ["gzip filename", "compress filename", "zip filename", "tar filename"], correctAnswer: 0 },
-    { question: "Which command is used to monitor system performance?", options: ["top", "sys", "status", "perf"], correctAnswer: 0 },
-    { question: "How do you stop a job and send it to the background?", options: ["Ctrl+Z", "Ctrl+C", "Ctrl+X", "Ctrl+A"], correctAnswer: 0 },
-    { question: "Which command do you use to navigate to the home directory?", options: ["cd ~", "cd /", "cd home", "cd root"], correctAnswer: 0 },
-    { question: "What does 'export' command do?", options: ["Sets environment variables", "Deletes environment variables", "Moves files", "Copies files"], correctAnswer: 0 },
-    { question: "What does 'head' command display?", options: ["First few lines of a file", "Last few lines of a file", "Entire file", "Middle lines of a file"], correctAnswer: 0 },
-    { question: "Which command is used to display user login attempts?", options: ["last", "history", "log", "whoami"], correctAnswer: 0 },
-    { question: "How do you clear the terminal screen?", options: ["clear", "cls", "clr", "clean"], correctAnswer: 0 },
-    { question: "What does 'df -h' display?", options: ["Human-readable disk usage", "Detailed file list", "Hidden files", "System uptime"], correctAnswer: 0 },
-    { question: "What does 'alias' command do?", options: ["Creates shortcuts for commands", "Deletes commands", "Moves files", "Copies files"], correctAnswer: 0 },
-    { question: "How do you edit a file with the vi editor?", options: ["vi filename", "edit filename", "cat filename", "view filename"], correctAnswer: 0 },
-    { question: "What does the command 'passwd' do?", options: ["Changes user password", "Creates new user", "Deletes user", "Renames user"], correctAnswer: 0 },
-    { question: "Which command is used to unmount a file system?", options: ["umount", "mount", "unmount", "dismount"], correctAnswer: 0 },
-    { question: "How do you append text to a file?", options: ["echo 'text' >> file", "cat > file", "echo 'text' > file", "write 'text' file"], correctAnswer: 0 },
-    { question: "Which command changes a user’s shell?", options: ["chsh", "change", "edit", "set"], correctAnswer: 0 },
-    { question: "What does 'exit 0' indicate?", options: ["Successful execution", "Error occurred", "Exit with warning", "User logout"], correctAnswer: 0 },
-    { question: "How do you display only unique lines in a file?", options: ["uniq", "sort", "grep", "diff"], correctAnswer: 0 },
-    { question: "What does 'ping' measure?", options: ["Network latency", "CPU usage", "Memory usage", "Disk usage"], correctAnswer: 0 },
-    { question: "Which file keeps track of all user login attempts?", options: ["/var/log/wtmp", "/var/log/user", "/etc/logs", "/home/logs"], correctAnswer: 0 },
-    { question: "What does 'apt-get' command do?", options: ["Manages packages in Debian", "Displays directories", "Changes permissions", "Creates new files"], correctAnswer: 0 },
-    { question: "How do you search for installed packages?", options: ["dpkg -l", "apt search", "pkg list", "install"], correctAnswer: 0 },
-    { question: "Which command updates package lists?", options: ["apt update", "pkg install", "dpkg update", "apt-get remove"], correctAnswer: 0 },
-    { question: "How do you start a service?", options: ["systemctl start", "service on", "init start", "svc on"], correctAnswer: 0 },
-    { question: "How do you stop a service?", options: ["systemctl stop", "service off", "init stop", "svc off"], correctAnswer: 0 },
-    { question: "What does the 'whoami' command output?", options: ["Current user name", "List of users", "Group of user", "Current directory"], correctAnswer: 0 },
-    { question: "How do you lock a user account?", options: ["usermod -L", "passwd -l", "usermod -l", "chmod -L"], correctAnswer: 0 },
-    { question: "What does 'diff' command do?", options: ["Compares files", "Copies files", "Deletes files", "Moves files"], correctAnswer: 0 },
-    { question: "Which directory contains log files?", options: ["/var/log", "/usr/bin", "/home/log", "/tmp"], correctAnswer: 0 },
-    { question: "What is the default location for user home directories?", options: ["/home", "/usr", "/var", "/root"], correctAnswer: 0 },
-    { question: "Which command removes an empty directory?", options: ["rmdir", "rm", "delete", "del"], correctAnswer: 0 },
-    { question: "What is the default port for SSH?", options: ["22", "80", "443", "25"], correctAnswer: 0 },
-    { question: "What is the 'fstab' file used for?", options: ["Lists file systems", "Sets network configurations", "Defines user permissions", "Stores process logs"], correctAnswer: 0 },
-    { question: "Which command displays CPU information?", options: ["lscpu", "cpuinfo", "cpu -v", "showcpu"], correctAnswer: 0 },
-   
-  ];
+    // Group 1 (1-4)
+    { question: "Which command lists all files in the current directory?", options: ["ls", "cd", "pwd", "cp"], correctAnswer: 0 },
+    { question: "What does the 'rm' command do?", options: ["Move files", "Rename files", "List files", "Remove files"], correctAnswer: 3 },
+    { question: "What is the purpose of the 'cd' command in Linux?", options: ["Copy files", "Change directories", "Delete files", "List files"], correctAnswer: 1 },
+    { question: "Which command displays the current working directory?", options: ["ls", "cd", "pwd", "rm"], correctAnswer: 2 },
+    { question: "How do you display the contents of a text file?", options: ["mv", "cat", "ls", "cp"], correctAnswer: 1 },
 
+    // Group 2 (5-8)
+    { question: "What does the command 'chmod' change?", options: ["File content", "File name", "File type", "File permissions"], correctAnswer: 3 },
+    { question: "Which command is used to copy files?", options: ["mv", "ls", "cp", "rm"], correctAnswer: 2 },
+    { question: "What does the 'mkdir' command do?", options: ["Makes a directory", "Moves files", "Deletes files", "Lists files"], correctAnswer: 0 },
+
+    // Group 3 (9-12)
+    { question: "What does the command 'df' display?", options: ["File contents", "Process list", "Disk usage", "Memory usage"], correctAnswer: 2 },
+    { question: "What does the 'ps' command do?", options: ["Lists processes", "Changes permissions", "Shows directories", "Pings servers"], correctAnswer: 0 },
+    { question: "Which command compares two files?", options: ["cmp", "diff", "comm", "fc"], correctAnswer: 0 },
+    { question: "Which command renames a file?", options: ["cp", "mv", "ls", "rm"], correctAnswer: 1 },
+
+    // Group 4 (13-16)
+    { question: "How do you check free memory in Linux?", options: ["mem", "top", "ps", "free"], correctAnswer: 3 },
+    { question: "What does the 'touch' command do?", options: ["Removes files", "Copies files", "Lists files", "Creates files"], correctAnswer: 3 },
+    { question: "What does the command 'kill' do?", options: ["Lists files", "Terminates processes", "Shows memory", "Copies files"], correctAnswer: 1 },
+    { question: "Which symbol redirects output to a file?", options: ["<", "|", ">", "&"], correctAnswer: 2 },
+
+    // Group 5 (17-20)
+    { question: "What does 'grep' command do?", options: ["Lists files", "Searches patterns", "Shows processes", "Copies files"], correctAnswer: 1 },
+    { question: "Which file contains user account information?", options: ["/etc/shadow", "/etc/group", "/etc/passwd", "/etc/users"], correctAnswer: 2 },
+    { question: "What does 'sudo' allow a user to do?", options: ["List files", "Run as root", "Copy files", "Show processes"], correctAnswer: 1 },
+    { question: "Which command changes file ownership?", options: ["chown", "chmod", "chgrp", "chattr"], correctAnswer: 0 },
+
+    // Group 6 (21-24)
+    { question: "What is the root user's home directory?", options: ["/home/root", "/usr/root", "/etc/root", "/root"], correctAnswer: 3 },
+    { question: "Which command displays network configuration?", options: ["ifconfig", "netstat", "route", "ip"], correctAnswer: 0 },
+    { question: "How do you search for a file in Linux?", options: ["search", "locate", "grep", "find"], correctAnswer: 3 },
+    { question: "Which command lists open files?", options: ["openfiles", "files", "lsof", "psf"], correctAnswer: 2 },
+
+    // Group 7 (25-28)
+    { question: "What command shows disk usage by directory?", options: ["disk", "space", "df", "du"], correctAnswer: 3 },
+    { question: "What is the purpose of /etc directory?", options: ["User files", "Configuration files", "System binaries", "Temporary files"], correctAnswer: 1 },
+    { question: "What does 'uname -r' display?", options: ["User info", "System info", "Host info", "Kernel version"], correctAnswer: 3 },
+    { question: "What does 'tar' command do?", options: ["Archives files", "Lists files", "Copies files", "Moves files"], correctAnswer: 0 },
+
+    // Group 8 (29-32)
+    { question: "Which command creates a symbolic link?", options: ["symlink", "link", "ln -s", "newlink"], correctAnswer: 2 },
+    { question: "What is 'nano' in Linux?", options: ["Text editor", "File manager", "Process viewer", "Network tool"], correctAnswer: 0 },
+    { question: "What does 'hostname' show?", options: ["IP address", "Domain name", "System name", "User name"], correctAnswer: 2 },
+    { question: "Which command views system logs?", options: ["viewlog", "dmesg", "logview", "syslog"], correctAnswer: 1 },
+
+    // Group 9 (33-36)
+    { question: "Which command checks filesystem?", options: ["syscheck", "diskcheck", "fsck", "chkdsk"], correctAnswer: 2 },
+    { question: "What does 'echo' command do?", options: ["Read text", "Display text", "Copy text", "Move text"], correctAnswer: 1 },
+    { question: "What does 'ping' command test?", options: ["Network connectivity", "Disk speed", "Memory usage", "CPU load"], correctAnswer: 0 },
+    { question: "Which command starts system services?", options: ["systemctl start", "service up", "init start", "daemon up"], correctAnswer: 0 },
+    { question: "How do you become superuser?", options: ["admin", "root", "super", "su"], correctAnswer: 3 },
+
+    // Group 10 (37-40)
+    { question: "Which command shows current user?", options: ["whoami", "user", "who", "me"], correctAnswer: 0 },
+    { question: "Which command displays network connections?", options: ["netinfo", "ipconfig", "ifconfig", "netstat"], correctAnswer: 3 },
+    { question: "What is swap space used for?", options: ["File storage", "Temp files", "Virtual memory", "Log files"], correctAnswer: 2 },
+
+    // Group 11 (41-44)
+    { question: "Which command shows process memory usage?", options: ["free", "top", "ps", "mem"], correctAnswer: 1 },
+    { question: "What clears the terminal screen?", options: ["cls", "clear", "clean", "clscreen"], correctAnswer: 1 },
+    { question: "Which command shows file end?", options: ["end", "last", "tail", "EOF"], correctAnswer: 2 },
+    { question: "What does 'man' command provide?", options: ["Management", "Maintenance", "Manifesto", "Manual"], correctAnswer: 3 },
+
+    // Group 12 (45-48)
+    { question: "What does 'passwd' command do?", options: ["Show password", "Change password", "Remove password", "List passwords"], correctAnswer: 1 },
+    { question: "What compresses files in Linux?", options: ["compress", "zip", "archive", "gzip"], correctAnswer: 3 },
+    { question: "Which key combination ends process?", options: ["Ctrl+X", "Ctrl+D", "Ctrl+C", "Ctrl+Z"], correctAnswer: 2 },
+    { question: "Which command shows directory structure?", options: ["tree", "dir", "ls", "show"], correctAnswer: 0 },
+
+    // Group 13 (49-52)
+    { question: "Which command shows calendar?", options: ["cal", "date", "time", "day"], correctAnswer: 0 },
+    { question: "What does 'locate' command do?", options: ["List files", "Find files", "Show files", "Copy files"], correctAnswer: 1 },
+    { question: "What does 'which' command show?", options: ["File type", "File size", "File owner", "File location"], correctAnswer: 3 },
+
+    { question: "Which directory holds system logs?", options: ["/usr/log", "/etc/log", "/var/log", "/log"], correctAnswer: 2 },
+    // Group 14 (53-56)
+    { question: "What does 'diff' command do?", options: ["Copy files", "Compare files", "Move files", "Delete files"], correctAnswer: 1 },
+    { question: "Which command counts words?", options: ["count", "num", "wc", "words"], correctAnswer: 2 },
+    { question: "What does 'less' command do?", options: ["Delete text", "Copy text", "Move text", "View text"], correctAnswer: 3 },
+    { question: "Which command shows disk partitions?", options: ["fdisk -l", "part", "disk", "show"], correctAnswer: 0 },
+
+    // Group 15 (57-60)
+    { question: "Which command shows USB devices?", options: ["lsusb", "usb", "devices", "show"], correctAnswer: 0 },
+    { question: "What does 'adduser' do?", options: ["Delete user", "Create user", "Modify user", "Show user"], correctAnswer: 1 },
+    { question: "Which command creates archives?", options: ["zip", "compress", "tar", "archive"], correctAnswer: 2 },
+    { question: "What does 'uniq' command show?", options: ["All lines", "Sort lines", "Count lines", "Unique lines"], correctAnswer: 3 },
+    { question: "What does 'head' command show?", options: ["Last lines", "First lines", "Middle lines", "All lines"], correctAnswer: 1 },
+
+    // Group 16 (61-64)
+    { question: "Which command shows CPU info?", options: ["lscpu", "cpu", "proc", "system"], correctAnswer: 0 },
+    { question: "Which command schedules tasks?", options: ["schedule", "task", "cron", "time"], correctAnswer: 2 },
+
+    // Group 17 (65-68)
+    { question: "What does 'chgrp' change?", options: ["User access", "File access", "Time access", "Group access"], correctAnswer: 3 },
+    { question: "Which command shows PCI devices?", options: ["lspci", "pci", "devices", "hardware"], correctAnswer: 0 },
+    { question: "Which command shows environment?", options: ["show", "vars", "env", "system"], correctAnswer: 2 },
+    { question: "What does 'killall' affect?", options: ["One process", "Some processes", "Few processes", "All processes"], correctAnswer: 3 },
+
+    // Group 18 (69-72)
+    { question: "What does 'umount' do?", options: ["Create mount", "Unmount filesystem", "Show mounts", "List mounts"], correctAnswer: 1 },
+    { question: "What does 'wget' do?", options: ["Send files", "Download files", "List files", "Delete files"], correctAnswer: 1 },
+    { question: "Which key shows command history?", options: ["Up arrow", "Down arrow", "Left arrow", "Right arrow"], correctAnswer: 0 },
+    { question: "Which command checks memory?", options: ["check", "meminfo", "free", "memory"], correctAnswer: 2 },
+    { question: "What does 'rmdir' remove?", options: ["Files", "Links", "Archives", "Directories"], correctAnswer: 3 },
+
+    // Group 19 (73-76)
+    { question: "Which command shows file type?", options: ["what", "type", "file", "show"], correctAnswer: 2 },
+    { question: "Which command shows block devices?", options: ["lsblk", "block", "devices", "show"], correctAnswer: 0 },
+    { question: "What does 'at' command do?", options: ["Shows time", "Lists jobs", "Runs now", "Schedules jobs"], correctAnswer: 3 },
+    { question: "What does 'usermod' do?", options: ["Create user", "Modify user", "Delete user", "Show user"], correctAnswer: 1 },
+
+    // Group 20 (77-80)
+    { question: "What does 'sort' do?", options: ["Count lines", "Sort lines", "Delete lines", "Copy lines"], correctAnswer: 1 },
+    { question: "Which signal terminates process?", options: ["SIGTERM", "SIGKILL", "SIGSTOP", "SIGCONT"], correctAnswer: 0 },
+    { question: "Which command shows load average?", options: ["load", "average", "uptime", "system"], correctAnswer: 2 },
+    { question: "What does 'nl' command do?", options: ["New line", "Next line", "Null line", "Number lines"], correctAnswer: 3 },
+
+    // Group 21 (81-84)
+    { question: "Which directory holds temporary files?", options: ["/tmp", "/temp", "/t", "/temporary"], correctAnswer: 0 },
+    { question: "Which command shows printer queue?", options: ["printers", "queue", "lpq", "print"], correctAnswer: 2 },
+    { question: "What does 'tee' command do?", options: ["Delete output", "Split output", "Move output", "Join output"], correctAnswer: 1 },
+    { question: "What does 'fmt' command do?", options: ["Delete text", "Copy text", "Move text", "Format text"], correctAnswer: 3 },
+
+    // Group 22 (85-88)
+    { question: "What does 'join' command do?", options: ["Split files", "Copy files", "Move files", "Merge files"], correctAnswer: 3 },
+    { question: "Which command shows system time?", options: ["date", "time", "clock", "now"], correctAnswer: 0 },
+    { question: "What does 'cut' command do?", options: ["Join fields", "Extract fields", "Delete fields", "Copy fields"], correctAnswer: 1 },
+    { question: "Which command shows routing table?", options: ["routing", "path", "route", "network"], correctAnswer: 2 },
+
+    // Group 23 (89-92)
+    { question: "What does 'logger' do?", options: ["Delete logs", "Add log entries", "Show logs", "Clear logs"], correctAnswer: 1 },
+    { question: "Which file sets system hostname?", options: ["/etc/hostname", "/etc/name", "/etc/host", "/etc/system"], correctAnswer: 0 },
+    { question: "Which command shows shared memory?", options: ["memory", "shared", "ipcs", "show"], correctAnswer: 2 },
+    { question: "What does 'expand' command do?", options: ["Compress text", "Delete spaces", "Remove tabs", "Convert tabs"], correctAnswer: 3 },
+
+    { question: "Which command creates backup?", options: ["copy", "save", "backup", "archive"], correctAnswer: 2 },
+    { question: "What does 'basename' show?", options: ["Directory name", "File name", "Full path", "Link name"], correctAnswer: 1 },
+    { question: "Which command shows system messages?", options: ["dmesg", "messages", "syslog", "log"], correctAnswer: 0 },
+
+    // Final Group 25 (97-100)
+    { question: "What does 'sed' command do?", options: ["Sort text", "Copy text", "Move text", "Edit text"], correctAnswer: 3 }
+    { question: "What does 'comm' command do?", options: ["Combine files", "Copy files", "Move files", "Compare files"], correctAnswer: 3 },
+    { question: "What does 'ftp' command do?", options: ["Copy local", "Transfer files", "Move files", "Delete files"], correctAnswer: 1 },
+    { question: "Which command displays file differences?", options: ["cmp", "comp", "diff", "compare"], correctAnswer: 2 },
+    { question: "Which command executes commands periodically?", options: ["watch", "monitor", "observe", "track"], correctAnswer: 0 },
+];
 
 
 
