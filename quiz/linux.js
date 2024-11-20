@@ -142,7 +142,7 @@ const questions = [
     { question: "Which command shows system messages?", options: ["dmesg", "messages", "syslog", "log"], correctAnswer: 0 },
 
     // Final Group 25 (97-100)
-    { question: "What does 'sed' command do?", options: ["Sort text", "Copy text", "Move text", "Edit text"], correctAnswer: 3 }
+    { question: "What does 'sed' command do?", options: ["Sort text", "Copy text", "Move text", "Edit text"], correctAnswer: 3 },
     { question: "What does 'comm' command do?", options: ["Combine files", "Copy files", "Move files", "Compare files"], correctAnswer: 3 },
     { question: "What does 'ftp' command do?", options: ["Copy local", "Transfer files", "Move files", "Delete files"], correctAnswer: 1 },
     { question: "Which command displays file differences?", options: ["cmp", "comp", "diff", "compare"], correctAnswer: 2 },
