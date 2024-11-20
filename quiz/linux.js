@@ -100,9 +100,7 @@ const questions = [
     { question: "What is the default port for SSH?", options: ["22", "80", "443", "25"], correctAnswer: 0 },
     { question: "What is the 'fstab' file used for?", options: ["Lists file systems", "Sets network configurations", "Defines user permissions", "Stores process logs"], correctAnswer: 0 },
     { question: "Which command displays CPU information?", options: ["lscpu", "cpuinfo", "cpu -v", "showcpu"], correctAnswer: 0 },
-    { question: "What does the command 'ssh' do?", options: ["Connects to remote servers", "Displays system status", "Copies files", "Finds files"], correctAnswer: 0 },
-    { question: "How do you list installed services?", options: ["systemctl list-unit-files", "service list", "svc --all", "show services"], correctAnswer: 0 },
-  
+   
   ];
 
 
@@ -111,7 +109,7 @@ const questions = [
 let currentQuestion = 0;
 let correctAnswers = 0;
 let incorrectAnswers = 0;
-let timeLeft = 420; // 7 minutes in seconds
+let timeLeft = 900; // 15 minutes in seconds
 let timerInterval;
 let userName = "";
 
