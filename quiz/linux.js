@@ -150,11 +150,10 @@ const questions = [
 ];
 
 
-
 let currentQuestion = 0;
 let correctAnswers = 0;
 let incorrectAnswers = 0;
-let timeLeft = 900; // 15 minutes in seconds
+let timeLeft = 420; // 7 minutes in seconds
 let timerInterval;
 let userName = "";
 
