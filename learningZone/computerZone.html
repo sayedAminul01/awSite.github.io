@@ -18,6 +18,29 @@
     <title>Computer Zone</title>
     <meta name="description" content="Explore coding tutorials, discussions, and learning resources at the Alien Institute of Computer Learning Zone.">
     <link rel="stylesheet" href="./style.css">
+
+<!--Search Bar CSS  -->
+    <style>
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        #searchInput {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            color: blue;
+        }
+        .card.hidden {
+            display: none;
+        }
+    </style>
+    <!--Search Bar CSS  End-->
+    
 </head>
 <body>
     <header>
@@ -34,6 +57,14 @@
             </nav> -->
         </div>
     </header>
+
+        <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search topics..." onkeyup="searchTopics()">
+    </div>
+    <!-- Search Bar end -->
+
+    
     <main class="container">
         <div class="main-content">
             <div class="card">
@@ -102,6 +133,26 @@
         // Add any necessary JavaScript here
         console.log('Welcome to the Alien Institute of Computer Learning Zone!');
     </script>
+
+<!--     Search Bar Functionality -->
+        <script>
+        function searchTopics() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                const title = card.textContent.toLowerCase();
+                
+                if (title.includes(searchValue)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+
+    <!--     Search Bar Functionality End -->
 
     <!-- Adsense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3056427584192481"
