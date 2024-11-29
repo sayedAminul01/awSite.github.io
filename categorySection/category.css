@@ -158,6 +158,32 @@ h2::after {
     color: var(--text-secondary);
 }
 
+
+#toolsCategorySearch {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 30px;
+    border: 2px solid var(--border-color);
+    background: var(--card-bg);
+    /* color: var(--text-primary); */
+    color: var(--html-color);
+    font-size: 1rem;
+    transition: all 0.3s ease; 
+}
+
+/* #toolsCategorySearch {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(114, 137, 218, 0.3);
+
+} */
+
+
+/* #toolsCategorySearch {
+    color: var(--text-secondary);
+} */
+
+
 /* Category-specific styles */
 .category-html .category-icon { color: var(--html-color); }
 .category-css .category-icon { color: var(--css-color); }
@@ -218,3 +244,78 @@ h2::after {
         padding: 0.875rem 1.25rem;
     }
 }
+
+
+
+/* CSS for Category tools */
+/* Add these styles to your existing category.css file */
+.category-card .category-icon {
+    color: var(--primary-color, #007bff); /* Fallback to blue if custom property not set */
+    transition: all 0.3s ease;
+}
+
+/* Computer Science (CSS) */
+.category-css .category-icon {
+    color: #2965f1; /* Blue for CSS */
+}
+
+/* Open Schooling (JavaScript) */
+.category-javascript .category-icon {
+    color: #f0db4f; /* Yellow for JavaScript */
+}
+
+/* High School Resources (Node) */
+.category-node .category-icon {
+    color: #68a063; /* Green for Node */
+}
+
+/* Blog (React) */
+.category-react .category-icon {
+    color: #61dafb; /* Light Blue for React */
+}
+
+/* Shorts (Python) */
+.category-python .category-icon {
+    color: #3776ab; /* Deep Blue for Python */
+}
+
+/* Web Dev (Design) */
+.category-design .category-icon {
+    color: #f24e1e; /* Orange for Design */
+}
+
+/* Quiz (Tools) */
+.category-tools .category-icon {
+    color: #6a5acd; /* Slate Blue for Tools */
+}
+
+/* Learning Zone */
+.category-learning-zone .category-icon {
+    color: #4CAF50; /* Green for Learning Zone */
+}
+
+/* New Tools Categories */
+.category-development-tools .category-icon {
+    color: #865e5e; /* Dark Gray for Development Tools */
+}
+
+.category-design-tools .category-icon {
+    color: #ff6b6b; /* Coral for Design Tools */
+}
+
+.category-productivity-tools .category-icon {
+    color: #4ecdc4; /* Teal for Productivity Tools */
+}
+
+.category-online-resources .category-icon {
+    color: #6c5ce7; /* Purple for Online Learning */
+}
+
+.category-collaboration-tools .category-icon {
+    color: #0984e3; /* Bright Blue for Collaboration */
+}
+
+.category-hosting-tools .category-icon {
+    color: #636e72; /* Gray for Hosting Tools */
+}
+/* CSS for Category tools end */
