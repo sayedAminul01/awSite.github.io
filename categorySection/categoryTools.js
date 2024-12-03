@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 'design-tools',
             title: 'Generate Vocational Course Receipt',
-            icon: 'material-icons',
+            icon: 'fa-solid fa-receipt',
             postCount:  "Generate any Computer Course Receipt instantly",
             description: 'https://sayedaminul01.github.io/VocationalReceipt/',
             url: '/tools/design'
