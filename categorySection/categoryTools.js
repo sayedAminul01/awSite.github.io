@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Generate Vocational Course Receipt',
             icon: 'fa-solid fa-receipt',
             postCount:  "Generate any Computer Course Receipt instantly",
-            description: 'https://sayedaminul01.github.io/VocationalReceipt/',
-            url: '/tools/design'
+            description: 'tools',
+            url: 'https://sayedaminul01.github.io/VocationalReceipt/'
         },
         // {
         //     id: 'productivity-tools',
