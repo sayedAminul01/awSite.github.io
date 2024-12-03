@@ -10,14 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
             description: 'Programming and development tools',
             url: 'https://receipt.code01.xyz/'
         },
-        // {
-        //     id: 'design-tools',
-        //     title: 'Design Tools',
-        //     icon: 'fa-solid fa-paint-brush',
-        //     postCount: 18,
-        //     description: 'UI/UX and graphic design tools',
-        //     url: '/tools/design'
-        // },
+        {
+            id: 'design-tools',
+            title: 'Generate Vocational Course Receipt',
+            icon: 'material-icons',
+            postCount:  "Generate any Computer Course Receipt instantly",
+            description: 'https://sayedaminul01.github.io/VocationalReceipt/',
+            url: '/tools/design'
+        },
         // {
         //     id: 'productivity-tools',
         //     title: 'Productivity Tools',
