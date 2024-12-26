@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-book-open',
             postCount: 10,
             description: 'Web programming',
-            url: '/category/javascript'
+            url: './openSchool/o.html'
         },
         {
             id: 'node',
