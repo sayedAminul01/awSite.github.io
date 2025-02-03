@@ -70,8 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
         },
                 {
             id: 'css',
-            title: 'Computer Science',
-            icon: 'fa-solid fa-laptop-code',
+            title: 'Cyber Security',
+            icon: 'fa-solid fa-shield-virus',
             postCount: 38,
             description: 'Styling and animations',
             url: './learningZone/computerZone.html'
