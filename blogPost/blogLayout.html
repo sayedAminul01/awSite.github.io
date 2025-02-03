@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore the latest tech insights, development trends, and industry news on AlienWeb - Your gateway to the digital future">
+    <meta name="keywords" content="tech blog, web development, AI, cybersecurity, cloud computing, programming">
+    <meta name="author" content="AlienWeb">
+    <meta property="og:title" content="AlienWeb - Tech Blog">
+    <meta property="og:description" content="Discover cutting-edge tech insights and development trends">
+    <meta property="og:url" content="https://alienweb.in">
+    <link rel="canonical" href="https://alienweb.in">
+    <title>AlienWeb - Tech Blog | Latest Tech Insights and Trends</title>
+    <link rel="stylesheet" href="blogLayout.css">
+    <link rel="preconnect" href="https://images.unsplash.com">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="site-title">AlienWeb Tech Blog</h1>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search posts..."
+                    aria-label="Search blog posts"
+                >
+                <button id="searchButton" aria-label="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </div>
+        </header>
+        <main>
+            <div class="grid" id="postsGrid">
+                <!-- Posts will be dynamically added here -->
+            </div>
+            <button id="loadMoreBtn" class="load-more-btn">Load More Posts</button>
+        </main>
+    </div>
+    <script src="blogLayout.js" defer></script>
+</body>
+</html>
