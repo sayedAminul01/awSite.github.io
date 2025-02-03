@@ -67,6 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
             postCount: 19,
             description: 'Development tools',
             url: './learningZone/index.html'
+        },
+                {
+            id: 'css',
+            title: 'Computer Science',
+            icon: 'fa-solid fa-laptop-code',
+            postCount: 38,
+            description: 'Styling and animations',
+            url: './learningZone/computerZone.html'
         }
 
     ];
