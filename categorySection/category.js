@@ -89,10 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
                class="category-card category-${category.id}"
                style="animation-delay: ${index * 0.1}s"
                data-category="${category.id}"
-               aria-label="View ${category.title} category with ${category.postCount} posts">
+               // aria-label="View ${category.title} category with ${category.postCount} posts">
                 <i class="category-icon ${category.icon}" aria-hidden="true"></i>
                 <h3 class="category-title">${category.title}</h3>
-                <p class="post-count">${category.postCount} posts</p>
+                // <p class="post-count">${category.postCount} posts</p>
             </a>
         `;
     }
