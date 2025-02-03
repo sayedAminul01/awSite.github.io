@@ -47,22 +47,7 @@ const posts = [
         image: 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb',
         readTime: '6 min read'
     },
-    {
-        id: 7,
-        title: 'Data Science Insights',
-        description: 'Analytics and machine learning applications',
-        date: 'Jan 15, 2024',
-        image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904',
-        readTime: '7 min read'
-    },
-    {
-        id: 8,
-        title: 'Data Science Insights',
-        description: 'Analytics and machine learning applications',
-        date: 'Jan 15, 2024',
-        image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904',
-        readTime: '7 min read'
-    }
+
 ];
 
 let currentPosts = [...posts];
