@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-blog',
             postCount: 47,
             description: 'Modern UI development',
-            url: '/category/react'
+            url: './blogPost/blogLayout.html'
         },
 
         {
