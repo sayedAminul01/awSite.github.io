@@ -4,50 +4,37 @@ const posts = [
         title: 'AI and Future of Technology',
         description: 'Exploring artificial intelligence innovations',
         date: 'Feb 1, 2024',
-        image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995',
-        readTime: '7 min read'
+        image: '/assets/images/ai-future.jpg', // Local Image
+        readTime: '7 min read',
+        link: '/posts/ai-future' // Add link
     },
     {
         id: 2,
         title: 'Web Development Trends',
         description: 'Latest frameworks and development strategies',
         date: 'Jan 28, 2024',
-        image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479',
-        readTime: '5 min read'
+        image: '/assets/images/web-trends.jpg',
+        readTime: '5 min read',
+        link: '/posts/web-trends'
     },
     {
         id: 3,
         title: 'Cybersecurity Challenges',
         description: 'Emerging threats and protection strategies',
         date: 'Jan 25, 2024',
-        image: 'https://images.unsplash.com/photo-1614064641938-3bbee52942c7',
-        readTime: '6 min read'
+        image: '/assets/images/cybersecurity.jpg',
+        readTime: '6 min read',
+        link: '/posts/cybersecurity'
     },
     {
         id: 4,
         title: 'Mobile App Development',
         description: 'Building cross-platform applications efficiently',
         date: 'Jan 22, 2024',
-        image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c',
-        readTime: '8 min read'
-    },
-    {
-        id: 5,
-        title: 'Cloud Computing Solutions',
-        description: 'Modern cloud architecture and best practices',
-        date: 'Jan 20, 2024',
-        image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8',
-        readTime: '5 min read'
-    },
-    {
-        id: 6,
-        title: 'DevOps Practices',
-        description: 'Streamlining development and operations',
-        date: 'Jan 18, 2024',
-        image: 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb',
-        readTime: '6 min read'
-    },
-
+        image: '/assets/images/mobile-dev.jpg',
+        readTime: '8 min read',
+        link: '/posts/mobile-dev'
+    }
 ];
 
 let currentPosts = [...posts];
