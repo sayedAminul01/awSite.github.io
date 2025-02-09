@@ -2,7 +2,7 @@
 const posts = [
     {
         id: 1,
-        title: 'AI and Future of Technology',
+        title: 'A Comprehensive Guide to Understanding and Using Proxies',
         description: 'Exploring artificial intelligence innovations',
         date: 'Feb 1, 2024',
         image: 'images/proxy.jpg', // Update image path
