@@ -4,7 +4,7 @@ const posts = [
         title: 'AI and Future of Technology',
         description: 'Exploring artificial intelligence innovations',
         date: 'Feb 1, 2024',
-        image: '/images/proxyServer.jpg', // Local Image
+        image: './images/proxyServer.jpg', // Local Image
         readTime: '7 min read',
         link: '/posts/ai-future' // Add link
     },
