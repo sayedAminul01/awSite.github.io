@@ -1,21 +1,22 @@
+// blogLayout.js
 const posts = [
     {
         id: 1,
         title: 'AI and Future of Technology',
         description: 'Exploring artificial intelligence innovations',
         date: 'Feb 1, 2024',
-        image: 'images/proxyServer.jpg', // Local Image
+        image: 'images/proxy.jpg', // Update image path
         readTime: '7 min read',
-        link: '/posts/ai-future' // Add link
+        link: 'posts/proxy.html'
     },
     {
         id: 2,
         title: 'Web Development Trends',
         description: 'Latest frameworks and development strategies',
         date: 'Jan 28, 2024',
-        image: '/assets/images/web-trends.jpg',
+        image: '/',
         readTime: '5 min read',
-        link: '/posts/web-trends'
+        link: '/posts/web-trends.html'
     },
     {
         id: 3,
@@ -24,7 +25,7 @@ const posts = [
         date: 'Jan 25, 2024',
         image: '/assets/images/cybersecurity.jpg',
         readTime: '6 min read',
-        link: '/posts/cybersecurity'
+        link: '/posts/cybersecurity.html'
     },
     {
         id: 4,
@@ -33,21 +34,19 @@ const posts = [
         date: 'Jan 22, 2024',
         image: '/assets/images/mobile-dev.jpg',
         readTime: '8 min read',
-        link: '/posts/mobile-dev'
+        link: '/posts/mobile-dev.html'
     }
 ];
 
-let currentPosts = [...posts];
-let visiblePosts = 6;
-
 function createPostCard(post) {
     return `
-        <div class="post-card">
+        <a href="${post.link}" class="post-card">
             <div class="post-image-container">
                 <img 
                     src="${post.image}" 
                     alt="${post.title}" 
                     class="post-image"
+                    onerror="this.src='/assets/images/placeholder.jpg'"
                 >
                 <div class="post-overlay"></div>
                 <div class="post-content">
@@ -65,9 +64,15 @@ function createPostCard(post) {
                     <span>${post.readTime}</span>
                 </div>
             </div>
-        </div>
+        </a>
     `;
 }
+
+
+let currentPosts = [...posts];
+let visiblePosts = 6;
+
+
 
 function renderPosts() {
     const grid = document.querySelector('.grid');
