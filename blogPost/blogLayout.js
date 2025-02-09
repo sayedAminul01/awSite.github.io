@@ -5,7 +5,7 @@ const posts = [
         title: 'A Comprehensive Guide to Understanding and Using Proxies',
         description: 'A proxy acts as an intermediary between your device and the internet. When you use a proxy server,',
         date: 'Feb 1, 2024',
-        image: 'images/proxy.jpg', // Update image path
+        image: 'images/proxyServer.jpg', // Update image path
         readTime: '7 min read',
         link: 'posts/proxy.html'
     },
