@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
             description: 'tools',
             url: 'https://sayedaminul01.github.io/VocationalReceipt/'
         },
-        // {
-        //     id: 'productivity-tools',
-        //     title: 'Productivity Tools',
-        //     icon: 'fa-solid fa-clock',
-        //     postCount: 15,
-        //     description: 'Productivity and time management tools',
-        //     url: '/tools/productivity'
-        // },
+        {
+            id: 'Loan Calculation Tool',
+            title: 'Loan Calculation',
+            icon: 'fa-solid fa-hand-holding-dollar',
+            postCount: 15,
+            description: 'Calculate any Loan amount interest by Year/Amount/Monthly Sheet and more',
+            url: '/tools/productivity'
+        },
         // {
         //     id: 'online-resources',
         //     title: 'Online Learning',
