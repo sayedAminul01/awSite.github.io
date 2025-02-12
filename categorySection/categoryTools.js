@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 'Loan Calculation Tool',
-            title: 'Loan Calculation',
+            title: 'Loan Calculation Tool',
             icon: 'fa-solid fa-hand-holding-dollar',
             postCount: "Calculate any Loan amount interest by Year/Amount/Monthly Sheet and more'",
             description: 'Loan Tools',
