@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-question',
             postCount: 19,
             description: 'Development tools',
-            url: '/category/tools'
+            url: './learningZone/computerZone.html'
         },
         {
             id: 'tools',
