@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             description: 'Styling and animations',
             // url: './learningZone/computerZone.html'
         },
+        {
             id: 'css',
             title: 'ADCA',
             icon: 'fa-solid fa-desktop',
