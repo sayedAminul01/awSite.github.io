@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'css',
             title: 'Computer Science',
             icon: 'fa-solid fa-laptop-code',
-            postCount: 38,
+            postCount: 20,
             description: 'Styling and animations',
             url: './learningZone/computerZone.html'
         },
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'javascript',
             title: 'Open Schooling',
             icon: 'fa-solid fa-book-open',
-            postCount: 10,
+            postCount: 0,
             description: 'Web programming',
             url: './openSchool/o.html'
         },
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'node',
             title: 'High School Resources',
             icon: 'fa-solid fa-school',
-            postCount: 31,
+            postCount: 1,
             description: 'Backend development',
             url: './learningZone/layout.html'
         },
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'react',
             title: 'Blog',
             icon: 'fa-solid fa-blog',
-            postCount: 47,
+            postCount: 1,
             description: 'Modern UI development',
             url: './blogPost/blogLayout.html'
         },
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'python',
             title: 'Shorts',
             icon: 'fa-solid fa-video',
-            postCount: 28,
+            postCount: 1,
             description: 'Python programming',
             url: '/category/python'
         },
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'design',
             title: 'Web Dev',
             icon: 'fa-brands fa-codepen',
-            postCount: 23,
+            postCount: 0,
             description: 'UI/UX design',
             url: '/category/design'
         },
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'tools',
             title: 'Quiz',
             icon: 'fa-solid fa-question',
-            postCount: 19,
+            postCount: 20,
             description: 'Development tools',
             url: './learningZone/computerZone.html'
         },
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'tools',
             title: 'Learning Zone',
             icon: 'fa-solid fa-cubes',
-            postCount: 19,
+            postCount: 20,
             description: 'Development tools',
             url: './learningZone/index.html'
         },
@@ -72,9 +72,16 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'css',
             title: 'Cyber Security',
             icon: 'fa-solid fa-shield-virus',
-            postCount: 38,
+            postCount: 1,
             description: 'Styling and animations',
             // url: './learningZone/computerZone.html'
+        },
+            id: 'css',
+            title: 'ADCA',
+            icon: 'fa-solid fa-desktop',
+            postCount: 1,
+            description: 'Styling and animations',
+            url: '../adca_test/adcaLayoutPage.html'
         }
 
     ];
