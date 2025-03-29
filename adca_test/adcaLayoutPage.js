@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 'test2',
-            title: 'Coming Soon',
+            title: 'Troubleshooting Test',
             icon: 'fa-solid fa-code',
             postCount: 0,
             description: 'Programming basics test',
