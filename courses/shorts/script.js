@@ -3,28 +3,53 @@
             {
                 id: 'https://www.youtube.com/watch?v=pioOT0IM7Tg',
                 title: 'How to Automatically Shutdown PC/COMPUTER/LAPTOP',
-                type: 'shorts'
+                type: 'full'
             },
             {
                 id: 'https://youtube.com/shorts/m4oSCfvBCus',
                 title: 'System software of computer by aW Mami',
                 type: 'shorts'
             },
-            // {
-            //     id: 'https://www.youtube.com/shorts/UyjcZ3aKAd8',
-            //     title: 'Cool YouTube Short',
-            //     type: 'shorts'
-            // },
-            // {
-            //     id: 'dQw4w9WgXcQ',
-            //     title: 'Rick Astley - Never Gonna Give You Up',
-            //     type: 'full'
-            // },
-            // {
-            //     id: '9bZkp7q19f0',
-            //     title: 'PSY - GANGNAM STYLE',
-            //     type: 'full'
-            // }
+            {
+                id: 'https://youtube.com/shorts/RaxK-Pu8qaQ',
+                title: 'Windows operating system accessories by aW simi',
+                type: 'shorts'
+            },
+            {
+                id: 'https://youtube.com/shorts/186yUFHsneI',
+                title: 'Top 7 search engine in the world by aW mami',
+                type: 'shorts'
+            },
+            {
+                id: 'https://youtube.com/shorts/7oJX3XUttxQ',
+                title: 'Top 5 operating system name in the world by aW Nijumoni',
+                type: 'shorts'
+            },
+            {
+                id: 'https://youtube.com/shorts/7oJX3XUttxQ',
+                title: 'popular operating system by aW Rekib',
+                type: 'shorts'
+            },
+                {
+                id: 'https://youtube.com/shorts/UyjcZ3aKAd8',
+                title: 'Types of computers by aW Arjuma',
+                type: 'shorts'
+            },
+              {
+                id: 'https://youtube.com/shorts/3Jb-teGK-uU',
+                title: 'Types of computers by aW Ashik',
+                type: 'shorts'
+            },
+            {
+                id: 'https://youtube.com/shorts/eVm7zvHwA-k',
+                title: 'Types of computers by aW Rejina',
+                type: 'shorts'
+            },
+            {
+                id: 'https://youtube.com/shorts/eVm7zvHwA-k',
+                title: 'Types of computers by aW Rejina',
+                type: 'shorts'
+            },
         ];
         
         // Main videos array
