@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlienWeb - Watch YouTube videos and shorts in dark mode">
+    <meta name="keywords" content="alienWeb, YouTube, shorts, videos, dark mode">
+    <title>AlienWeb - YouTube Videos</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <a href="https://alienweb.in">AlienWeb</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://alienweb.in" title="Home"><i class="fas fa-home"></i></a>
+                <a href="https://t.me/+P9aaH9bUytcyYTM1" title="Join Telegram"><i class="fab fa-telegram"></i></a>
+                <a href="https://whatsapp.com/channel/0029VaWla8zBqbrBeQ9t7F3i" title="Join WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </header>
+    
+    <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search videos by title...">
+        <button class="btn" id="searchBtn"><i class="fas fa-search"></i> Search</button>
+    </div>
+    
+    <div id="message" class="message" style="display: none;"></div>
+    
+    <div class="tab-container">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="all">All Videos</button>
+            <button class="tab-btn" data-tab="full">Full Videos</button>
+            <button class="tab-btn" data-tab="shorts">Shorts</button>
+        </div>
+        
+        <div class="tab-content active" id="all">
+            <div class="video-grid" id="allVideosGrid"></div>
+            <div class="loading" id="allLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading more videos...</p>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="full">
+            <div class="video-grid" id="fullVideosGrid"></div>
+            <div class="loading" id="fullLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading more videos...</p>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="shorts">
+            <div class="reels-grid" id="shortsGrid"></div>
+            <div class="loading" id="shortsLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading more videos...</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="add-video-btn" id="addVideoBtn">
+        <i class="fas fa-plus"></i>
+    </div>
+    
+    <div class="add-video-modal" id="addVideoModal">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <h3>Add New Videos</h3>
+        <div class="add-video-form">
+            <input type="text" class="search-input" id="videoUrlInput" placeholder="Enter YouTube video URL or ID">
+            <button class="btn" id="submitVideoBtn">Add Single Video</button>
+            
+            <div class="bulk-add-container">
+                <textarea class="bulk-add-textarea" id="bulkVideoUrls" placeholder="Paste multiple YouTube URLs (one per line)"></textarea>
+                <button class="btn" id="bulkAddBtn" style="margin-top: 10px;">Add Multiple Videos</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
