@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'css',
             title: 'ADCA',
             icon: 'fa-solid fa-desktop',
-            postCount: 1,
+            postCount: 2,
             description: 'Styling and animations',
             url: '../adca_test/adcaLayoutPage.html'
         }
