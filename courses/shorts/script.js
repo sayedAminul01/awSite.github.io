@@ -1,13 +1,13 @@
         // Initial video data
         const initialVideos = [
             {
-                id: 'eVm7zvHwA-k',
-                title: 'Funny YouTube Short',
+                id: 'https://www.youtube.com/watch?v=pioOT0IM7Tg',
+                title: 'How to Automatically Shutdown PC/COMPUTER/LAPTOP',
                 type: 'shorts'
             },
             {
-                id: '3Jb-teGK-uU',
-                title: 'Another YouTube Short',
+                id: 'https://youtube.com/shorts/m4oSCfvBCus',
+                title: 'System software of computer by aW Mami',
                 type: 'shorts'
             },
             {
