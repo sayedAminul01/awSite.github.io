@@ -10,21 +10,21 @@
                 title: 'System software of computer by aW Mami',
                 type: 'shorts'
             },
-            {
-                id: 'https://www.youtube.com/shorts/UyjcZ3aKAd8',
-                title: 'Cool YouTube Short',
-                type: 'shorts'
-            },
-            {
-                id: 'dQw4w9WgXcQ',
-                title: 'Rick Astley - Never Gonna Give You Up',
-                type: 'full'
-            },
-            {
-                id: '9bZkp7q19f0',
-                title: 'PSY - GANGNAM STYLE',
-                type: 'full'
-            }
+            // {
+            //     id: 'https://www.youtube.com/shorts/UyjcZ3aKAd8',
+            //     title: 'Cool YouTube Short',
+            //     type: 'shorts'
+            // },
+            // {
+            //     id: 'dQw4w9WgXcQ',
+            //     title: 'Rick Astley - Never Gonna Give You Up',
+            //     type: 'full'
+            // },
+            // {
+            //     id: '9bZkp7q19f0',
+            //     title: 'PSY - GANGNAM STYLE',
+            //     type: 'full'
+            // }
         ];
         
         // Main videos array
