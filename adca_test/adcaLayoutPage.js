@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'test2',
             title: 'Troubleshooting Test',
             icon: 'fa-solid fa-code',
-            postCount: 0,
+            postCount: 50,
             description: 'Programming basics test',
             url: '../adcaCourseTestContent/Troubleshooting/index.html'
         },
