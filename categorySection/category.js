@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-video',
             postCount: 1,
             description: 'Python programming',
-            url: '/category/python'
+            url: '../courses/shorts/index.html'
         },
         {
             id: 'design',
