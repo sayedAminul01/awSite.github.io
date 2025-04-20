@@ -1,6 +1,7 @@
 
         // YouTube videos data - Just IDs or links
         let allVideos = [
+                "https://www.youtube.com/shorts/EQ1H0ZG9ruM",
                 "https://www.youtube.com/shorts/YcDwAXIvCEQ",
                 "https://www.youtube.com/shorts/y3x-L1fnT-0",
                 "https://www.youtube.com/shorts/SPPMc-KsTDM",
