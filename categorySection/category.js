@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-brands fa-python',
             postCount: 1,
             description: 'Backend development',
-            url: './learningZone/layout.html'
+            // url: './learningZone/layout.html'
         }
 
     ];
