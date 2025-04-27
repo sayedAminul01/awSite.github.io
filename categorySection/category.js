@@ -83,6 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
             postCount: 2,
             description: 'Styling and animations',
             url: '../adca_test/adcaLayoutPage.html'
+        },
+                {
+            id: 'node',
+            title: 'High School Resources',
+            icon: 'fa-brands fa-python',
+            postCount: 1,
+            description: 'Backend development',
+            url: './learningZone/layout.html'
         }
 
     ];
