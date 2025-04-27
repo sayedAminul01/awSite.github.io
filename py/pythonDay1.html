@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Python Day 1 - AlienWeb</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    header {
+      background: url('https://images.unsplash.com/photo-1581091012184-7f0317dc3c52?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+    }
+    header h1 {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 2rem;
+    }
+    h2, h3 {
+      color: #00ff99;
+    }
+    pre {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    .quiz {
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #00ff99;
+      color: #121212;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00d9ff;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    a.button {
+      display: inline-block;
+      margin-top: 30px;
+      background: #00ff99;
+      color: #121212;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    a.button:hover {
+      background: #00d9ff;
+    }
+    @media (max-width: 600px) {
+      header {
+        height: 150px;
+      }
+      header h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🌟 Python Day 1 - AlienWeb</h1>
+</header>
+
+<div class="container">
+  
+  <p>Welcome to <strong>Day 1</strong> of Python at <strong>AlienWeb</strong> 🚀.  
+  Let’s start very simple so anyone can learn — even if you are a complete beginner!</p>
+
+  <h2>📚 Step-by-Step Topics</h2>
+
+  <h3>1. Printing Output</h3>
+  <p>In Python, you can display text or messages using the <code>print()</code> function.</p>
+  <pre><code>print("Hello, AlienWeb Learner!")</code></pre>
+
+  <h3>2. Taking User Input</h3>
+  <p>You can ask the user to type something using the <code>input()</code> function.</p>
+  <pre><code>name = input("What is your name? ")
+print("Welcome, " + name)</code></pre>
+
+  <h3>3. Adding Comments</h3>
+  <p>Comments help you and others understand the code. In Python, use <code>#</code> for comments.</p>
+  <pre><code># This is a comment
+print("Comments are ignored by Python.")</code></pre>
+
+  <h3>4. Debugging Errors</h3>
+  <p><strong>Syntax Error:</strong> You forgot Python rules (like missing quotes,brackets etc.).<br>
+     <strong>Name Error:</strong> You used a variable that doesn’t exist.</p>
+  <p>Example of Syntax Error:</p>
+  <pre><code># Missing a closing quote
+print("Hello World)  # ❌
+</code></pre>
+
+    <p>Example of Name Error:</p>
+  <pre><code>print(myname)  # ❌ (We didn't define 'myname' before using it)
+
+</code></pre>
+
+
+  <h3>5. String Manipulation</h3>
+  <p>We can combine two strings using <code>+</code> in Python.</p>
+  <pre><code>first_name = "Alien"
+last_name = "Web"
+full_name = first_name + " " + last_name
+print(full_name)</code></pre>
+
+  <h3>6. Variables</h3>
+  <p>Variables are like boxes where you keep information (text, numbers, etc.) Example:</p>
+  <pre><code>city = "London"
+year = 2025</code></pre>
+
+  <h2>🌟 Mini Project: Color Name Maker</h2>
+  <p>Mix your favorite two colors and create a new stylish color name!</p>
+  <pre><code>print("Welcome to the Color Name Maker 🎨")
+
+color1 = input("Enter your first favorite color: ")
+color2 = input("Enter your second favorite color: ")
+
+new_color = color1 + " " + color2
+
+print("Your stylish color name is: " + new_color)</code></pre>
+
+  <h2>🧠 Quick MCQ Test</h2>
+
+  <div class="quiz" id="quiz">
+    <form id="mcqForm">
+      
+      <p><strong>1. Which function prints output in Python?</strong><br>
+      <input type="radio" name="q1" value="A"> A) echo()<br>
+      <input type="radio" name="q1" value="B"> B) print()<br>
+      <input type="radio" name="q1" value="C"> C) printf()<br>
+      <input type="radio" name="q1" value="D"> D) show()</p>
+
+      <p><strong>2. What symbol is used for comments in Python?</strong><br>
+      <input type="radio" name="q2" value="A"> A) //<br>
+      <input type="radio" name="q2" value="B"> B) <!-- --> <br>
+      <input type="radio" name="q2" value="C"> C) #<br>
+      <input type="radio" name="q2" value="D"> D) **</p>
+
+      <p><strong>3. How do you take input in Python?</strong><br>
+      <input type="radio" name="q3" value="A"> A) get()<br>
+      <input type="radio" name="q3" value="B"> B) input()<br>
+      <input type="radio" name="q3" value="C"> C) scan()<br>
+      <input type="radio" name="q3" value="D"> D) ask()</p>
+
+      <p><strong>4. What does a NameError mean?</strong><br>
+      <input type="radio" name="q4" value="A"> A) Syntax broken<br>
+      <input type="radio" name="q4" value="B"> B) Variable not defined<br>
+      <input type="radio" name="q4" value="C"> C) Program success<br>
+      <input type="radio" name="q4" value="D"> D) Wrong keyword</p>
+
+      <button type="button" onclick="checkAnswers()">Submit</button>
+
+    </form>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <h2>🎯 Conclusion</h2>
+  <p>You have successfully learned:
+    <ul>
+      <li>How to display output</li>
+      <li>How to take user input</li>
+      <li>How to write comments</li>
+      <li>How to debug basic errors</li>
+      <li>How to combine strings</li>
+      <li>How to use variables</li>
+    </ul>
+  </p>
+
+  <a href="day2.html" class="button">🔗 Go to Day 2</a>
+
+</div>
+
+<script>
+function checkAnswers() {
+  const correct = {
+    q1: "B",
+    q2: "C",
+    q3: "B",
+    q4: "B"
+  };
+  
+  let score = 0;
+  const form = document.getElementById('mcqForm');
+  for (let q in correct) {
+    const userAnswer = form[q].value;
+    if (userAnswer === correct[q]) {
+      score++;
+    }
+  }
+
+  const result = document.getElementById('result');
+  result.textContent = "You scored " + score + " out of 4!";
+}
+</script>
+
+</body>
+</html>
