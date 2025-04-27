@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
                 {
             id: 'node',
-            title: 'High School Resources',
+            title: 'Learn Python Only',
             icon: 'fa-brands fa-python',
             postCount: 1,
             description: 'Backend development',
