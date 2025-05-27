@@ -2,7 +2,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Categories data
     const categories = [
-
+        {
+            id: 'node',
+            title: 'Ai Tools Directory',
+            icon: 'fa-solid fa-robot',
+            postCount: 1,
+            description: 'Backend development',
+            url: './categorySection/aiToolsDirectory.html'
+        },
         {
             id: 'css',
             title: 'Computer Science',
