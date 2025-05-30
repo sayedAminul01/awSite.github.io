@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn the foundational AI prompting techniques: zero-shot, one-shot, and few-shot prompting with examples for better output clarity using ChatGPT. Ideal for beginners and prompt engineers alike." />
+  <meta name="keywords" content="Prompt Engineering, Zero-Shot Prompting, One-Shot Prompting, Few-Shot Prompting, ChatGPT Frameworks, AI Prompts, Prompt Types" />
+  <meta name="author" content="AlienWeb" />
+  <title>Understanding Shot Prompting Techniques with ChatGPT | AlienWeb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      line-height: 1.8;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1, h2, h3 {
+      color: #00e09d;
+    }
+
+    a.button {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #03dac5;
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    a.button:hover {
+      background-color: #018786;
+    }
+
+    @media screen and (max-width: 768px) {
+      .container {
+        margin: 1rem;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Shot Prompting: Master the Basics of Prompt Engineering</h1>
+
+    <p>Prompt engineering plays a key role in getting high-quality results from AI tools like ChatGPT. In this post, we’ll break down one of the most important foundational concepts in prompt writing: <strong>Shot Prompting</strong>. Whether you're a content creator, developer, or digital marketer, knowing when and how to use different shot types will help you get the best output.</p>
+
+    <h2>What is Shot Prompting?</h2>
+    <p><strong>Shot prompting</strong> refers to the number of examples or instructions you provide to the AI before it starts generating an answer. There are three primary types:</p>
+
+    <h3>1. Zero-Shot Prompting</h3>
+    <p>This is the simplest form. You give the AI a direct instruction without any examples or context.</p>
+    <p><strong>Example:</strong> “Write a blog intro about eco-friendly home gadgets.”</p>
+    <p>This is useful for fast responses or simple tasks. But the output may vary in quality if the topic is complex or vague.</p>
+
+    <h3>2. One-Shot Prompting</h3>
+    <p>You provide one example before asking the AI to generate a similar output.</p>
+    <p><strong>Example:</strong></p>
+    <p>“Here’s a sample intro: ‘Technology has made it easier to live green. From smart thermostats to solar-powered chargers, innovation is key.’ Now write a similar blog intro about green transportation.”</p>
+    <p>This sets a tone and structure for the AI, leading to more relevant outputs.</p>
+
+    <h3>3. Few-Shot Prompting</h3>
+    <p>You give the AI multiple examples to follow, usually 2-5, depending on complexity.</p>
+    <p><strong>Example:</strong></p>
+    <p>“Example 1: Intro about smart homes… Example 2: Intro about wearable health devices… Example 3: Intro about voice assistants… Now write an intro about AI in education.”</p>
+    <p>This helps the AI better understand your style, tone, and structure, especially for detailed or technical content.</p>
+
+    <h2>When to Use Each Shot Type</h2>
+    <ul>
+      <li><strong>Zero-shot</strong>: Great for fast results and short-form content like slogans, titles, or quick questions.</li>
+      <li><strong>One-shot</strong>: Use it when tone and context matter more, like writing a review or case study summary.</li>
+      <li><strong>Few-shot</strong>: Perfect for long-form tasks where accuracy and consistency are essential (like reports, email templates, course creation).</li>
+    </ul>
+
+    <h2>Best Practices for Prompting</h2>
+    <ul>
+      <li>Use clear and concise instructions.</li>
+      <li>Provide examples close to your desired outcome.</li>
+      <li>Test different variations to compare outputs.</li>
+      <li>Always check and refine the final output.</li>
+    </ul>
+
+    <h2>Final Thoughts</h2>
+    <p>Understanding zero-shot, one-shot, and few-shot prompting gives you greater control over your interaction with AI tools. The more precise your prompt, the better the AI can assist you.</p>
+
+    <p>In the next lesson, we'll explore <strong>Chain-of-Thought Prompting</strong>, where we guide the model through multi-step reasoning for even smarter responses.</p>
+
+    <a href="/next-lesson.html" class="button">Next: Chain-of-Thought Prompting &raquo;</a>
+  </div>
+</body>
+</html>
