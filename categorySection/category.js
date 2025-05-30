@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-brain',
             postCount: 50,
             description: 'Backend development',
-            url: './aiCourse/postsAppearPage.html'
+            url: './promptEngineering/postsAppearPage.html'
         },
         {
             id: 'node',
