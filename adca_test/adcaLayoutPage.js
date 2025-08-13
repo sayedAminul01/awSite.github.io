@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-calculator',
             postCount: 0,
             description: 'Mathematics aptitude test',
-            url: './demoTest/index.html'
+            url: '../demoTest/index.html'
         },
         {
             id: 'test4',
@@ -157,4 +157,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
