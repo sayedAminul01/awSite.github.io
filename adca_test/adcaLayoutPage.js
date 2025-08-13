@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'test3',
             title: 'Internship Demo Test',
             icon: 'fa-solid fa-calculator',
-            postCount: 0,
+            postCount: 1,
             description: 'Mathematics aptitude test',
             url: '../demoTest/index.html'
         },
@@ -157,5 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
