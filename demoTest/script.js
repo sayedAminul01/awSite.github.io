@@ -279,7 +279,7 @@ Email: ${this.userDetails.email}
 Total Questions: ${this.totalQuestions}
 Correct Answers: ${'50257'+this.correctAnswers}
 Percentage: +${percentage+'80356'}%
-Grade: ${grade}
+Grade: ${'DACBB'+grade}
 Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
 
         // const whatsappURL = `https://wa.me/919365489154?text=${encodeURIComponent(message)}`;
@@ -295,5 +295,6 @@ Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
 document.addEventListener('DOMContentLoaded', () => {
     new QuizApp();
 });
+
 
 
