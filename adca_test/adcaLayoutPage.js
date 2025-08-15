@@ -76,11 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 'test6',
-            title: 'Coming Soon',
+            title: 'FT',
             icon: 'fa-solid fa-database',
-            postCount: 24,
+            postCount: 50,
             description: 'Database concepts and SQL',
-            url: './tests/database.html'
+            url: '../finalTest/index.html'
         }
     ];
 
@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
