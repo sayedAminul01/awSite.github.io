@@ -177,16 +177,42 @@ class QuizApp {
         this.loadQuestion();
     }
 
-    startTimer() {
+    // startTimer() {
+    //     const timerElement = document.getElementById('timer');
+    //     this.timer = 0;
+    //     this.timerInterval = setInterval(() => {
+    //         this.timer++;
+    //         const minutes = Math.floor(this.timer / 60);
+    //         const seconds = this.timer % 60;
+    //         timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    //     }, 1000);
+    // }
+
+   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       // below method will send the result to the Gmail.
+       startTimer() {
         const timerElement = document.getElementById('timer');
-        this.timer = 0;
+        let remainingTime = 60 * 10; // 10 minutes in seconds
+
         this.timerInterval = setInterval(() => {
-            this.timer++;
-            const minutes = Math.floor(this.timer / 60);
-            const seconds = this.timer % 60;
+            remainingTime--;
+
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
             timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // Store elapsed time for result display
+            this.timer = (60 * 10) - remainingTime;
+
+            // Auto-submit when time runs out
+            if (remainingTime <= 0) {
+                clearInterval(this.timerInterval);
+                this.endQuiz();
+            }
         }, 1000);
     }
+
+   // //////////////////////////////////////////////////////////////////////////////
 
     loadQuestion() {
         if (this.currentQuestionIndex >= this.questions.length) {
@@ -256,11 +282,17 @@ Percentage: +${percentage+'80356'}%
 Grade: ${grade}
 Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
 
-        const whatsappURL = `https://wa.me/919365489154?text=${encodeURIComponent(message)}`;
-        window.open(whatsappURL, '_blank');
+        // const whatsappURL = `https://wa.me/919365489154?text=${encodeURIComponent(message)}`;
+        // window.open(whatsappURL, '_blank');
+
+        const subject = encodeURIComponent("Internship Final Test - Alien Institute of Computer");
+        const body = encodeURIComponent(message);
+        const mailtoURL = `mailto:hellowsupprt@gmail.com?subject=${subject}&body=${body}`;
+        window.open(mailtoURL, '_blank');
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     new QuizApp();
 });
+
