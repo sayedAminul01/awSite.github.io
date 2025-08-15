@@ -701,9 +701,9 @@ Name: ${this.userDetails.name}
 Phone: ${this.userDetails.phone}
 Email: ${this.userDetails.email}
 Total Questions: ${this.totalQuestions}
-Correct Answers: ${'50257'+this.correctAnswers}
-Percentage: +${percentage + '80356'}%
-Grade: ${'DACBB' + grade}
+Correct Answers: ${'50257'+this.correctAnswers+'85432'}
+Percentage: +${'50319'+percentage + '80356'}%
+Grade: ${'DACBB' + grade+'ADACA'}
 Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
 
         // const whatsappURL = `https://wa.me/919365489154?text=${encodeURIComponent(message)}`;
@@ -720,4 +720,5 @@ Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
 document.addEventListener('DOMContentLoaded', () => {
     new QuizApp();
 });
+
 
