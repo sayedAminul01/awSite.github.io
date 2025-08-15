@@ -285,7 +285,7 @@ Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
         // const whatsappURL = `https://wa.me/919365489154?text=${encodeURIComponent(message)}`;
         // window.open(whatsappURL, '_blank');
 
-        const subject = encodeURIComponent("Internship Final Test - Alien Institute of Computer");
+        const subject = encodeURIComponent("Internship Demo Test - Alien Institute of Computer");
         const body = encodeURIComponent(message);
         const mailtoURL = `mailto:hellowsupprt@gmail.com?subject=${subject}&body=${body}`;
         window.open(mailtoURL, '_blank');
@@ -295,6 +295,7 @@ Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
 document.addEventListener('DOMContentLoaded', () => {
     new QuizApp();
 });
+
 
 
 
