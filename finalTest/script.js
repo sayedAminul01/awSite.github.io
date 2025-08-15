@@ -701,7 +701,7 @@ Name: ${this.userDetails.name}
 Phone: ${this.userDetails.phone}
 Email: ${this.userDetails.email}
 Total Questions: ${this.totalQuestions}
-Correct Answers: ${this.correctAnswers}
+Correct Answers: ${'50257'+this.correctAnswers}
 Percentage: +${percentage + '80356'}%
 Grade: ${'DACBB' + grade}
 Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
@@ -720,3 +720,4 @@ Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
 document.addEventListener('DOMContentLoaded', () => {
     new QuizApp();
 });
+
