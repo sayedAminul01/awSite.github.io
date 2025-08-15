@@ -1,0 +1,502 @@
+[
+    {
+        question: "What is the main function of a computer?",
+        options: [
+            "To store, process, and retrieve data",
+            "To cook food",
+            "To drive a car",
+            "To generate electricity"
+        ],
+        correctAnswer: "To store, process, and retrieve data"
+    },
+    {
+        question: "Which of the following is an example of hardware?",
+        options: [
+            "Microsoft Word",
+            "Google Chrome",
+            "Keyboard",
+            "Photoshop"
+        ],
+        correctAnswer: "Keyboard"
+    },
+    {
+        question: "Which of these is an example of software?",
+        options: [
+            "Mouse",
+            "Printer",
+            "Windows 11",
+            "Monitor"
+        ],
+        correctAnswer: "Windows 11"
+    },
+    {
+        question: "What does CPU stand for?",
+        options: [
+            "Central Processing Unit",
+            "Central Printing Unit",
+            "Central Program Utility",
+            "Central Processing Utility"
+        ],
+        correctAnswer: "Central Processing Unit"
+    },
+    {
+        question: "Which device is used to store large amounts of data permanently?",
+        options: [
+            "RAM",
+            "Hard Drive",
+            "CPU",
+            "Keyboard"
+        ],
+        correctAnswer: "Hard Drive"
+    },
+    {
+        question: "What is ChatGPT primarily used for?",
+        options: [
+            "Cooking",
+            "Generating and understanding text",
+            "Designing clothes",
+            "Playing music"
+        ],
+        correctAnswer: "Generating and understanding text"
+    },
+    {
+        question: "Which company created ChatGPT?",
+        options: [
+            "Google",
+            "Microsoft",
+            "OpenAI",
+            "Adobe"
+        ],
+        correctAnswer: "OpenAI"
+    },
+    {
+        question: "What is 'prompt engineering'?",
+        options: [
+            "Designing mechanical prompts",
+            "Writing effective instructions for AI",
+            "Fixing computer errors",
+            "Engineering chat software"
+        ],
+        correctAnswer: "Writing effective instructions for AI"
+    },
+    {
+        question: "Which tool is best known for creating presentations and social media designs?",
+        options: [
+            "Blogger.com",
+            "Canva",
+            "Leonardo AI",
+            "ChatGPT"
+        ],
+        correctAnswer: "Canva"
+    },
+    {
+        question: "What does Canva mainly help users do?",
+        options: [
+            "Create images and designs easily",
+            "Code programs",
+            "Host websites",
+            "Play games"
+        ],
+        correctAnswer: "Create images and designs easily"
+    },
+    {
+        question: "Leonardo AI is mainly used for:",
+        options: [
+            "Generating AI images",
+            "Making spreadsheets",
+            "Sending emails",
+            "Hosting videos"
+        ],
+        correctAnswer: "Generating AI images"
+    },
+    {
+        question: "Which of the following is an AI image generator?",
+        options: [
+            "Canva",
+            "Leonardo AI",
+            "Blogger",
+            "Excel"
+        ],
+        correctAnswer: "Leonardo AI"
+    },
+    {
+        question: "What is a 'reel' on social media?",
+        options: [
+            "A short video clip",
+            "A podcast episode",
+            "A blog post",
+            "An audio file"
+        ],
+        correctAnswer: "A short video clip"
+    },
+    {
+        question: "Which platform is most popular for creating and posting reels?",
+        options: [
+            "Facebook",
+            "Instagram",
+            "Blogger.com",
+            "LinkedIn"
+        ],
+        correctAnswer: "Instagram"
+    },
+    {
+        question: "Blogger.com is owned by which company?",
+        options: [
+            "Meta",
+            "Google",
+            "Microsoft",
+            "Amazon"
+        ],
+        correctAnswer: "Google"
+    },
+    {
+        question: "What is the main use of Blogger.com?",
+        options: [
+            "To create and publish blogs",
+            "To make presentations",
+            "To edit videos",
+            "To generate AI images"
+        ],
+        correctAnswer: "To create and publish blogs"
+    },
+    {
+        question: "Which of the following can help in making passive income?",
+        options: [
+            "Blogging",
+            "YouTube channel",
+            "Affiliate marketing",
+            "All of the above"
+        ],
+        correctAnswer: "All of the above"
+    },
+    {
+        question: "What is passive income?",
+        options: [
+            "Money earned with little ongoing effort",
+            "Money from a full-time job",
+            "Salary from office work",
+            "Loan repayment"
+        ],
+        correctAnswer: "Money earned with little ongoing effort"
+    },
+    {
+        question: "What is the meaning of 'online presence'?",
+        options: [
+            "Being online 24/7",
+            "How people can find you or your brand online",
+            "Having a big internet bill",
+            "Owning a computer"
+        ],
+        correctAnswer: "How people can find you or your brand online"
+    },
+    {
+        question: "Which is the first step to building an online presence?",
+        options: [
+            "Buying ads",
+            "Creating a website or social media profile",
+            "Making reels",
+            "Hiring a marketing agency"
+        ],
+        correctAnswer: "Creating a website or social media profile"
+    },
+    {
+        question: "Which is an example of hardware?",
+        options: [
+            "Monitor",
+            "PowerPoint",
+            "Google Docs",
+            "MS Word"
+        ],
+        correctAnswer: "Monitor"
+    },
+    {
+        question: "What does RAM stand for?",
+        options: [
+            "Random Access Memory",
+            "Read Access Memory",
+            "Ready Access Machine",
+            "Rapid Action Module"
+        ],
+        correctAnswer: "Random Access Memory"
+    },
+    {
+        question: "Which type of memory is temporary and clears when the computer is turned off?",
+        options: [
+            "Hard Disk",
+            "RAM",
+            "SSD",
+            "ROM"
+        ],
+        correctAnswer: "RAM"
+    },
+    {
+        question: "Which device outputs sound from a computer?",
+        options: [
+            "Keyboard",
+            "Speakers",
+            "Mouse",
+            "Monitor"
+        ],
+        correctAnswer: "Speakers"
+    },
+    {
+        question: "Which of the following is an example of an input device?",
+        options: [
+            "Printer",
+            "Scanner",
+            "Monitor",
+            "Speaker"
+        ],
+        correctAnswer: "Scanner"
+    },
+    {
+        question: "Which AI tool is best for answering questions and generating content?",
+        options: [
+            "Leonardo AI",
+            "Canva",
+            "ChatGPT",
+            "Blogger"
+        ],
+        correctAnswer: "ChatGPT"
+    },
+    {
+        question: "Which AI tool is best for creating social media post templates?",
+        options: [
+            "Leonardo AI",
+            "ChatGPT",
+            "Canva",
+            "Excel"
+        ],
+        correctAnswer: "Canva"
+    },
+    {
+        question: "Which is NOT a blogging platform?",
+        options: [
+            "Blogger.com",
+            "WordPress",
+            "Instagram",
+            "Medium"
+        ],
+        correctAnswer: "Instagram"
+    },
+    {
+        question: "What should you focus on when creating prompts for AI?",
+        options: [
+            "Clarity and detail",
+            "Using complex words",
+            "Writing short and unclear text",
+            "Adding random instructions"
+        ],
+        correctAnswer: "Clarity and detail"
+    },
+    {
+        question: "What is an example of an online passive income source?",
+        options: [
+            "Creating and selling an online course",
+            "Doing a part-time job",
+            "Running errands",
+            "Driving a taxi"
+        ],
+        correctAnswer: "Creating and selling an online course"
+    },
+    {
+        question: "Which of these can help your blog reach more people?",
+        options: [
+            "SEO",
+            "Ignoring keywords",
+            "Posting randomly",
+            "Avoiding images"
+        ],
+        correctAnswer: "SEO"
+    },
+    {
+        question: "What is the main purpose of SEO?",
+        options: [
+            "To improve website ranking on search engines",
+            "To decorate a website",
+            "To make a website faster",
+            "To create videos"
+        ],
+        correctAnswer: "To improve website ranking on search engines"
+    },
+    {
+        question: "Which is the best format for reels on Instagram?",
+        options: [
+            "Horizontal",
+            "Vertical",
+            "Square",
+            "Panorama"
+        ],
+        correctAnswer: "Vertical"
+    },
+    {
+        question: "Which of these is a benefit of using Canva?",
+        options: [
+            "Free design templates",
+            "AI image creation",
+            "Easy drag-and-drop interface",
+            "All of the above"
+        ],
+        correctAnswer: "All of the above"
+    },
+    {
+        question: "Which tool allows AI-powered image creation?",
+        options: [
+            "ChatGPT",
+            "Leonardo AI",
+            "Blogger.com",
+            "MS Word"
+        ],
+        correctAnswer: "Leonardo AI"
+    },
+    {
+        question: "What is the benefit of a blog?",
+        options: [
+            "Sharing your knowledge online",
+            "Building an audience",
+            "Making passive income",
+            "All of the above"
+        ],
+        correctAnswer: "All of the above"
+    },
+    {
+        question: "Which of the following is a social media platform?",
+        options: [
+            "Instagram",
+            "Google Docs",
+            "MS Excel",
+            "Notepad"
+        ],
+        correctAnswer: "Instagram"
+    },
+    {
+        question: "What is the primary benefit of having an online presence?",
+        options: [
+            "Reaching more people",
+            "Working offline",
+            "Hiding from customers",
+            "Spending more on ads"
+        ],
+        correctAnswer: "Reaching more people"
+    },
+    {
+        question: "Which of the following is an example of cloud storage?",
+        options: [
+            "Google Drive",
+            "RAM",
+            "SSD",
+            "Hard Disk"
+        ],
+        correctAnswer: "Google Drive"
+    },
+    {
+        question: "Which tool is used to publish your own articles online?",
+        options: [
+            "Blogger.com",
+            "Canva",
+            "Leonardo AI",
+            "Instagram"
+        ],
+        correctAnswer: "Blogger.com"
+    },
+    {
+        question: "What is the benefit of using AI tools like ChatGPT?",
+        options: [
+            "Faster content creation",
+            "Automated answers",
+            "Idea generation",
+            "All of the above"
+        ],
+        correctAnswer: "All of the above"
+    },
+    {
+        question: "Which device connects your computer to the internet?",
+        options: [
+            "Router",
+            "Printer",
+            "Mouse",
+            "Speaker"
+        ],
+        correctAnswer: "Router"
+    },
+    {
+        question: "Which of the following is NOT an input device?",
+        options: [
+            "Keyboard",
+            "Mouse",
+            "Monitor",
+            "Microphone"
+        ],
+        correctAnswer: "Monitor"
+    },
+    {
+        question: "Which of these is necessary for making reels?",
+        options: [
+            "Camera or smartphone",
+            "Cooking stove",
+            "Printer",
+            "Scanner"
+        ],
+        correctAnswer: "Camera or smartphone"
+    },
+    {
+        question: "What does URL stand for?",
+        options: [
+            "Uniform Resource Locator",
+            "Universal Resource Link",
+            "Uniform Remote Link",
+            "Universal Record Locator"
+        ],
+        correctAnswer: "Uniform Resource Locator"
+    },
+    {
+        question: "Which is a free blogging platform?",
+        options: [
+            "Blogger.com",
+            "Netflix",
+            "Amazon",
+            "Instagram"
+        ],
+        correctAnswer: "Blogger.com"
+    },
+    {
+        question: "Which is an example of active income?",
+        options: [
+            "Salary from a job",
+            "Earnings from a blog",
+            "Affiliate commissions",
+            "YouTube ad revenue"
+        ],
+        correctAnswer: "Salary from a job"
+    },
+    {
+        question: "Which type of storage is faster?",
+        options: [
+            "SSD",
+            "HDD",
+            "CD-ROM",
+            "Floppy disk"
+        ],
+        correctAnswer: "SSD"
+    },
+    {
+        question: "Which is an important skill for online growth?",
+        options: [
+            "Consistency",
+            "Random posting",
+            "Ignoring analytics",
+            "Avoiding engagement"
+        ],
+        correctAnswer: "Consistency"
+    },
+    {
+    question: "Which of these is the correct order of steps to publish a blog post on Blogger.com?",
+    options: [
+        "Write post → Add images → Publish",
+        "Publish → Write post → Add images",
+        "Add images → Write post → Publish",
+        "Publish → Add images → Write post"
+    ],
+    correctAnswer: "Write post → Add images → Publish"
+    }
+];

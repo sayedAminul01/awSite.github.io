@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alien Institute of Computer - Knowledge Test</title>
+    <link rel="icon" href="/api/placeholder/32/32" type="image/png">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="description" content="Interactive placement quiz for Alien Institute of Computer students">
+    <meta name="keywords" content="computer science, placement test, quiz, alien institute">
+
+<!--     Ads -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3056427584192481"
+     crossorigin="anonymous"></script>
+<!-- All Rounder ads -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3056427584192481"
+     data-ad-slot="7840881821"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<!--     Ads End -->
+</head>
+<body>
+    <div class="background-effect"></div>
+    <div class="quiz-container" id="quizContainer">
+        <div class="quiz-header">
+            <h2>Internship Program Final Test</h2>
+            <div class="timer" id="timer">00:00</div>
+        </div>
+        
+        <div id="registrationSection">
+            <form class="registration-form" id="registrationForm">
+                <input type="text" placeholder="Full Name" id="fullName" required>
+                <input type="email" placeholder="Email Address" id="emailAddress" required>
+                <input type="tel" placeholder="Phone Number" id="phoneNumber" required>
+                <button type="submit" class="btn">Start Test</button>
+            </form>
+        </div>
+
+        <div id="quizSection" style="display:none;">
+            <div class="question" id="questionText"></div>
+            <div class="options" id="optionsContainer"></div>
+        </div>
+
+        <div id="completionSection" style="display:none;" class="completion-message">
+            <h2>Thank You for Taking the Internship Test!</h2>
+            <p>Your test has been submitted. We appreciate your participation.</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
