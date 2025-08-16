@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-database',
             postCount: 50,
             description: 'Database concepts and SQL',
-            url: '.../finalTest/index.html'
+            url: '../finalTest/index.html'
         }
     ];
 
@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
