@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'javascript',
             title: 'Open Schooling',
             icon: 'fa-solid fa-book-open',
-            postCount: 0,
+            postCount: 1,
             description: 'Web programming',
             url: './openSchool/o.html'
         },
@@ -61,9 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 'design',
-            title: 'Web Dev',
+            title: 'Time Pass Classes Topics',
             icon: 'fa-brands fa-codepen',
-            postCount: 0,
+            postCount: 1,
             description: 'UI/UX design',
             url: '/category/design'
         },
@@ -183,3 +183,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
