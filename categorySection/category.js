@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-brands fa-codepen',
             postCount: 1,
             description: 'UI/UX design',
-            url: '/category/design'
+            url: '/adcaCourseTestContent/practiceHub.html'
         },
         {
             id: 'tools',
@@ -183,5 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
