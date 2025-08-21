@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 'design',
-            title: 'Time Pass Classes Topics',
+            title: 'Practice Hub without Instructor',
             icon: 'fa-brands fa-codepen',
             postCount: 1,
             description: 'UI/UX design',
@@ -183,4 +183,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
