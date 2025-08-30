@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 'todo list',
             title: 'todo list',
-            icon: 'fa-solid fa-hand-holding-dollar',
+            icon: 'fa-solid fa-list-check',
             postCount: "A smart to-do list app designed to simplify your life. Plan tasks, set priorities, and achieve more every day.",
             description: 'Loan_Tools',
             url: 'https://todo.servics.xyz/'
@@ -128,4 +128,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
