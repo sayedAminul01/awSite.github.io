@@ -19,12 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
             url: 'https://sayedaminul01.github.io/VocationalReceipt/'
         },
         {
-            id: 'Loan Calculation Tool',
-            title: 'Loan Calculation Tool',
+            id: 'todo list',
+            title: 'todo list',
             icon: 'fa-solid fa-hand-holding-dollar',
-            postCount: "Calculate any Loan amount interest by Year/Amount/Monthly Sheet and more'",
+            postCount: "A smart to-do list app designed to simplify your life. Plan tasks, set priorities, and achieve more every day.",
             description: 'Loan_Tools',
-            url: '/tools/productivity'
+            url: 'https://todo.servics.xyz/'
         },
         // {
         //     id: 'online-resources',
@@ -128,3 +128,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
