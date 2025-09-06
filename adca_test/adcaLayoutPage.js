@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const categories = [
         {
             id: 'test01',
-            title: 'Welcome Test',
+            title: 'Practice Tally',
             icon: 'fa-solid fa-book',
             postCount: 50,
-            description: 'Basic computer fundamentals test',
+            description: 'Practice Tally from Basic to Advance Level',
             url: '../tally/index.html'
         }, 
         {
@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
