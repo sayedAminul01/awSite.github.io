@@ -26,14 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
             description: 'Loan_Tools',
             url: 'https://todo.servics.xyz/'
         },
-        // {
-        //     id: 'online-resources',
-        //     title: 'Online Learning',
-        //     icon: 'fa-solid fa-graduation-cap',
-        //     postCount: 30,
-        //     description: 'Free online learning platforms',
-        //     url: '/tools/learning'
-        // },
+        {
+            id: 'online-resources',
+            title: 'Server Issues',
+            icon: 'fa-solid fa-server',
+            postCount: "prank your friends with a server issues 😁",
+            description: 'Free online learning platforms',
+            url: 'otherTools/serverIssues.html'
+        },
         // {
         //     id: 'collaboration-tools',
         //     title: 'Collaboration Tools',
@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
