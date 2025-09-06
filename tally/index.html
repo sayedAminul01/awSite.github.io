@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive quiz platform for Alien Institute of Computer">
+    <meta name="keywords" content="computer quiz, programming test, technology assessment">
+    <title>Quiz Platform - Alien Institute of Computer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>👽 Alien Institute of Computer</h1>
+            </div>
+            <nav class="navbar">
+                <ul class="nav-links">
+                    <li><a href="#" onclick="showHome()">Home</a></li>
+                    <li><a href="#" onclick="showTests()">Tests</a></li>
+                    <li><a href="#" onclick="showAbout()">About</a></li>
+                    <li><a href="#" onclick="showContact()">Contact</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Home Screen -->
+        <section id="homeScreen" class="screen active">
+            <div class="container">
+                <div class="hero">
+                    <h2>Practice Your Tally skills</h2>
+                    <p>Challenge yourself with our interactive practice platform</p>
+                </div>
+                
+                <!-- Ad Space -->
+                <div class="ad-space ad-banner">
+                    <div>Advertisement Space</div>
+                </div>
+
+                <div class="quiz-categories" id="quizCategories">
+                    <!-- Categories will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Screen -->
+        <section id="quizScreen" class="screen">
+            <div class="container">
+                <div class="quiz-header">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="question-counter">
+                        <span id="currentQuestion">1</span> / <span id="totalQuestions">5</span>
+                    </div>
+                </div>
+
+                <div class="quiz-content">
+                    <div class="question-card">
+                        <h3 id="questionText">Loading question...</h3>
+                        <div class="options" id="optionsContainer">
+                            <!-- Options will be populated by JavaScript -->
+                        </div>
+                        <button id="nextBtn" class="next-btn" disabled>Next Question</button>
+                        <br>
+                        <!-- High Impression Ad -->
+                        <div class="ad-space ad-high-impression">
+                            <div> Ad Space</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Screen -->
+        <section id="resultsScreen" class="screen">
+            <div class="container">
+                <div class="results-card">
+                    <div class="result-emoji" id="resultEmoji">🎉</div>
+                    <h2 id="resultTitle">Quiz Complete!</h2>
+                    <div class="score-display">
+                        <div class="score-item correct">
+                            <span class="score-label">Correct</span>
+                            <span class="score-value" id="correctCount">0</span>
+                        </div>
+                        <div class="score-item incorrect">
+                            <span class="score-label">Incorrect</span>
+                            <span class="score-value" id="incorrectCount">0</span>
+                        </div>
+                        <div class="score-item percentage">
+                            <span class="score-label">Score</span>
+                            <span class="score-value" id="percentageScore">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="homeBtn" class="action-btn primary">🏠 Home</button>
+                        <button id="tryAgainBtn" class="action-btn secondary">🔄 Try Again</button>
+                    </div>
+                </div>
+                
+                <!-- Ad Space -->
+                <div class="ad-space ad-banner">
+                    <div>Advertisement Space</div>
+                </div>
+
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Load Scripts -->
+    <script src="config.js"></script>
+    <script src="data/tally_level1.js"></script>
+    <script src="data/tally_level2.js"></script>
+    <script src="data/tally_level3.js"></script>
+    <script src="data/tally_level4.js"></script>
+
+    <script src="app.js"></script>
+</body>
+</html>
