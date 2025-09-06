@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Temporarily Unavailable - AlienWeb.in</title>
+    <meta name="description" content="AlienWeb.in server is temporarily unavailable. Please try again later.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="author" content="AlienWeb.in">
+    <link rel="canonical" href="https://alienweb.in">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .error-page {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #e74c3c;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .error-details {
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .error-details p {
+            margin-bottom: 8px;
+        }
+
+        .retry-section {
+            margin-top: 30px;
+        }
+
+        .retry-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .retry-btn:hover {
+            background: #2980b9;
+        }
+
+        .loading {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .prank-controls {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(240,240,240,0.3);
+            border-radius: 3px;
+            padding: 5px;
+            font-size: 12px;
+            opacity: 0.1;
+            transition: opacity 0.3s;
+        }
+
+        .prank-controls:hover {
+            opacity: 1;
+        }
+
+        #errorType {
+            padding: 3px 8px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+            margin-right: 5px;
+            font-size: 11px;
+        }
+
+        .hide-btn {
+            background: transparent;
+            color: #999;
+            border: none;
+            padding: 2px 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .hide-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .error-500 h1 { color: #e74c3c; }
+        .error-502 h1 { color: #f39c12; }
+        .error-503 h1 { color: #e67e22; }
+        .error-504 h1 { color: #9b59b6; }
+        .error-404 h1 { color: #34495e; }
+        .error-database h1 { color: #e74c3c; }
+        .error-maintenance h1 { color: #3498db; }
+        .error-overload h1 { color: #f39c12; }
+        .error-hack h1 { color: #c0392b; }
+
+        .error-hack {
+            background: linear-gradient(45deg, #ff0000, #000000);
+            color: white;
+        }
+
+        .error-hack .error-details {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .blinking {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        .timer-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            color: #666;
+        }
+
+        #countdown {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .error-page {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .error-icon {
+                font-size: 3rem;
+            }
+            
+            .prank-controls {
+                bottom: 5px;
+                right: 5px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-page" id="errorPage">
+            <div class="error-icon">⚠️</div>
+            <h1 id="errorTitle">503 Service Unavailable</h1>
+            <p id="errorMessage">The server is temporarily unable to service your request due to maintenance downtime or capacity problems.</p>
+            <div class="error-details">
+                <p><strong>Error Code:</strong> <span id="errorCode">503</span></p>
+                <p><strong>Timestamp:</strong> <span id="timestamp"></span></p>
+                <p><strong>Server:</strong> <span id="serverName">nginx/1.18.0</span></p>
+            </div>
+            <div class="retry-section">
+                <button onclick="retryConnection()" class="retry-btn" id="retryBtn">Retry Connection</button>
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <span>Attempting to reconnect...</span>
+                </div>
+                <div class="timer-section" id="timerSection" style="display: none;">
+                    <p>Please try again in: <span id="countdown"></span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="prank-controls" id="prankControls">
+            <select id="errorType" onchange="changeError()">
+                <option value="503">503 - Service Unavailable</option>
+                <option value="500">500 - Internal Server Error</option>
+                <option value="502">502 - Bad Gateway</option>
+                <option value="504">504 - Gateway Timeout</option>
+                <option value="404">404 - Not Found</option>
+                <option value="database">Database Connection Failed</option>
+                <option value="maintenance">Scheduled Maintenance</option>
+                <option value="overload">Server Overload</option>
+                <option value="hack">Security Breach Detected</option>
+            </select>
+            <button onclick="toggleControls()" class="hide-btn">×</button>
+        </div>
+    </div>
+    
+    <script>
+        let currentError = '503';
+        let retryTimer = null;
+        let countdownInterval = null;
+
+        const errorTypes = {
+            '503': {
+                title: '503 Service Unavailable',
+                message: 'The server is temporarily unable to service your request due to maintenance downtime or capacity problems.',
+                icon: '⚠️',
+                server: 'nginx/1.18.0'
+            },
+            '500': {
+                title: '500 Internal Server Error',
+                message: 'The server encountered an unexpected condition that prevented it from fulfilling the request.',
+                icon: '💥',
+                server: 'Apache/2.4.41'
+            },
+            '502': {
+                title: '502 Bad Gateway',
+                message: 'The server received an invalid response from the upstream server while acting as a gateway or proxy.',
+                icon: '🚫',
+                server: 'nginx/1.20.1'
+            },
+            '504': {
+                title: '504 Gateway Timeout',
+                message: 'The server did not receive a timely response from the upstream server.',
+                icon: '⏰',
+                server: 'Cloudflare'
+            },
+            '404': {
+                title: '404 Not Found',
+                message: 'The requested resource could not be found on this server.',
+                icon: '🔍',
+                server: 'nginx/1.18.0'
+            },
+            'database': {
+                title: 'Database Connection Failed',
+                message: 'Unable to establish connection to the database server. Please try again later.',
+                icon: '🗄️',
+                server: 'MySQL 8.0.25'
+            },
+            'maintenance': {
+                title: 'Scheduled Maintenance',
+                message: 'The system is currently undergoing scheduled maintenance. We apologize for the inconvenience.',
+                icon: '🔧',
+                server: 'Load Balancer',
+                waitTime: 120
+            },
+            'overload': {
+                title: 'Server Overload',
+                message: 'The server is experiencing high traffic and cannot process your request at this time.',
+                icon: '📈',
+                server: 'nginx/1.18.0',
+                waitTime: 60
+            },
+            'hack': {
+                title: 'SECURITY BREACH DETECTED',
+                message: 'UNAUTHORIZED ACCESS ATTEMPT BLOCKED. ALL CONNECTIONS TERMINATED. SYSTEM LOCKDOWN INITIATED.',
+                icon: '🚨',
+                server: 'SECURITY_SYSTEM_v2.1',
+                waitTime: 300
+            }
+        };
+
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('timestamp').textContent = now.toISOString();
+        }
+
+        function changeError() {
+            const errorType = document.getElementById('errorType').value;
+            currentError = errorType;
+            const error = errorTypes[errorType];
+            const errorPage = document.getElementById('errorPage');
+            
+            clearTimeout(retryTimer);
+            clearInterval(countdownInterval);
+            
+            errorPage.className = 'error-page';
+            errorPage.classList.add(`error-${errorType}`);
+            
+            document.getElementById('errorTitle').textContent = error.title;
+            document.getElementById('errorMessage').textContent = error.message;
+            document.querySelector('.error-icon').textContent = error.icon;
+            document.getElementById('errorCode').textContent = errorType.toUpperCase();
+            document.getElementById('serverName').textContent = error.server;
+            
+            if (errorType === 'hack') {
+                document.getElementById('errorTitle').classList.add('blinking');
+                document.querySelector('.error-icon').classList.add('blinking');
+            } else {
+                document.getElementById('errorTitle').classList.remove('blinking');
+                document.querySelector('.error-icon').classList.remove('blinking');
+            }
+            
+            updateTimestamp();
+            
+            const retryBtn = document.getElementById('retryBtn');
+            retryBtn.disabled = false;
+            retryBtn.textContent = 'Retry Connection';
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('timerSection').style.display = 'none';
+        }
+
+        function retryConnection() {
+            const loading = document.getElementById('loading');
+            const retryBtn = document.getElementById('retryBtn');
+            const timerSection = document.getElementById('timerSection');
+            
+            loading.style.display = 'flex';
+            retryBtn.disabled = true;
+            retryBtn.textContent = 'Connecting...';
+            
+            setTimeout(() => {
+                loading.style.display = 'none';
+                
+                const error = errorTypes[currentError];
+                
+                if (error.waitTime) {
+                    timerSection.style.display = 'block';
+                    retryBtn.textContent = 'Please Wait';
+                    startCountdown(error.waitTime * 60);
+                } else {
+                    retryBtn.disabled = false;
+                    retryBtn.textContent = 'Retry Connection';
+                }
+                
+            }, 3000);
+        }
+
+        function startCountdown(seconds) {
+            const countdownElement = document.getElementById('countdown');
+            const retryBtn = document.getElementById('retryBtn');
+            
+            countdownInterval = setInterval(() => {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                
+                countdownElement.textContent = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('timerSection').style.display = 'none';
+                    retryBtn.disabled = false;
+                    retryBtn.textContent = 'Retry Connection';
+                }
+                
+                seconds--;
+            }, 1000);
+        }
+
+        function toggleControls() {
+            const controls = document.getElementById('prankControls');
+            controls.classList.toggle('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTimestamp();
+            changeError();
+            
+            setInterval(updateTimestamp, 30000);
+            
+            setInterval(() => {
+                if (!document.getElementById('retryBtn').disabled) {
+                    changeError();
+                }
+            }, 120000);
+        });
+    </script>
+</body>
+</html>
