@@ -3,6 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Test categories data
     const categories = [
         {
+            id: 'test01',
+            title: 'Welcome Test',
+            icon: 'fa-solid fa-book',
+            postCount: 50,
+            description: 'Basic computer fundamentals test',
+            url: '../tally/index.html'
+        }, 
+        {
             id: 'test1',
             title: 'Welcome Test',
             icon: 'fa-solid fa-desktop',
@@ -157,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
