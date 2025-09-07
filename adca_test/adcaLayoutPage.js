@@ -4,11 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const categories = [
         {
             id: 'test01',
-            title: 'Practice Tally',
-            icon: 'fa-solid fa-book',
-            postCount: 50,
-            description: 'Practice Tally from Basic to Advance Level',
-            url: '../tally/index.html'
+            title: 'Month 1',
+            icon: 'fa-solid fa-desktop',
+            postCount: 100,
+            description: 'Basic computer fundamentals test',
+            url: '../adca/index.html'
         }, 
         {
             id: 'test1',
@@ -36,11 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 'test4',
-            title: 'Coming Soon',
-            icon: 'fa-solid fa-flask',
-            postCount: 0,
-            description: 'Science knowledge test',
-            url: './tests/science.html'
+            title: 'Practice Tally',
+            icon: 'fa-solid fa-book',
+            postCount: 50,
+            description: 'Practice Tally from Basic to Advance Level',
+            url: '../tally/index.html'
         },
         {
             id: 'test5',
@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
