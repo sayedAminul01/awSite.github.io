@@ -64,7 +64,7 @@ const products = [
     {
         title: "JACK & JONES Men's Cotton Solid Classic Fit T-Shirt",
         image: "images/tshirt2.jpg", // Upload your image to images folder
-        affiliateLink: "https://amzn.to/4gbEXGB"
+        affiliateLink: "https://amzn.to/4mQewZg"
     },
     {
         title: "Woodland Men's Suede Casual Shoes",
