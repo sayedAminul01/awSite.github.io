@@ -43,6 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
             url: './learningZone/layout.html'
         },
         {
+            id: 'node',
+            title: 'alienWeb store',
+            icon: 'fa-solid fa-store',
+            postCount: 1,
+            description: 'Alienweb amazon store',
+            url: './alienWebStore/index.html'
+        }
+        {
             id: 'react',
             title: 'Blog',
             icon: 'fa-solid fa-blog',
@@ -183,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
