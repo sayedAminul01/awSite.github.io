@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postCount: 1,
             description: 'Alienweb amazon store',
             url: './alienWebStore/index.html'
-        }
+        },
         {
             id: 'react',
             title: 'Blog',
@@ -191,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
