@@ -28,7 +28,7 @@ const products = [
     },
     {
         title: "Jaspo Polyurethane Hurricane Ollie Spiral Fiber Composite Skateboard",
-        image: "images/Skateboard.jpg", // Upload your image to images folder
+        image: "images/skateboard1.jpg", // Upload your image to images folder
         affiliateLink: "https://amzn.to/468dktd"
     },
     {
