@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Debugger - AlienWeb Games</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(135deg, #2c1810 0%, #0f0f23 100%);
+            color: #fff; font-family: 'Orbitron', sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 10px;
+        }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem); background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px; text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+        
+        .stats { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .stat {
+            background: rgba(255, 107, 107, 0.2); padding: 8px 16px; border-radius: 8px;
+            border: 1px solid #ff6b6b; font-weight: bold; min-width: 80px; text-align: center;
+        }
+        
+        .game-area {
+            background: rgba(0, 0, 0, 0.4); border: 2px solid #ff6b6b; border-radius: 15px;
+            padding: 30px; max-width: 900px; width: 100%; margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.3);
+        }
+        
+        .code-container {
+            background: #1e1e1e; border: 1px solid #444; border-radius: 10px;
+            padding: 20px; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace;
+            position: relative; overflow-x: auto;
+        }
+        
+        .code-line {
+            display: flex; align-items: center; margin-bottom: 8px; min-height: 24px;
+            padding: 4px 8px; border-radius: 4px; transition: all 0.3s ease;
+        }
+        
+        .line-number {
+            color: #666; width: 30px; text-align: right; margin-right: 15px;
+            font-size: 14px; user-select: none;
+        }
+        
+        .code-text { color: #d4d4d4; font-size: 14px; flex: 1; }
+        
+        .error-line { background: rgba(255, 107, 107, 0.2); border-left: 3px solid #ff6b6b; }
+        .fixed-line { background: rgba(72, 187, 120, 0.2); border-left: 3px solid #48bb78; }
+        
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+        .number { color: #b5cea8; }
+        .function { color: #dcdcaa; }
+        
+        .error-indicator {
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            background: #ff6b6b; color: #fff; padding: 2px 6px; border-radius: 4px;
+            font-size: 12px; cursor: pointer;
+        }
+        
+        .question { font-size: 18px; margin-bottom: 15px; color: #feca57; }
+        
+        .options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+        
+        .option {
+            background: linear-gradient(45deg, #ff6b6b, #feca57); color: #000;
+            padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;
+            transition: all 0.3s ease; border: none; font-family: 'JetBrains Mono', monospace;
+            text-align: left;
+        }
+        
+        .option:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4); }
+        .option.correct { background: #48bb78; }
+        .option.wrong { background: #ff4757; }
+        
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57); border: none;
+            padding: 10px 20px; border-radius: 20px; color: #000; font-weight: bold;
+            cursor: pointer; transition: all 0.3s ease; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4); }
+        
+        .language-selector {
+            display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 107, 107, 0.2); border: 1px solid #ff6b6b;
+            padding: 8px 16px; border-radius: 8px; color: #fff; cursor: pointer;
+            transition: all 0.3s ease; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .lang-btn.active { background: #ff6b6b; color: #000; }
+        .lang-btn:hover { background: #feca57; color: #000; }
+        
+        #gameOver {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9); padding: 30px; border-radius: 15px;
+            text-align: center; border: 2px solid #ff6b6b; display: none; z-index: 100;
+        }
+        
+        .feedback { font-size: 16px; margin-top: 15px; min-height: 25px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🐛 Code Debugger</h1>
+        <p>Find and fix programming errors!</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat">Score: <span id="score">0</span></div>
+        <div class="stat">Level: <span id="level">1</span></div>
+        <div class="stat">Fixed: <span id="fixed">0</span>/10</div>
+        <div class="stat">Streak: <span id="streak">0</span></div>
+    </div>
+    
+    <div class="language-selector">
+        <div class="lang-btn active" onclick="selectLanguage('python')">Python</div>
+        <div class="lang-btn" onclick="selectLanguage('javascript')">JavaScript</div>
+        <div class="lang-btn" onclick="selectLanguage('java')">Java</div>
+    </div>
+    
+    <div class="game-area">
+        <div class="question" id="question">Click Start Debugging to begin!</div>
+        
+        <div class="code-container" id="codeContainer">
+            <div class="code-line">
+                <span class="line-number">1</span>
+                <span class="code-text">Select a language and start debugging!</span>
+            </div>
+        </div>
+        
+        <div class="options" id="options"></div>
+        
+        <div class="feedback" id="feedback"></div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="startGame()" id="startBtn">Start Debugging</button>
+        <button class="btn" onclick="nextBug()" id="nextBtn" style="display: none;">Next Bug</button>
+        <button class="btn" onclick="resetGame()">Reset</button>
+        <button class="btn" onclick="toggleSound()" id="soundBtn">🔊 Sound ON</button>
+    </div>
+    
+    <div id="gameOver">
+        <h2>Debugging Complete!</h2>
+        <p>Bugs Fixed: <span id="finalFixed">0</span>/10</p>
+        <p>Final Score: <span id="finalScore">0</span></p>
+        <p id="rank" style="font-size: 24px; margin: 15px 0;"></p>
+        <div style="margin-top: 20px;">
+            <button class="btn" onclick="closeResults()">Continue</button>
+            <button class="btn" onclick="startGame()">Debug Again</button>
+            <button class="btn" onclick="window.location.href='index.html'">Back to Menu</button>
+        </div>
+    </div>
+
+    <script>
+        let audioContext, soundEnabled = true;
+        
+        function createSound(freq, dur, type = 'sine', vol = 0.1) {
+            if (!soundEnabled || !audioContext) return;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain); gain.connect(audioContext.destination);
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+            osc.type = type;
+            gain.gain.setValueAtTime(vol, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + dur);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + dur);
+        }
+        
+        function playSound(type) {
+            switch(type) {
+                case 'correct': createSound(523, 0.3, 'sine', 0.15); break;
+                case 'wrong': createSound(200, 0.4, 'sawtooth', 0.2); break;
+                case 'complete': createSound(659, 0.5, 'sine', 0.2); break;
+            }
+        }
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            if (soundEnabled && !audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        const bugs = {
+            python: [
+                {
+                    code: ['print("Hello World"', 'name = input("Enter name: ")', 'print("Hi " + name)'],
+                    question: "What's wrong with line 1?",
+                    options: ["Missing closing parenthesis", "Wrong quotes", "Missing semicolon", "Nothing wrong"],
+                    correct: 0, errorLine: 0
+                },
+                {
+                    code: ['x = 5', 'y = 10', 'if x = y:', '    print("Equal")'],
+                    question: "What's the error in line 3?",
+                    options: ["Should use == for comparison", "Missing parentheses", "Wrong indentation", "Missing colon"],
+                    correct: 0, errorLine: 2
+                },
+                {
+                    code: ['numbers = [1, 2, 3]', 'for i in range(len(numbers))', '    print(numbers[i])'],
+                    question: "What's missing in line 2?",
+                    options: ["Missing colon at end", "Wrong syntax", "Missing parentheses", "Wrong variable name"],
+                    correct: 0, errorLine: 1
+                }
+            ],
+            javascript: [
+                {
+                    code: ['let name = "John"', 'console.log("Hello " + name', 'alert("Welcome!");'],
+                    question: "What's wrong with line 2?",
+                    options: ["Missing closing parenthesis", "Wrong variable", "Missing semicolon", "Wrong quotes"],
+                    correct: 0, errorLine: 1
+                },
+                {
+                    code: ['function add(a, b) {', '    return a + b', '}', 'let result = add(5, 3'],
+                    question: "What's the error in line 4?",
+                    options: ["Missing closing parenthesis", "Wrong function call", "Missing semicolon", "Wrong variables"],
+                    correct: 0, errorLine: 3
+                }
+            ],
+            java: [
+                {
+                    code: ['public class Main {', '    public static void main(String[] args) {', '        System.out.println("Hello World"', '    }', '}'],
+                    question: "What's wrong with line 3?",
+                    options: ["Missing closing parenthesis", "Missing semicolon", "Wrong method", "Missing quotes"],
+                    correct: 0, errorLine: 2
+                }
+            ]
+        };
+        
+        let gameState = {
+            language: 'python',
+            currentBug: 0,
+            score: 0,
+            level: 1,
+            fixed: 0,
+            streak: 0,
+            bugs: [],
+            isActive: false
+        };
+        
+        function selectLanguage(lang) {
+            gameState.language = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (!gameState.isActive) {
+                document.getElementById('question').textContent = `Selected: ${lang.charAt(0).toUpperCase() + lang.slice(1)}. Click Start Debugging!`;
+            }
+        }
+        
+        function startGame() {
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            gameState.currentBug = 0;
+            gameState.score = 0;
+            gameState.level = 1;
+            gameState.fixed = 0;
+            gameState.streak = 0;
+            gameState.isActive = true;
+            
+            gameState.bugs = [...bugs[gameState.language]];
+            
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('feedback').textContent = '';
+            
+            showBug();
+            updateUI();
+        }
+        
+        function showBug() {
+            const bug = gameState.bugs[gameState.currentBug];
+            document.getElementById('question').textContent = bug.question;
+            
+            const codeContainer = document.getElementById('codeContainer');
+            codeContainer.innerHTML = '';
+            
+            bug.code.forEach((line, index) => {
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'code-line';
+                if (index === bug.errorLine) lineDiv.classList.add('error-line');
+                
+                lineDiv.innerHTML = `
+                    <span class="line-number">${index + 1}</span>
+                    <span class="code-text">${highlightSyntax(line, gameState.language)}</span>
+                    ${index === bug.errorLine ? '<div class="error-indicator">❌</div>' : ''}
+                `;
+                codeContainer.appendChild(lineDiv);
+            });
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            bug.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.textContent = option;
+                btn.onclick = () => selectFix(index);
+                optionsDiv.appendChild(btn);
+            });
+        }
+        
+        function highlightSyntax(code, lang) {
+            let highlighted = code;
+            
+            if (lang === 'python') {
+                highlighted = highlighted.replace(/(def|if|for|while|import|from|class|return|print|input)/g, '<span class="keyword">$1</span>');
+                highlighted = highlighted.replace(/"([^"]*)"/g, '<span class="string">"$1"</span>');
+                highlighted = highlighted.replace(/#.*/g, '<span class="comment">$&</span>');
+            } else if (lang === 'javascript') {
+                highlighted = highlighted.replace(/(let|const|var|function|if|for|while|return|console)/g, '<span class="keyword">$1</span>');
+                highlighted = highlighted.replace(/"([^"]*)"/g, '<span class="string">"$1"</span>');
+                highlighted = highlighted.replace(/\/\/.*/g, '<span class="comment">$&</span>');
+            } else if (lang === 'java') {
+                highlighted = highlighted.replace(/(public|private|static|void|class|if|for|while|return|System)/g, '<span class="keyword">$1</span>');
+                highlighted = highlighted.replace(/"([^"]*)"/g, '<span class="string">"$1"</span>');
+            }
+            
+            highlighted = highlighted.replace(/\b\d+\b/g, '<span class="number">$&</span>');
+            return highlighted;
+        }
+        
+        function selectFix(selected) {
+            const bug = gameState.bugs[gameState.currentBug];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((opt, index) => {
+                opt.onclick = null;
+                if (index === bug.correct) opt.classList.add('correct');
+                else if (index === selected) opt.classList.add('wrong');
+            });
+            
+            if (selected === bug.correct) {
+                gameState.score += 100 + (gameState.streak * 20);
+                gameState.fixed++;
+                gameState.streak++;
+                
+                const errorLine = document.querySelector('.error-line');
+                if (errorLine) {
+                    errorLine.classList.remove('error-line');
+                    errorLine.classList.add('fixed-line');
+                }
+                const errorIndicator = document.querySelector('.error-indicator');
+                if (errorIndicator) {
+                    errorIndicator.textContent = '✅';
+                }
+                
+                document.getElementById('feedback').innerHTML = '✅ Bug Fixed! Great debugging!';
+                document.getElementById('feedback').style.color = '#48bb78';
+                playSound('correct');
+                
+                if (gameState.streak % 3 === 0) gameState.level++;
+            } else {
+                gameState.streak = 0;
+                document.getElementById('feedback').innerHTML = `❌ Wrong fix! The correct answer was: ${bug.options[bug.correct]}`;
+                document.getElementById('feedback').style.color = '#ff4757';
+                playSound('wrong');
+            }
+            
+            updateUI();
+            
+            setTimeout(() => {
+                if (gameState.currentBug < gameState.bugs.length - 1) {
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                } else {
+                    endGame();
+                }
+            }, 2000);
+        }
+        
+        function nextBug() {
+            gameState.currentBug++;
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('feedback').textContent = '';
+            showBug();
+        }
+        
+        function endGame() {
+            gameState.isActive = false;
+            
+            document.getElementById('finalFixed').textContent = gameState.fixed;
+            document.getElementById('finalScore').textContent = gameState.score;
+            
+            const rankElement = document.getElementById('rank');
+            if (gameState.fixed >= 8) {
+                rankElement.textContent = '🏆 Master Debugger!';
+                rankElement.style.color = '#48bb78';
+            } else if (gameState.fixed >= 6) {
+                rankElement.textContent = '👨‍💻 Good Debugger!';
+                rankElement.style.color = '#feca57';
+            } else if (gameState.fixed >= 4) {
+                rankElement.textContent = '🔍 Learning Debugger!';
+                rankElement.style.color = '#ff6b6b';
+            } else {
+                rankElement.textContent = '📚 Keep Practicing!';
+                rankElement.style.color = '#ff4757';
+            }
+            
+            playSound('complete');
+            document.getElementById('gameOver').style.display = 'block';
+        }
+        
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('fixed').textContent = gameState.fixed;
+            document.getElementById('streak').textContent = gameState.streak;
+        }
+        
+        function resetGame() {
+            gameState.isActive = false;
+            gameState.currentBug = 0;
+            gameState.score = 0;
+            gameState.level = 1;
+            gameState.fixed = 0;
+            gameState.streak = 0;
+            
+            document.getElementById('question').textContent = 'Click Start Debugging to begin!';
+            document.getElementById('codeContainer').innerHTML = '<div class="code-line"><span class="line-number">1</span><span class="code-text">Select a language and start debugging!</span></div>';
+            document.getElementById('options').innerHTML = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'none';
+            
+            updateUI();
+        }
+        
+        function closeResults() {
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('startBtn').style.display = 'inline-block';
+        }
+        
+        // Initialize
+        updateUI();
+    </script>
+</body>
+</html>

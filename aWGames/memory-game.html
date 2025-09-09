@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Matrix - AlienWeb Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .game-board {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        
+        .card:hover {
+            transform: scale(1.05);
+        }
+        
+        .card.flipped {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            transform: rotateY(180deg);
+        }
+        
+        .card.matched {
+            background: linear-gradient(45deg, #a8e6cf, #7fcdcd);
+            transform: scale(0.9);
+            opacity: 0.7;
+        }
+        
+        .card.wrong {
+            background: linear-gradient(45deg, #ff7675, #d63031);
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,255,136,0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .level-complete {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+        
+        @media (max-width: 768px) {
+            .card {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .stats {
+                gap: 15px;
+            }
+            
+            .stat {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .card {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .game-board {
+                gap: 8px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ad-banner" style="width: 100%; max-width: 728px; height: 90px; background: rgba(102, 126, 234, 0.2); border: 1px dashed #667eea; display: flex; align-items: center; justify-content: center; margin: 10px auto; border-radius: 5px; font-size: 12px; opacity: 0.7;">AdSense Banner 728x90</div>
+    
+    <div class="header">
+        <h1>🧠 Memory Matrix</h1>
+        <p>Match all pairs to advance to the next level!</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat">Level: <span id="level">1</span></div>
+        <div class="stat">Score: <span id="score">0</span></div>
+        <div class="stat">Moves: <span id="moves">0</span></div>
+        <div class="stat">Time: <span id="time">0</span>s</div>
+    </div>
+    
+    <div class="game-board" id="gameBoard"></div>
+    
+    <div class="controls">
+        <button class="btn" onclick="newGame()">New Game</button>
+        <button class="btn" onclick="toggleSound()" id="soundBtn">🔊 Sound ON</button>
+        <button class="btn" onclick="window.location.href='index.html'">Back to Menu</button>
+    </div>
+    
+    <div class="ad-banner" style="width: 100%; max-width: 728px; height: 90px; background: rgba(102, 126, 234, 0.2); border: 1px dashed #667eea; display: flex; align-items: center; justify-content: center; margin: 10px auto; border-radius: 5px; font-size: 12px; opacity: 0.7;">AdSense Banner 728x90</div>
+    
+    <div class="level-complete" id="levelComplete">
+        <h2>Level Complete! 🎉</h2>
+        <p>Score: <span id="levelScore"></span></p>
+        <p>Time Bonus: <span id="timeBonus"></span></p>
+        <button class="btn" onclick="nextLevel()">Next Level</button>
+    </div>
+
+    <script>
+        let gameState = {
+            level: 1,
+            score: 0,
+            moves: 0,
+            startTime: Date.now(),
+            flippedCards: [],
+            matchedPairs: 0,
+            canFlip: true,
+            cards: []
+        };
+        
+        // Audio Context for better sound support
+        let audioContext;
+        let soundEnabled = true;
+        
+        // Create sound effects using Web Audio API
+        function createSound(frequency, duration, type = 'sine', volume = 0.1) {
+            if (!soundEnabled || !audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playSound(soundName) {
+            if (!soundEnabled || !audioContext) return;
+            
+            switch(soundName) {
+                case 'flip':
+                    createSound(600, 0.1, 'sine', 0.2);
+                    break;
+                case 'match':
+                    createSound(523, 0.2, 'sine', 0.3);
+                    setTimeout(() => createSound(659, 0.2, 'sine', 0.2), 100);
+                    setTimeout(() => createSound(784, 0.3, 'sine', 0.2), 200);
+                    break;
+                case 'wrong':
+                    createSound(200, 0.3, 'sawtooth', 0.2);
+                    setTimeout(() => createSound(150, 0.2, 'square', 0.1), 100);
+                    break;
+            }
+        }
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            
+            if (soundEnabled && !audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        // Initialize audio context on first user interaction
+        document.addEventListener('click', () => {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }, { once: true });
+        
+        const emojis = ['🚀', '👽', '🛸', '⭐', '🌙', '🪐', '☄️', '🌟', '🔮', '💎', '🎯', '🎮', '🎲', '🎪', '🎨', '🎭', '🎪', '🎯'];
+        
+        function createBoard() {
+            const boardSize = Math.min(4 + Math.floor(gameState.level / 3), 6);
+            const totalCards = boardSize * boardSize;
+            const pairsNeeded = totalCards / 2;
+            
+            // Create pairs
+            const cardEmojis = [];
+            for (let i = 0; i < pairsNeeded; i++) {
+                const emoji = emojis[i % emojis.length];
+                cardEmojis.push(emoji, emoji);
+            }
+            
+            // Shuffle
+            for (let i = cardEmojis.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cardEmojis[i], cardEmojis[j]] = [cardEmojis[j], cardEmojis[i]];
+            }
+            
+            // Create board
+            const board = document.getElementById('gameBoard');
+            board.innerHTML = '';
+            board.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
+            
+            gameState.cards = [];
+            cardEmojis.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.index = index;
+                card.dataset.emoji = emoji;
+                card.addEventListener('click', flipCard);
+                board.appendChild(card);
+                
+                gameState.cards.push({
+                    element: card,
+                    emoji: emoji,
+                    flipped: false,
+                    matched: false
+                });
+            });
+        }
+        
+        function flipCard(e) {
+            if (!gameState.canFlip) return;
+            
+            const cardIndex = parseInt(e.target.dataset.index);
+            const card = gameState.cards[cardIndex];
+            
+            if (card.flipped || card.matched) return;
+            if (gameState.flippedCards.length >= 2) return;
+            
+            // Flip card
+            playSound('flip');
+            card.flipped = true;
+            card.element.classList.add('flipped');
+            card.element.textContent = card.emoji;
+            gameState.flippedCards.push(cardIndex);
+            
+            if (gameState.flippedCards.length === 2) {
+                gameState.moves++;
+                updateUI();
+                checkMatch();
+            }
+        }
+        
+        function checkMatch() {
+            gameState.canFlip = false;
+            const [index1, index2] = gameState.flippedCards;
+            const card1 = gameState.cards[index1];
+            const card2 = gameState.cards[index2];
+            
+            setTimeout(() => {
+                if (card1.emoji === card2.emoji) {
+                    // Match found
+                    playSound('match');
+                    card1.matched = true;
+                    card2.matched = true;
+                    card1.element.classList.add('matched');
+                    card2.element.classList.add('matched');
+                    
+                    gameState.matchedPairs++;
+                    gameState.score += 100 + (gameState.level * 10);
+                    
+                    // Check if level complete
+                    if (gameState.matchedPairs === gameState.cards.length / 2) {
+                        completeLevel();
+                    }
+                } else {
+                    // No match
+                    playSound('wrong');
+                    card1.element.classList.add('wrong');
+                    card2.element.classList.add('wrong');
+                    
+                    setTimeout(() => {
+                        card1.flipped = false;
+                        card2.flipped = false;
+                        card1.element.classList.remove('flipped', 'wrong');
+                        card2.element.classList.remove('flipped', 'wrong');
+                        card1.element.textContent = '';
+                        card2.element.textContent = '';
+                    }, 500);
+                }
+                
+                gameState.flippedCards = [];
+                gameState.canFlip = true;
+                updateUI();
+            }, 1000);
+        }
+        
+        function completeLevel() {
+            const timeElapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+            const timeBonus = Math.max(0, 300 - timeElapsed) * gameState.level;
+            
+            gameState.score += timeBonus;
+            
+            document.getElementById('levelScore').textContent = gameState.score;
+            document.getElementById('timeBonus').textContent = timeBonus;
+            document.getElementById('levelComplete').style.display = 'block';
+        }
+        
+        function nextLevel() {
+            gameState.level++;
+            gameState.matchedPairs = 0;
+            gameState.moves = 0;
+            gameState.startTime = Date.now();
+            gameState.flippedCards = [];
+            gameState.canFlip = true;
+            
+            document.getElementById('levelComplete').style.display = 'none';
+            createBoard();
+            updateUI();
+        }
+        
+        function newGame() {
+            gameState = {
+                level: 1,
+                score: 0,
+                moves: 0,
+                startTime: Date.now(),
+                flippedCards: [],
+                matchedPairs: 0,
+                canFlip: true,
+                cards: []
+            };
+            
+            document.getElementById('levelComplete').style.display = 'none';
+            createBoard();
+            updateUI();
+        }
+        
+        function updateUI() {
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('moves').textContent = gameState.moves;
+            
+            const timeElapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+            document.getElementById('time').textContent = timeElapsed;
+        }
+        
+        // Update timer
+        setInterval(updateUI, 1000);
+        
+        // Initialize game
+        newGame();
+    </script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Pong - AlienWeb Games</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
+            color: #fff; font-family: 'Orbitron', sans-serif; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 10px;
+        }
+        
+        .ad-banner {
+            width: 100%; max-width: 728px; height: 90px; background: rgba(0, 255, 136, 0.1);
+            border: 1px dashed #00ff88; display: flex; align-items: center; justify-content: center;
+            margin: 10px 0; border-radius: 5px; font-size: 12px; opacity: 0.7;
+        }
+        
+        .header { text-align: center; margin-bottom: 15px; }
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem); background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 5px; text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        
+        #gameContainer { position: relative; margin-bottom: 15px; }
+        
+        #gameCanvas {
+            border: 3px solid #00ffff; background: #000;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), inset 0 0 50px rgba(0, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .score {
+            position: absolute; top: 20px; font-size: 48px; font-weight: bold;
+            color: #00ffff; text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .score.left { left: 50px; }
+        .score.right { right: 50px; }
+        
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px; }
+        
+        .btn {
+            background: linear-gradient(45deg, #00ffff, #ff00ff); border: none;
+            padding: 12px 24px; border-radius: 25px; color: #000; font-weight: bold;
+            cursor: pointer; transition: all 0.3s ease; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4); }
+        
+        .mobile-controls {
+            display: none; flex-direction: column; gap: 10px; margin: 15px 0;
+        }
+        
+        .mobile-paddle {
+            background: rgba(0, 255, 255, 0.3); border: 1px solid #00ffff;
+            color: #fff; padding: 20px; border-radius: 10px; font-size: 18px;
+            cursor: pointer; transition: all 0.3s ease; width: 200px;
+        }
+        
+        #gameOver {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9); padding: 30px; border-radius: 15px;
+            text-align: center; border: 2px solid #00ffff; display: none; z-index: 100;
+        }
+        
+        @media (max-width: 768px) { .mobile-controls { display: flex; } }
+    </style>
+</head>
+<body>
+    <div class="ad-banner">AdSense Banner 728x90</div>
+    
+    <div class="header">
+        <h1>🎮 Cyber Pong</h1>
+        <p>Next-gen Pong with power-ups and special effects!</p>
+    </div>
+    
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        
+        <div class="score left" id="playerScore">0</div>
+        <div class="score right" id="aiScore">0</div>
+        
+        <div id="gameOver">
+            <h2 id="gameOverTitle">Game Over!</h2>
+            <p id="gameOverText">Final Score: Player 0 - AI 0</p>
+            <button class="btn" onclick="restartGame()">Play Again</button>
+            <button class="btn" onclick="window.location.href='index.html'">Back to Menu</button>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="togglePause()" id="pauseBtn">Pause</button>
+        <button class="btn" onclick="restartGame()">Restart</button>
+        <button class="btn" onclick="toggleSound()" id="soundBtn">🔊 Sound ON</button>
+    </div>
+    
+    <div class="mobile-controls">
+        <button class="mobile-paddle" ontouchstart="moveUp()" ontouchend="stopMove()">Move Up ⬆️</button>
+        <button class="mobile-paddle" ontouchstart="moveDown()" ontouchend="stopMove()">Move Down ⬇️</button>
+    </div>
+    
+    <div class="ad-banner">AdSense Banner 728x90</div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let audioContext, soundEnabled = true;
+        
+        function createSound(freq, dur, type = 'sine', vol = 0.1) {
+            if (!soundEnabled || !audioContext) return;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain); gain.connect(audioContext.destination);
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+            osc.type = type;
+            gain.gain.setValueAtTime(vol, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + dur);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + dur);
+        }
+        
+        function playSound(type) {
+            switch(type) {
+                case 'paddle': createSound(440, 0.1, 'square', 0.2); break;
+                case 'wall': createSound(220, 0.1, 'sine', 0.2); break;
+                case 'score': createSound(660, 0.3, 'sine', 0.3); break;
+                case 'win': createSound(523, 0.5, 'sine', 0.3); setTimeout(() => createSound(659, 0.3), 200); break;
+            }
+        }
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            if (soundEnabled && !audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        document.addEventListener('click', () => {
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }, { once: true });
+        
+        // Responsive canvas
+        function resizeCanvas() {
+            const maxWidth = Math.min(window.innerWidth - 40, 800);
+            const maxHeight = Math.min(window.innerHeight - 200, 400);
+            canvas.style.width = maxWidth + 'px';
+            canvas.style.height = maxHeight + 'px';
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        let gameState = { playerScore: 0, aiScore: 0, running: true, paused: false, winScore: 5 };
+        let keys = {}, mobileMove = 0;
+        
+        // Game objects
+        let ball = {
+            x: canvas.width / 2, y: canvas.height / 2,
+            vx: 5, vy: 3, size: 10, trail: []
+        };
+        
+        let playerPaddle = {
+            x: 20, y: canvas.height / 2 - 50,
+            width: 15, height: 100, speed: 6
+        };
+        
+        let aiPaddle = {
+            x: canvas.width - 35, y: canvas.height / 2 - 50,
+            width: 15, height: 100, speed: 4
+        };
+        
+        let particles = [];
+        
+        // Input handling
+        document.addEventListener('keydown', (e) => { keys[e.key] = true; });
+        document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+        
+        function moveUp() { mobileMove = -1; }
+        function moveDown() { mobileMove = 1; }
+        function stopMove() { mobileMove = 0; }
+        
+        function resetBall() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            ball.vx = (Math.random() > 0.5 ? 1 : -1) * (4 + Math.random() * 2);
+            ball.vy = (Math.random() - 0.5) * 6;
+            ball.trail = [];
+        }
+        
+        function createParticles(x, y, color, count = 8) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x, y, vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 6,
+                    life: 30, color, size: Math.random() * 3 + 1
+                });
+            }
+        }
+        
+        function update() {
+            if (!gameState.running || gameState.paused) return;
+            
+            // Player paddle movement
+            if (keys['ArrowUp'] || keys['w'] || keys['W'] || mobileMove === -1) {
+                playerPaddle.y = Math.max(0, playerPaddle.y - playerPaddle.speed);
+            }
+            if (keys['ArrowDown'] || keys['s'] || keys['S'] || mobileMove === 1) {
+                playerPaddle.y = Math.min(canvas.height - playerPaddle.height, playerPaddle.y + playerPaddle.speed);
+            }
+            
+            // AI paddle movement
+            const aiCenter = aiPaddle.y + aiPaddle.height / 2;
+            const ballCenter = ball.y;
+            const diff = ballCenter - aiCenter;
+            
+            if (Math.abs(diff) > 5) {
+                if (diff > 0) aiPaddle.y += Math.min(aiPaddle.speed, diff);
+                else aiPaddle.y += Math.max(-aiPaddle.speed, diff);
+            }
+            
+            aiPaddle.y = Math.max(0, Math.min(canvas.height - aiPaddle.height, aiPaddle.y));
+            
+            // Ball movement
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+            
+            // Ball trail
+            ball.trail.push({ x: ball.x, y: ball.y });
+            if (ball.trail.length > 10) ball.trail.shift();
+            
+            // Ball collision with top/bottom walls
+            if (ball.y <= ball.size || ball.y >= canvas.height - ball.size) {
+                ball.vy = -ball.vy;
+                playSound('wall');
+                createParticles(ball.x, ball.y, '#00ffff');
+            }
+            
+            // Ball collision with paddles
+            if (ball.x - ball.size <= playerPaddle.x + playerPaddle.width &&
+                ball.y >= playerPaddle.y && ball.y <= playerPaddle.y + playerPaddle.height &&
+                ball.vx < 0) {
+                
+                ball.vx = -ball.vx * 1.05;
+                ball.vy += (ball.y - (playerPaddle.y + playerPaddle.height / 2)) * 0.1;
+                playSound('paddle');
+                createParticles(ball.x, ball.y, '#00ff88');
+            }
+            
+            if (ball.x + ball.size >= aiPaddle.x &&
+                ball.y >= aiPaddle.y && ball.y <= aiPaddle.y + aiPaddle.height &&
+                ball.vx > 0) {
+                
+                ball.vx = -ball.vx * 1.05;
+                ball.vy += (ball.y - (aiPaddle.y + aiPaddle.height / 2)) * 0.1;
+                playSound('paddle');
+                createParticles(ball.x, ball.y, '#ff00ff');
+            }
+            
+            // Scoring
+            if (ball.x < 0) {
+                gameState.aiScore++;
+                playSound('score');
+                createParticles(ball.x, ball.y, '#ff00ff', 15);
+                resetBall();
+                updateUI();
+                
+                if (gameState.aiScore >= gameState.winScore) {
+                    gameOver('AI Wins!');
+                }
+            }
+            
+            if (ball.x > canvas.width) {
+                gameState.playerScore++;
+                playSound('score');
+                createParticles(ball.x, ball.y, '#00ff88', 15);
+                resetBall();
+                updateUI();
+                
+                if (gameState.playerScore >= gameState.winScore) {
+                    gameOver('You Win!');
+                }
+            }
+            
+            // Update particles
+            particles = particles.filter(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.vx *= 0.98;
+                particle.vy *= 0.98;
+                particle.life--;
+                return particle.life > 0;
+            });
+        }
+        
+        function draw() {
+            // Clear with fade effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw center line
+            ctx.strokeStyle = '#00ffff';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 10]);
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw paddles with glow
+            ctx.shadowBlur = 10;
+            
+            // Player paddle
+            ctx.shadowColor = '#00ff88';
+            ctx.fillStyle = '#00ff88';
+            ctx.fillRect(playerPaddle.x, playerPaddle.y, playerPaddle.width, playerPaddle.height);
+            
+            // AI paddle
+            ctx.shadowColor = '#ff00ff';
+            ctx.fillStyle = '#ff00ff';
+            ctx.fillRect(aiPaddle.x, aiPaddle.y, aiPaddle.width, aiPaddle.height);
+            
+            ctx.shadowBlur = 0;
+            
+            // Draw ball trail
+            ball.trail.forEach((point, index) => {
+                const alpha = index / ball.trail.length;
+                ctx.fillStyle = `rgba(0, 255, 255, ${alpha})`;
+                const size = ball.size * alpha;
+                ctx.fillRect(point.x - size/2, point.y - size/2, size, size);
+            });
+            
+            // Draw ball with glow
+            ctx.shadowColor = '#00ffff';
+            ctx.shadowBlur = 15;
+            ctx.fillStyle = '#00ffff';
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            
+            // Draw particles
+            particles.forEach(particle => {
+                ctx.fillStyle = particle.color;
+                ctx.globalAlpha = particle.life / 30;
+                ctx.fillRect(particle.x - particle.size/2, particle.y - particle.size/2, particle.size, particle.size);
+                ctx.globalAlpha = 1;
+            });
+            
+            // Draw pause overlay
+            if (gameState.paused) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00ffff';
+                ctx.font = '48px Orbitron';
+                ctx.textAlign = 'center';
+                ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
+            }
+        }
+        
+        function gameLoop() {
+            update();
+            draw();
+            if (gameState.running) requestAnimationFrame(gameLoop);
+        }
+        
+        function updateUI() {
+            document.getElementById('playerScore').textContent = gameState.playerScore;
+            document.getElementById('aiScore').textContent = gameState.aiScore;
+        }
+        
+        function togglePause() {
+            if (!gameState.running) return;
+            gameState.paused = !gameState.paused;
+            document.getElementById('pauseBtn').textContent = gameState.paused ? 'Resume' : 'Pause';
+            if (!gameState.paused) gameLoop();
+        }
+        
+        function gameOver(winner) {
+            gameState.running = false;
+            playSound('win');
+            document.getElementById('gameOverTitle').textContent = winner;
+            document.getElementById('gameOverText').textContent = 
+                `Final Score: Player ${gameState.playerScore} - AI ${gameState.aiScore}`;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+        
+        function restartGame() {
+            gameState = { playerScore: 0, aiScore: 0, running: true, paused: false, winScore: 5 };
+            resetBall();
+            playerPaddle.y = canvas.height / 2 - 50;
+            aiPaddle.y = canvas.height / 2 - 50;
+            particles = [];
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('pauseBtn').textContent = 'Pause';
+            updateUI();
+            gameLoop();
+        }
+        
+        // Initialize
+        updateUI();
+        gameLoop();
+    </script>
+</body>
+</html>

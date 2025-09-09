@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlienWeb Games - Galactic Gaming Universe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Orbitron', 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        .galaxy-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at center, #1a0033 0%, #000 70%);
+        }
+        
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .alien-ship {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: fly 15s infinite linear;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+        }
+        
+        .alien-ship::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .wormhole {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, transparent 20%, #9b59b6 30%, #e74c3c 50%, transparent 70%);
+            animation: wormholeRotate 6s linear infinite;
+            top: 15%;
+            right: 10%;
+            z-index: 3;
+            pointer-events: none;
+        }
+        
+        .wormhole::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #000 30%, transparent 70%);
+            border-radius: 50%;
+            animation: wormholeCore 2s ease-in-out infinite alternate;
+        }
+        
+        .quantum-field {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 1px solid #00ff88;
+            border-radius: 50%;
+            bottom: 25%;
+            left: 8%;
+            animation: quantumPulse 3s ease-in-out infinite;
+            z-index: 3;
+            pointer-events: none;
+        }
+        
+        .quantum-field::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 1px solid #00ccff;
+            border-radius: 50%;
+            animation: quantumPulse 1.5s ease-in-out infinite reverse;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+        
+        @keyframes fly {
+            0% { transform: translateX(-100px) translateY(0px); }
+            25% { transform: translateX(25vw) translateY(-50px); }
+            50% { transform: translateX(50vw) translateY(20px); }
+            75% { transform: translateX(75vw) translateY(-30px); }
+            100% { transform: translateX(calc(100vw + 100px)) translateY(10px); }
+        }
+        
+        @keyframes wormholeRotate {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        @keyframes wormholeCore {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.3; }
+        }
+        
+        @keyframes quantumPulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.3); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 0.4; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .search-container {
+            margin-top: 30px;
+        }
+        
+        #searchInput {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px 20px;
+            border: 2px solid #00ff88;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            outline: none;
+            backdrop-filter: blur(10px);
+        }
+        
+        #searchInput::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        #searchInput:focus {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+        
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+        }
+        
+        .header p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            opacity: 0.9;
+            animation: fadeInUp 2s ease-out;
+        }
+        
+
+        
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 0.9; transform: translateY(0); }
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+            perspective: 1000px;
+        }
+        
+        .game-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1));
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+        
+        .game-preview {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        /* Unique hover effects for each card */
+        .game-card:nth-child(1):hover { transform: translateY(-15px) rotateX(10deg); border-color: #ff6b35; box-shadow: 0 25px 50px rgba(255, 107, 53, 0.4); }
+        .game-card:nth-child(1):hover .game-preview { transform: scale(1.1) rotateZ(5deg); }
+        
+        .game-card:nth-child(2):hover { transform: translateY(-15px) rotateY(10deg); border-color: #9b59b6; box-shadow: 0 25px 50px rgba(155, 89, 182, 0.4); }
+        .game-card:nth-child(2):hover .game-preview { transform: scale(1.05) rotateX(10deg); }
+        
+        .game-card:nth-child(3):hover { transform: translateY(-15px) scale(1.05); border-color: #2ecc71; box-shadow: 0 25px 50px rgba(46, 204, 113, 0.4); }
+        .game-card:nth-child(3):hover .game-preview { transform: skewX(5deg) scale(1.1); }
+        
+        .game-card:nth-child(4):hover { transform: translateY(-15px) rotateZ(3deg); border-color: #e74c3c; box-shadow: 0 25px 50px rgba(231, 76, 60, 0.4); }
+        .game-card:nth-child(4):hover .game-preview { transform: perspective(500px) rotateY(15deg); }
+        
+        .game-card:nth-child(5):hover { transform: translateY(-15px) rotateX(-5deg) rotateY(5deg); border-color: #f39c12; box-shadow: 0 25px 50px rgba(243, 156, 18, 0.4); }
+        .game-card:nth-child(5):hover .game-preview { transform: scale(1.1) rotateZ(-5deg); }
+        
+        .game-card:nth-child(6):hover { transform: translateY(-20px) scale(1.02); border-color: #3498db; box-shadow: 0 30px 60px rgba(52, 152, 219, 0.4); }
+        .game-card:nth-child(6):hover .game-preview { transform: rotateX(15deg) scale(1.05); }
+        
+        .game-card:nth-child(7):hover { transform: translateY(-15px) rotateY(-10deg); border-color: #00ffff; box-shadow: 0 25px 50px rgba(0, 255, 255, 0.4); }
+        .game-card:nth-child(7):hover .game-preview { transform: scale(1.1) rotateZ(10deg); }
+        
+        .game-card:nth-child(8):hover { transform: translateY(-15px) rotateX(8deg) scale(1.03); border-color: #ff1493; box-shadow: 0 25px 50px rgba(255, 20, 147, 0.4); }
+        .game-card:nth-child(8):hover .game-preview { transform: perspective(300px) rotateX(-10deg); }
+        
+        .game-card:nth-child(9):hover { transform: translateY(-20px) rotateZ(-2deg) rotateY(5deg); border-color: #00ff00; box-shadow: 0 30px 60px rgba(0, 255, 0, 0.4); }
+        .game-card:nth-child(9):hover .game-preview { transform: scale(1.15) skewY(3deg); }
+        
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .game-card:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease-in-out;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-15px) rotateX(5deg) rotateY(5deg);
+            border-color: #00ff88;
+            box-shadow: 0 25px 50px rgba(0, 255, 136, 0.4), 0 0 30px rgba(0, 255, 136, 0.2);
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .game-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin-bottom: 18px;
+            background: linear-gradient(45deg, #00ccff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+        }
+        
+        .game-card p {
+            margin-bottom: 25px;
+            opacity: 0.85;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        .play-btn {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            border: none;
+            padding: 15px 35px;
+            border-radius: 30px;
+            color: #000;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .play-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .play-btn:hover::before {
+            left: 100%;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 255, 136, 0.5);
+        }
+        
+
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .games-grid { gap: 20px; }
+            .game-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛸 AlienWeb Games 🛸</h1>
+            <p>Engage with our collection of addictive browser games!</p>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search games..." onkeyup="searchGames()">
+            </div>
+        </div>
+        
+        <div class="wormhole"></div>
+        <div class="quantum-field"></div>
+        
+        <div class="games-grid">
+            <div class="game-card" data-game="space defender shooting action">
+                <div class="game-preview">🚀🔫</div>
+                <h3>🚀 Space Defender</h3>
+                <p>Defend Earth from alien invasion! Fast-paced shooting action with increasing difficulty.</p>
+                <a href="space-defender.html" class="play-btn">Play Now</a>
+            </div>
+            
+            <div class="game-card" data-game="memory matrix puzzle card matching">
+                <div class="game-preview">🧠🃏</div>
+                <h3>🧠 Memory Matrix</h3>
+                <p>Test your memory with this challenging card matching game. How many levels can you complete?</p>
+                <a href="memory-game.html" class="play-btn">Play Now</a>
+            </div>
+            
+            <div class="game-card" data-game="neon snake classic arcade">
+                <div class="game-preview">🐍⚡</div>
+                <h3>🐍 Neon Snake</h3>
+                <p>Classic snake game with a futuristic twist. Collect energy orbs and grow your neon snake!</p>
+                <a href="snake-game.html" class="play-btn">Play Now</a>
+            </div>
+            
+            <div class="game-card" data-game="laser defense tower strategy">
+                <div class="game-preview">🔫🏰</div>
+                <h3>🔫 Laser Defense</h3>
+                <p>Ultimate tower defense with laser cannons! Build defenses and stop alien waves!</p>
+                <a href="laser-defense.html" class="play-btn">Play Now</a>
+            </div>
+            
+            <div class="game-card" data-game="cyber pong arcade classic">
+                <div class="game-preview">🎮⚡</div>
+                <h3>🎮 Cyber Pong</h3>
+                <p>Next-gen Pong with power-ups and special effects! Battle AI in neon arenas!</p>
+                <a href="cyber-pong.html" class="play-btn">Play Now</a>
+            </div>
+            
+            <div class="game-card" data-game="typing speed keyboard test wpm">
+                <div class="game-preview">⌨️⚡</div>
+                <h3>⌨️ Typing Speed</h3>
+                <p>Test your typing speed and accuracy! Challenge yourself with different difficulty levels!</p>
+                <a href="typing-speed.html" class="play-btn">Play Now</a>
+            </div>
+            
+            <div class="game-card" data-game="typing challenge falling words leaderboard">
+                <div class="game-preview">⚡🏆</div>
+                <h3>⚡ Typing Challenge</h3>
+                <p>Race against time! Type falling words before they disappear and compete on the leaderboard!</p>
+                <a href="typing-challenge.html" class="play-btn">Play Now</a>
+            </div>
+            
+            <div class="game-card" data-game="keyboard master shortcuts computer education">
+                <div class="game-preview">⌨️🎓</div>
+                <h3>⌨️ Keyboard Master</h3>
+                <p>Learn keyboard shortcuts, computer terms, and file management skills through interactive quizzes!</p>
+                <a href="keyboard-master.html" class="play-btn">Play Now</a>
+            </div>
+            
+            <div class="game-card" data-game="code debugger programming errors bugs fix">
+                <div class="game-preview">🐛💻</div>
+                <h3>🐛 Code Debugger</h3>
+                <p>Find and fix programming errors! Learn debugging skills with Python, JavaScript, and Java code.</p>
+                <a href="code-debugger.html" class="play-btn">Play Now</a>
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="galaxy-bg">
+        <div class="stars"></div>
+    </div>
+    
+    <script>
+        // Create animated stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Create nebula clouds
+        function createNebulas() {
+            const galaxyBg = document.querySelector('.galaxy-bg');
+            const nebulaCount = 5;
+            
+            for (let i = 0; i < nebulaCount; i++) {
+                const nebula = document.createElement('div');
+                nebula.className = 'nebula';
+                nebula.style.left = Math.random() * 100 + '%';
+                nebula.style.top = Math.random() * 100 + '%';
+                nebula.style.width = Math.random() * 300 + 100 + 'px';
+                nebula.style.height = Math.random() * 200 + 80 + 'px';
+                nebula.style.background = `radial-gradient(circle, rgba(${Math.random() * 100 + 100}, ${Math.random() * 100 + 50}, ${Math.random() * 255}, 0.3), transparent)`;
+                nebula.style.animationDelay = Math.random() * 20 + 's';
+                galaxyBg.appendChild(nebula);
+            }
+        }
+        
+        // Create alien ships
+        function createAlienShips() {
+            const galaxyBg = document.querySelector('.galaxy-bg');
+            
+            setInterval(() => {
+                if (Math.random() < 0.3) {
+                    const ship = document.createElement('div');
+                    ship.className = 'alien-ship';
+                    ship.style.top = Math.random() * 80 + 10 + '%';
+                    ship.style.left = '-100px';
+                    galaxyBg.appendChild(ship);
+                    
+                    setTimeout(() => {
+                        if (ship.parentNode) {
+                            ship.parentNode.removeChild(ship);
+                        }
+                    }, 15000);
+                }
+            }, 3000);
+        }
+        
+        // Search functionality
+        function searchGames() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const gameCards = document.querySelectorAll('.game-card');
+            
+            gameCards.forEach(card => {
+                const gameData = card.getAttribute('data-game').toLowerCase();
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                
+                if (gameData.includes(searchTerm) || title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            createNebulas();
+            createAlienShips();
+        });
+    </script>
+</body>
+</html>

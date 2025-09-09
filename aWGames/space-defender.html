@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Defender - AlienWeb Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #00ff88;
+            background: linear-gradient(180deg, #000428 0%, #004e92 100%);
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+        
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            display: none;
+        }
+        
+        #instructions {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9); display: flex; align-items: center; justify-content: center;
+            z-index: 1000; font-family: Arial, sans-serif;
+        }
+        
+        .instruction-box {
+            background: linear-gradient(135deg, #00ff88, #00ccff); padding: 30px; border-radius: 20px;
+            text-align: center; max-width: 500px; color: #000;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            #controls {
+                bottom: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="instructions">
+        <div class="instruction-box">
+            <h2>🚀 Space Defender</h2>
+            <p><strong>How to Play:</strong></p>
+            <p>🖱️ Move mouse to control your ship</p>
+            <p>🖱️ Click to shoot at alien invaders</p>
+            <p>📱 On mobile: Touch to move and shoot</p>
+            <p>🎯 Destroy all enemies to advance levels!</p>
+            <button class="btn" onclick="startGame()" style="margin-top: 20px;">Start Game</button>
+        </div>
+    </div>
+    
+    <div class="ad-banner" style="width: 100%; max-width: 728px; height: 90px; background: rgba(0, 255, 136, 0.1); border: 1px dashed #00ff88; display: flex; align-items: center; justify-content: center; margin: 10px auto; border-radius: 5px; font-size: 12px; opacity: 0.7;">AdSense Banner 728x90</div>
+    
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div id="ui">
+            <div>Score: <span id="score">0</span></div>
+            <div>Lives: <span id="lives">3</span></div>
+            <div>Level: <span id="level">1</span></div>
+            <button class="btn" onclick="toggleSound()" id="soundBtn" style="margin-left: 20px; padding: 5px 10px; font-size: 12px;">🔊 Sound ON</button>
+        </div>
+        
+        <div id="gameOver">
+            <h2>Game Over!</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <button class="btn" onclick="restartGame()">Play Again</button>
+            <button class="btn" onclick="window.location.href='index.html'">Back to Menu</button>
+        </div>
+        
+        <div id="controls">
+            <p>🖱️ Move mouse to aim | 🖱️ Click to shoot | 📱 Touch to move & shoot</p>
+        </div>
+    </div>
+    
+    <div class="ad-banner" style="width: 100%; max-width: 728px; height: 90px; background: rgba(0, 255, 136, 0.1); border: 1px dashed #00ff88; display: flex; align-items: center; justify-content: center; margin: 10px auto; border-radius: 5px; font-size: 12px; opacity: 0.7;">AdSense Banner 728x90</div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Audio Context for better sound support
+        let audioContext;
+        let soundEnabled = true;
+        
+        // Create sound effects using Web Audio API
+        function createSound(frequency, duration, type = 'sine', volume = 0.1) {
+            if (!soundEnabled || !audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playSound(soundName) {
+            if (!soundEnabled || !audioContext) return;
+            
+            switch(soundName) {
+                case 'shoot':
+                    createSound(800, 0.1, 'square', 0.2);
+                    break;
+                case 'hit':
+                    createSound(300, 0.2, 'sawtooth', 0.3);
+                    setTimeout(() => createSound(150, 0.1, 'square', 0.2), 50);
+                    break;
+                case 'gameOver':
+                    createSound(200, 0.5, 'sawtooth', 0.3);
+                    setTimeout(() => createSound(100, 0.8, 'triangle', 0.2), 300);
+                    break;
+            }
+        }
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            
+            if (soundEnabled && !audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        function startGame() {
+            document.getElementById('instructions').style.display = 'none';
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        // Initialize audio context on first user interaction
+        document.addEventListener('click', () => {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }, { once: true });
+        
+        // Responsive canvas
+        function resizeCanvas() {
+            const maxWidth = window.innerWidth - 40;
+            const maxHeight = window.innerHeight - 40;
+            const ratio = Math.min(maxWidth / 800, maxHeight / 600);
+            
+            canvas.style.width = (800 * ratio) + 'px';
+            canvas.style.height = (600 * ratio) + 'px';
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        // Game state
+        let gameState = {
+            score: 0,
+            lives: 3,
+            level: 1,
+            gameRunning: true,
+            mouseX: 400,
+            mouseY: 300
+        };
+        
+        // Game objects
+        let player = { x: 400, y: 550, width: 40, height: 30, speed: 5 };
+        let bullets = [];
+        let enemies = [];
+        let particles = [];
+        
+        // Input handling
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            gameState.mouseX = (e.clientX - rect.left) * scaleX;
+            gameState.mouseY = (e.clientY - rect.top) * scaleY;
+        });
+        
+        canvas.addEventListener('click', shoot);
+        canvas.addEventListener('touchstart', handleTouch);
+        canvas.addEventListener('touchmove', handleTouch);
+        
+        function handleTouch(e) {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            const touch = e.touches[0];
+            gameState.mouseX = (touch.clientX - rect.left) * scaleX;
+            gameState.mouseY = (touch.clientY - rect.top) * scaleY;
+            
+            if (e.type === 'touchstart') shoot();
+        }
+        
+        function shoot() {
+            if (!gameState.gameRunning) return;
+            
+            playSound('shoot');
+            bullets.push({
+                x: player.x + player.width / 2,
+                y: player.y,
+                width: 4,
+                height: 10,
+                speed: 8,
+                color: '#00ff88'
+            });
+        }
+        
+        // Enemy spawning
+        function spawnEnemies() {
+            const enemyCount = 5 + gameState.level;
+            enemies = [];
+            
+            for (let i = 0; i < enemyCount; i++) {
+                enemies.push({
+                    x: Math.random() * (canvas.width - 30),
+                    y: Math.random() * -200 - 50,
+                    width: 30,
+                    height: 30,
+                    speed: 1 + gameState.level * 0.5,
+                    color: `hsl(${Math.random() * 60 + 300}, 100%, 50%)`
+                });
+            }
+        }
+        
+        // Game loop
+        function update() {
+            if (!gameState.gameRunning) return;
+            
+            // Move player towards mouse
+            const dx = gameState.mouseX - player.x - player.width / 2;
+            player.x += dx * 0.1;
+            player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+            
+            // Update bullets
+            bullets = bullets.filter(bullet => {
+                bullet.y -= bullet.speed;
+                return bullet.y > -bullet.height;
+            });
+            
+            // Update enemies
+            enemies.forEach(enemy => {
+                enemy.y += enemy.speed;
+            });
+            
+            // Remove off-screen enemies and spawn new ones
+            enemies = enemies.filter(enemy => {
+                if (enemy.y > canvas.height) {
+                    gameState.lives--;
+                    updateUI();
+                    return false;
+                }
+                return true;
+            });
+            
+            // Collision detection
+            bullets.forEach((bullet, bulletIndex) => {
+                enemies.forEach((enemy, enemyIndex) => {
+                    if (bullet.x < enemy.x + enemy.width &&
+                        bullet.x + bullet.width > enemy.x &&
+                        bullet.y < enemy.y + enemy.height &&
+                        bullet.y + bullet.height > enemy.y) {
+                        
+                        // Create explosion particles
+                        for (let i = 0; i < 8; i++) {
+                            particles.push({
+                                x: enemy.x + enemy.width / 2,
+                                y: enemy.y + enemy.height / 2,
+                                vx: (Math.random() - 0.5) * 6,
+                                vy: (Math.random() - 0.5) * 6,
+                                life: 30,
+                                color: enemy.color
+                            });
+                        }
+                        
+                        playSound('hit');
+                        bullets.splice(bulletIndex, 1);
+                        enemies.splice(enemyIndex, 1);
+                        gameState.score += 10;
+                        updateUI();
+                    }
+                });
+            });
+            
+            // Update particles
+            particles = particles.filter(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.life--;
+                return particle.life > 0;
+            });
+            
+            // Check for level completion
+            if (enemies.length === 0) {
+                gameState.level++;
+                spawnEnemies();
+                updateUI();
+            }
+            
+            // Check game over
+            if (gameState.lives <= 0) {
+                endGame();
+            }
+        }
+        
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = 'rgba(0, 4, 40, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw stars
+            ctx.fillStyle = '#fff';
+            for (let i = 0; i < 50; i++) {
+                const x = (i * 137.5) % canvas.width;
+                const y = (i * 73.7 + Date.now() * 0.01) % canvas.height;
+                ctx.fillRect(x, y, 1, 1);
+            }
+            
+            // Draw player
+            ctx.fillStyle = '#00ff88';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            
+            // Draw bullets
+            bullets.forEach(bullet => {
+                ctx.fillStyle = bullet.color;
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            });
+            
+            // Draw enemies
+            enemies.forEach(enemy => {
+                ctx.fillStyle = enemy.color;
+                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+            });
+            
+            // Draw particles
+            particles.forEach(particle => {
+                ctx.fillStyle = particle.color;
+                ctx.globalAlpha = particle.life / 30;
+                ctx.fillRect(particle.x, particle.y, 3, 3);
+                ctx.globalAlpha = 1;
+            });
+        }
+        
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('lives').textContent = gameState.lives;
+            document.getElementById('level').textContent = gameState.level;
+        }
+        
+        function endGame() {
+            gameState.gameRunning = false;
+            playSound('gameOver');
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+        
+        function restartGame() {
+            gameState = { score: 0, lives: 3, level: 1, gameRunning: true, mouseX: 400, mouseY: 300 };
+            bullets = [];
+            particles = [];
+            spawnEnemies();
+            updateUI();
+            document.getElementById('gameOver').style.display = 'none';
+        }
+        
+        // Initialize game
+        spawnEnemies();
+        updateUI();
+        gameLoop();
+    </script>
+</body>
+</html>

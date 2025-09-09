@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Challenge - AlienWeb Games</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #2c1810 100%);
+            color: #fff; font-family: 'Orbitron', sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 10px;
+        }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem); background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px; text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+        
+        .stats { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .stat {
+            background: rgba(255, 107, 53, 0.2); padding: 8px 16px; border-radius: 8px;
+            border: 1px solid #ff6b35; font-weight: bold; min-width: 80px; text-align: center;
+        }
+        
+        .game-area {
+            background: rgba(0, 0, 0, 0.4); border: 2px solid #ff6b35; border-radius: 15px;
+            padding: 20px; max-width: 900px; width: 100%; margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.3); position: relative; height: 400px;
+        }
+        
+        .word-container {
+            position: relative; width: 100%; height: 300px; overflow: hidden;
+            border: 1px solid #f7931e; border-radius: 10px; background: #000;
+        }
+        
+        .falling-word {
+            position: absolute; font-family: 'JetBrains Mono', monospace;
+            font-size: 18px; font-weight: 600; padding: 8px 12px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e); color: #000;
+            border-radius: 8px; cursor: pointer; transition: all 0.3s ease;
+            animation: fall linear; box-shadow: 0 2px 10px rgba(255, 107, 53, 0.4);
+        }
+        
+        .falling-word.typed { background: #00ff88; animation: none; }
+        .falling-word.missed { background: #ff4444; animation: explode 0.5s ease-out; }
+        
+        @keyframes fall {
+            from { top: -50px; }
+            to { top: 350px; }
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        
+        #wordInput {
+            width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ff6b35;
+            border-radius: 8px; background: rgba(0, 0, 0, 0.7); color: #fff;
+            font-family: 'JetBrains Mono', monospace; outline: none; margin-top: 10px;
+        }
+        
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e); border: none;
+            padding: 10px 20px; border-radius: 20px; color: #000; font-weight: bold;
+            cursor: pointer; transition: all 0.3s ease; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4); }
+        
+        .leaderboard {
+            background: rgba(0, 0, 0, 0.3); border: 2px solid #ff6b35; border-radius: 15px;
+            padding: 20px; max-width: 400px; width: 100%; margin-bottom: 20px;
+        }
+        
+        .leaderboard h3 { text-align: center; margin-bottom: 15px; color: #ff6b35; }
+        
+        .leaderboard-entry {
+            display: flex; justify-content: space-between; padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+        }
+        
+        .leaderboard-entry:last-child { border-bottom: none; }
+        
+        #gameOver {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9); padding: 30px; border-radius: 15px;
+            text-align: center; border: 2px solid #ff6b35; display: none; z-index: 100;
+        }
+        
+        #instructions {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9); display: flex; align-items: center; justify-content: center;
+            z-index: 1000; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .instruction-box {
+            background: linear-gradient(135deg, #ff6b35, #f7931e); padding: 30px; border-radius: 20px;
+            text-align: center; max-width: 500px; color: #000;
+        }
+        
+        .name-input {
+            background: rgba(0, 0, 0, 0.7); border: 2px solid #ff6b35; border-radius: 8px;
+            padding: 10px; color: #fff; font-family: 'Orbitron', sans-serif; margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area { padding: 15px; height: 350px; }
+            .word-container { height: 250px; }
+            .falling-word { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="instructions">
+        <div class="instruction-box">
+            <h2>⚡ Typing Speed Challenge</h2>
+            <p><strong>How to Play:</strong></p>
+            <p>⌨️ Type falling words before they disappear</p>
+            <p>⏰ Words fall faster as you progress</p>
+            <p>🎯 Miss 5 words and game over</p>
+            <p>🏆 Compete on the leaderboard!</p>
+            <input type="text" id="playerName" class="name-input" placeholder="Enter your name" maxlength="15">
+            <br>
+            <button class="btn" onclick="startGame()" style="margin-top: 15px;">Start Challenge</button>
+        </div>
+    </div>
+    
+    <div class="header">
+        <h1>⚡ Typing Speed Challenge</h1>
+        <p>Type fast or words disappear!</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat">Score: <span id="score">0</span></div>
+        <div class="stat">Level: <span id="level">1</span></div>
+        <div class="stat">Lives: <span id="lives">5</span></div>
+        <div class="stat">WPM: <span id="wpm">0</span></div>
+        <div class="stat">Streak: <span id="streak">0</span></div>
+    </div>
+    
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: flex-start;">
+        <div class="game-area">
+            <div class="word-container" id="wordContainer"></div>
+            <input type="text" id="wordInput" placeholder="Type the falling words here..." disabled>
+        </div>
+        
+        <div class="leaderboard">
+            <h3>🏆 Leaderboard</h3>
+            <div id="leaderboardList">
+                <div class="leaderboard-entry">
+                    <span>No scores yet</span>
+                    <span>-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="startChallenge()" id="startBtn">Start Challenge</button>
+        <button class="btn" onclick="pauseGame()" id="pauseBtn">Pause</button>
+        <button class="btn" onclick="resetGame()">Reset</button>
+        <button class="btn" onclick="toggleSound()" id="soundBtn">🔊 Sound ON</button>
+    </div>
+    
+    <div id="gameOver">
+        <h2>Challenge Complete!</h2>
+        <p>Final Score: <span id="finalScore">0</span></p>
+        <p>Level Reached: <span id="finalLevel">1</span></p>
+        <p>Words Per Minute: <span id="finalWPM">0</span></p>
+        <p id="newRecord" style="display: none; color: #00ff88; font-weight: bold;">🏆 New High Score!</p>
+        <div style="margin-top: 20px;">
+            <button class="btn" onclick="closeResults()">Continue</button>
+            <button class="btn" onclick="startChallenge()">Play Again</button>
+            <button class="btn" onclick="window.location.href='index.html'">Back to Menu</button>
+        </div>
+    </div>
+
+    <script>
+        let audioContext, soundEnabled = true;
+        
+        function createSound(freq, dur, type = 'sine', vol = 0.1) {
+            if (!soundEnabled || !audioContext) return;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain); gain.connect(audioContext.destination);
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+            osc.type = type;
+            gain.gain.setValueAtTime(vol, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + dur);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + dur);
+        }
+        
+        function playSound(type) {
+            switch(type) {
+                case 'correct': createSound(523, 0.2, 'sine', 0.15); break;
+                case 'miss': createSound(150, 0.3, 'sawtooth', 0.2); break;
+                case 'levelup': createSound(659, 0.4, 'sine', 0.2); break;
+                case 'gameover': createSound(100, 0.8, 'triangle', 0.3); break;
+            }
+        }
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            if (soundEnabled && !audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        function startGame() {
+            const name = document.getElementById('playerName').value.trim();
+            if (!name) {
+                alert('Please enter your name!');
+                return;
+            }
+            gameState.playerName = name;
+            document.getElementById('instructions').style.display = 'none';
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            loadLeaderboard();
+        }
+        
+        const words = [
+            'cat', 'dog', 'run', 'go', 'see', 'the', 'and', 'you', 'me', 'we',
+            'car', 'sun', 'fun', 'yes', 'no', 'up', 'down', 'in', 'out', 'on',
+            'home', 'play', 'game', 'good', 'nice', 'easy', 'help', 'love', 'like', 'new',
+            'Japan', 'London', 'Paris', 'Bhutan', 'arrow', 'nearly', 'help', 'love', 'like', 'new'
+        ];
+        
+        let gameState = {
+            score: 0,
+            level: 1,
+            lives: 5,
+            streak: 0,
+            isRunning: false,
+            isPaused: false,
+            playerName: '',
+            startTime: null,
+            wordsTyped: 0,
+            fallSpeed: 12000,
+            spawnRate: 4000,
+            activeWords: []
+        };
+        
+        let gameTimer, spawnTimer;
+        
+        function startChallenge() {
+            if (gameState.isPaused) {
+                resumeGame();
+                return;
+            }
+            
+            gameState = {
+                score: 0,
+                level: 1,
+                lives: 5,
+                streak: 0,
+                isRunning: true,
+                isPaused: false,
+                playerName: gameState.playerName,
+                startTime: Date.now(),
+                wordsTyped: 0,
+                fallSpeed: 8000,
+                spawnRate: 2000,
+                activeWords: []
+            };
+            
+            document.getElementById('wordInput').disabled = false;
+            document.getElementById('wordInput').focus();
+            document.getElementById('startBtn').textContent = 'Running...';
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            
+            updateUI();
+            spawnWord();
+            spawnTimer = setInterval(spawnWord, gameState.spawnRate);
+        }
+        
+        function spawnWord() {
+            if (!gameState.isRunning || gameState.isPaused) return;
+            
+            // Only spawn if there are less than 2 words on screen (easier for beginners)
+            if (gameState.activeWords.length >= 2) return;
+            
+            const word = words[Math.floor(Math.random() * words.length)];
+            const wordElement = document.createElement('div');
+            wordElement.className = 'falling-word';
+            wordElement.textContent = word;
+            wordElement.style.left = Math.random() * (document.getElementById('wordContainer').offsetWidth - 100) + 'px';
+            wordElement.style.animationDuration = gameState.fallSpeed + 'ms';
+            
+            const wordId = Date.now() + Math.random();
+            wordElement.dataset.wordId = wordId;
+            
+            gameState.activeWords.push({
+                id: wordId,
+                text: word,
+                element: wordElement,
+                startTime: Date.now()
+            });
+            
+            document.getElementById('wordContainer').appendChild(wordElement);
+            
+            setTimeout(() => {
+                if (wordElement.parentNode && !wordElement.classList.contains('typed')) {
+                    wordElement.classList.add('missed');
+                    gameState.lives--;
+                    playSound('miss');
+                    gameState.streak = 0;
+                    
+                    setTimeout(() => {
+                        if (wordElement.parentNode) {
+                            wordElement.parentNode.removeChild(wordElement);
+                        }
+                    }, 500);
+                    
+                    gameState.activeWords = gameState.activeWords.filter(w => w.id !== wordId);
+                    
+                    if (gameState.lives <= 0) {
+                        endGame();
+                    } else {
+                        updateUI();
+                    }
+                }
+            }, gameState.fallSpeed);
+        }
+        
+        function pauseGame() {
+            if (!gameState.isRunning) return;
+            
+            gameState.isPaused = !gameState.isPaused;
+            
+            if (gameState.isPaused) {
+                clearInterval(spawnTimer);
+                document.getElementById('pauseBtn').textContent = 'Resume';
+                document.getElementById('wordInput').disabled = true;
+                
+                gameState.activeWords.forEach(word => {
+                    word.element.style.animationPlayState = 'paused';
+                });
+            } else {
+                resumeGame();
+            }
+        }
+        
+        function resumeGame() {
+            gameState.isPaused = false;
+            document.getElementById('pauseBtn').textContent = 'Pause';
+            document.getElementById('wordInput').disabled = false;
+            document.getElementById('wordInput').focus();
+            
+            gameState.activeWords.forEach(word => {
+                word.element.style.animationPlayState = 'running';
+            });
+            
+            spawnTimer = setInterval(spawnWord, gameState.spawnRate);
+        }
+        
+        function endGame() {
+            gameState.isRunning = false;
+            clearInterval(spawnTimer);
+            
+            document.getElementById('wordInput').disabled = true;
+            document.getElementById('startBtn').textContent = 'Start Challenge';
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            
+            const finalWPM = calculateWPM();
+            
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalLevel').textContent = gameState.level;
+            document.getElementById('finalWPM').textContent = finalWPM;
+            
+            saveScore(gameState.playerName, gameState.score, gameState.level, finalWPM);
+            playSound('gameover');
+            
+            document.getElementById('gameOver').style.display = 'block';
+        }
+        
+        function calculateWPM() {
+            const timeElapsed = (Date.now() - gameState.startTime) / 60000;
+            return Math.round(gameState.wordsTyped / timeElapsed) || 0;
+        }
+        
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('lives').textContent = gameState.lives;
+            document.getElementById('wpm').textContent = calculateWPM();
+            document.getElementById('streak').textContent = gameState.streak;
+        }
+        
+        function resetGame() {
+            gameState.isRunning = false;
+            gameState.isPaused = false;
+            clearInterval(spawnTimer);
+            
+            document.getElementById('wordContainer').innerHTML = '';
+            document.getElementById('wordInput').value = '';
+            document.getElementById('wordInput').disabled = true;
+            document.getElementById('startBtn').textContent = 'Start Challenge';
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').textContent = 'Pause';
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('gameOver').style.display = 'none';
+            
+            gameState.activeWords = [];
+            updateUI();
+        }
+        
+        function closeResults() {
+            document.getElementById('gameOver').style.display = 'none';
+        }
+        
+        function saveScore(name, score, level, wpm) {
+            let leaderboard = JSON.parse(localStorage.getItem('typingChallengeLeaderboard') || '[]');
+            
+            leaderboard.push({
+                name: name,
+                score: score,
+                level: level,
+                wpm: wpm,
+                date: new Date().toLocaleDateString()
+            });
+            
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 10);
+            
+            localStorage.setItem('typingChallengeLeaderboard', JSON.stringify(leaderboard));
+            
+            if (leaderboard[0].name === name && leaderboard[0].score === score) {
+                document.getElementById('newRecord').style.display = 'block';
+            }
+            
+            loadLeaderboard();
+        }
+        
+        function loadLeaderboard() {
+            const leaderboard = JSON.parse(localStorage.getItem('typingChallengeLeaderboard') || '[]');
+            const listElement = document.getElementById('leaderboardList');
+            
+            if (leaderboard.length === 0) {
+                listElement.innerHTML = '<div class="leaderboard-entry"><span>No scores yet</span><span>-</span></div>';
+                return;
+            }
+            
+            listElement.innerHTML = '';
+            leaderboard.forEach((entry, index) => {
+                const entryElement = document.createElement('div');
+                entryElement.className = 'leaderboard-entry';
+                entryElement.innerHTML = `
+                    <span>${index + 1}. ${entry.name}</span>
+                    <span>${entry.score}</span>
+                `;
+                listElement.appendChild(entryElement);
+            });
+        }
+        
+        // Input handling
+        document.getElementById('wordInput').addEventListener('input', (e) => {
+            if (!gameState.isRunning || gameState.isPaused) return;
+            
+            const input = e.target.value.trim().toLowerCase();
+            
+            if (input === '') return;
+            
+            const matchedWord = gameState.activeWords.find(word => 
+                word.text.toLowerCase() === input && !word.element.classList.contains('typed')
+            );
+            
+            if (matchedWord) {
+                matchedWord.element.classList.add('typed');
+                setTimeout(() => {
+                    if (matchedWord.element.parentNode) {
+                        matchedWord.element.parentNode.removeChild(matchedWord.element);
+                    }
+                }, 300);
+                
+                gameState.activeWords = gameState.activeWords.filter(w => w.id !== matchedWord.id);
+                
+                gameState.score += input.length * 10 + (gameState.streak * 5);
+                gameState.streak++;
+                gameState.wordsTyped++;
+                
+                if (gameState.streak % 15 === 0) {
+                    gameState.level++;
+                    gameState.fallSpeed = Math.max(8000, gameState.fallSpeed - 1000);
+                    gameState.spawnRate = Math.max(3000, gameState.spawnRate - 200);
+                    
+                    clearInterval(spawnTimer);
+                    spawnTimer = setInterval(spawnWord, gameState.spawnRate);
+                    
+                    playSound('levelup');
+                } else {
+                    playSound('correct');
+                }
+                
+                e.target.value = '';
+                updateUI();
+            }
+        });
+        
+        // Initialize
+        loadLeaderboard();
+        updateUI();
+    </script>
+</body>
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Visualizer - AlienWeb Games</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff; font-family: 'Orbitron', sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 10px;
+        }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem); background: linear-gradient(45deg, #8e44ad, #3498db);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px; text-shadow: 0 0 20px rgba(142, 68, 173, 0.5);
+        }
+        
+        .stats { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .stat {
+            background: rgba(142, 68, 173, 0.2); padding: 8px 16px; border-radius: 8px;
+            border: 1px solid #8e44ad; font-weight: bold; min-width: 80px; text-align: center;
+        }
+        
+        .algorithm-selector {
+            display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;
+        }
+        
+        .algo-btn {
+            background: rgba(142, 68, 173, 0.2); border: 1px solid #8e44ad;
+            padding: 8px 16px; border-radius: 8px; color: #fff; cursor: pointer;
+            transition: all 0.3s ease; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .algo-btn.active { background: #8e44ad; color: #000; }
+        .algo-btn:hover { background: #3498db; color: #000; }
+        
+        .visualizer-area {
+            background: rgba(0, 0, 0, 0.4); border: 2px solid #8e44ad; border-radius: 15px;
+            padding: 30px; max-width: 900px; width: 100%; margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(142, 68, 173, 0.3);
+        }
+        
+        .array-container {
+            display: flex; justify-content: center; align-items: end; height: 300px;
+            margin-bottom: 20px; gap: 2px; overflow-x: auto; padding: 10px;
+        }
+        
+        .array-bar {
+            background: linear-gradient(45deg, #8e44ad, #3498db); min-width: 20px;
+            border-radius: 4px 4px 0 0; transition: all 0.3s ease; position: relative;
+            display: flex; align-items: end; justify-content: center; color: #fff;
+            font-weight: bold; font-size: 12px; padding-bottom: 5px;
+        }
+        
+        .array-bar.comparing { background: #e74c3c; transform: scale(1.1); }
+        .array-bar.swapping { background: #f39c12; transform: scale(1.2); }
+        .array-bar.sorted { background: #27ae60; }
+        
+        .info-panel {
+            background: rgba(0, 0, 0, 0.3); border: 1px solid #8e44ad; border-radius: 10px;
+            padding: 15px; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .algorithm-info { margin-bottom: 10px; }
+        .complexity { color: #3498db; }
+        .description { color: #ecf0f1; font-size: 14px; }
+        
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+        
+        .btn {
+            background: linear-gradient(45deg, #8e44ad, #3498db); border: none;
+            padding: 10px 20px; border-radius: 20px; color: #000; font-weight: bold;
+            cursor: pointer; transition: all 0.3s ease; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .speed-control {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+        }
+        
+        .speed-slider {
+            width: 150px; height: 5px; background: rgba(142, 68, 173, 0.3);
+            border-radius: 5px; outline: none; cursor: pointer;
+        }
+        
+        .quiz-mode {
+            background: rgba(0, 0, 0, 0.3); border: 1px solid #8e44ad; border-radius: 10px;
+            padding: 20px; margin-top: 20px; display: none;
+        }
+        
+        .question { font-size: 16px; margin-bottom: 15px; color: #3498db; }
+        
+        .quiz-options { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 15px; }
+        
+        .quiz-option {
+            background: rgba(142, 68, 173, 0.2); padding: 10px; border-radius: 8px;
+            cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent;
+        }
+        
+        .quiz-option:hover { background: rgba(52, 152, 219, 0.3); }
+        .quiz-option.correct { background: #27ae60; border-color: #2ecc71; }
+        .quiz-option.wrong { background: #e74c3c; border-color: #c0392b; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔬 Algorithm Visualizer</h1>
+        <p>Learn sorting algorithms through visualization!</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat">Comparisons: <span id="comparisons">0</span></div>
+        <div class="stat">Swaps: <span id="swaps">0</span></div>
+        <div class="stat">Time: <span id="time">0</span>s</div>
+        <div class="stat">Status: <span id="status">Ready</span></div>
+    </div>
+    
+    <div class="algorithm-selector">
+        <div class="algo-btn active" onclick="selectAlgorithm('bubble')">Bubble Sort</div>
+        <div class="algo-btn" onclick="selectAlgorithm('selection')">Selection Sort</div>
+        <div class="algo-btn" onclick="selectAlgorithm('insertion')">Insertion Sort</div>
+        <div class="algo-btn" onclick="selectAlgorithm('quick')">Quick Sort</div>
+    </div>
+    
+    <div class="visualizer-area">
+        <div class="info-panel">
+            <div class="algorithm-info" id="algoInfo">
+                <strong>Bubble Sort</strong> - <span class="complexity">O(n²)</span>
+            </div>
+            <div class="description" id="algoDesc">
+                Compares adjacent elements and swaps them if they're in wrong order. Simple but inefficient.
+            </div>
+        </div>
+        
+        <div class="array-container" id="arrayContainer"></div>
+        
+        <div class="speed-control">
+            <label>Speed:</label>
+            <input type="range" class="speed-slider" id="speedSlider" min="1" max="10" value="5">
+            <span id="speedValue">5</span>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="generateArray()" id="generateBtn">Generate Array</button>
+        <button class="btn" onclick="startSort()" id="startBtn">Start Sort</button>
+        <button class="btn" onclick="pauseSort()" id="pauseBtn" disabled>Pause</button>
+        <button class="btn" onclick="resetSort()" id="resetBtn">Reset</button>
+        <button class="btn" onclick="toggleQuiz()" id="quizBtn">Quiz Mode</button>
+        <button class="btn" onclick="toggleSound()" id="soundBtn">🔊 Sound ON</button>
+    </div>
+    
+    <div class="quiz-mode" id="quizMode">
+        <div class="question" id="quizQuestion">What is the time complexity of Bubble Sort?</div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div id="quizFeedback" style="margin-top: 10px; font-weight: bold;"></div>
+        <button class="btn" onclick="nextQuizQuestion()" id="nextQuizBtn" style="display: none; margin-top: 10px;">Next Question</button>
+    </div>
+
+    <script>
+        let audioContext, soundEnabled = true;
+        
+        function createSound(freq, dur, type = 'sine', vol = 0.1) {
+            if (!soundEnabled || !audioContext) return;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain); gain.connect(audioContext.destination);
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+            osc.type = type;
+            gain.gain.setValueAtTime(vol, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + dur);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + dur);
+        }
+        
+        function playSound(type) {
+            switch(type) {
+                case 'compare': createSound(400, 0.1, 'sine', 0.1); break;
+                case 'swap': createSound(600, 0.2, 'square', 0.15); break;
+                case 'complete': createSound(800, 0.5, 'sine', 0.2); break;
+            }
+        }
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            if (soundEnabled && !audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        const algorithms = {
+            bubble: {
+                name: 'Bubble Sort',
+                complexity: 'O(n²)',
+                description: 'Compares adjacent elements and swaps them if they\'re in wrong order. Simple but inefficient.'
+            },
+            selection: {
+                name: 'Selection Sort',
+                complexity: 'O(n²)',
+                description: 'Finds minimum element and places it at beginning. Repeats for remaining array.'
+            },
+            insertion: {
+                name: 'Insertion Sort',
+                complexity: 'O(n²)',
+                description: 'Builds sorted array one element at a time by inserting each element in correct position.'
+            },
+            quick: {
+                name: 'Quick Sort',
+                complexity: 'O(n log n)',
+                description: 'Divides array around pivot element and recursively sorts sub-arrays. Very efficient.'
+            }
+        };
+        
+        const quizQuestions = [
+            {
+                question: "What is the time complexity of Bubble Sort?",
+                options: ["O(n)", "O(n²)", "O(n log n)", "O(1)"],
+                correct: 1
+            },
+            {
+                question: "Which sorting algorithm is most efficient for large datasets?",
+                options: ["Bubble Sort", "Selection Sort", "Quick Sort", "Insertion Sort"],
+                correct: 2
+            },
+            {
+                question: "What does 'stable sorting' mean?",
+                options: ["Never crashes", "Maintains relative order of equal elements", "Always fast", "Uses less memory"],
+                correct: 1
+            },
+            {
+                question: "Which algorithm works by finding the minimum element?",
+                options: ["Bubble Sort", "Selection Sort", "Insertion Sort", "Quick Sort"],
+                correct: 1
+            }
+        ];
+        
+        let gameState = {
+            algorithm: 'bubble',
+            array: [],
+            originalArray: [],
+            isRunning: false,
+            isPaused: false,
+            comparisons: 0,
+            swaps: 0,
+            startTime: 0,
+            speed: 5,
+            currentQuiz: 0,
+            quizMode: false
+        };
+        
+        function selectAlgorithm(algo) {
+            if (gameState.isRunning) return;
+            
+            gameState.algorithm = algo;
+            document.querySelectorAll('.algo-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const algoData = algorithms[algo];
+            document.getElementById('algoInfo').innerHTML = `<strong>${algoData.name}</strong> - <span class="complexity">${algoData.complexity}</span>`;
+            document.getElementById('algoDesc').textContent = algoData.description;
+        }
+        
+        function generateArray() {
+            if (gameState.isRunning) return;
+            
+            gameState.array = [];
+            for (let i = 0; i < 15; i++) {
+                gameState.array.push(Math.floor(Math.random() * 250) + 10);
+            }
+            gameState.originalArray = [...gameState.array];
+            
+            renderArray();
+            resetStats();
+        }
+        
+        function renderArray() {
+            const container = document.getElementById('arrayContainer');
+            container.innerHTML = '';
+            
+            gameState.array.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'array-bar';
+                bar.style.height = value + 'px';
+                bar.textContent = value;
+                bar.id = `bar-${index}`;
+                container.appendChild(bar);
+            });
+        }
+        
+        function startSort() {
+            if (gameState.isPaused) {
+                gameState.isPaused = false;
+                document.getElementById('pauseBtn').disabled = false;
+                document.getElementById('startBtn').textContent = 'Running...';
+                return;
+            }
+            
+            gameState.isRunning = true;
+            gameState.startTime = Date.now();
+            document.getElementById('startBtn').textContent = 'Running...';
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('status').textContent = 'Sorting...';
+            
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            switch(gameState.algorithm) {
+                case 'bubble': bubbleSort(); break;
+                case 'selection': selectionSort(); break;
+                case 'insertion': insertionSort(); break;
+                case 'quick': quickSort(0, gameState.array.length - 1); break;
+            }
+        }
+        
+        function pauseSort() {
+            gameState.isPaused = true;
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('startBtn').textContent = 'Resume';
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('status').textContent = 'Paused';
+        }
+        
+        function resetSort() {
+            gameState.isRunning = false;
+            gameState.isPaused = false;
+            gameState.array = [...gameState.originalArray];
+            
+            document.getElementById('startBtn').textContent = 'Start Sort';
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('status').textContent = 'Ready';
+            
+            renderArray();
+            resetStats();
+        }
+        
+        function resetStats() {
+            gameState.comparisons = 0;
+            gameState.swaps = 0;
+            updateStats();
+        }
+        
+        function updateStats() {
+            document.getElementById('comparisons').textContent = gameState.comparisons;
+            document.getElementById('swaps').textContent = gameState.swaps;
+            
+            if (gameState.isRunning) {
+                const elapsed = ((Date.now() - gameState.startTime) / 1000).toFixed(1);
+                document.getElementById('time').textContent = elapsed;
+            }
+        }
+        
+        async function bubbleSort() {
+            const n = gameState.array.length;
+            
+            for (let i = 0; i < n - 1; i++) {
+                for (let j = 0; j < n - i - 1; j++) {
+                    if (gameState.isPaused) return;
+                    
+                    await highlightBars([j, j + 1], 'comparing');
+                    gameState.comparisons++;
+                    playSound('compare');
+                    
+                    if (gameState.array[j] > gameState.array[j + 1]) {
+                        await swap(j, j + 1);
+                    }
+                    
+                    await delay(1100 - gameState.speed * 100);
+                    clearHighlights();
+                }
+                
+                document.getElementById(`bar-${n - i - 1}`).classList.add('sorted');
+            }
+            
+            if (!gameState.isPaused) {
+                document.getElementById(`bar-0`).classList.add('sorted');
+                completeSorting();
+            }
+        }
+        
+        async function selectionSort() {
+            const n = gameState.array.length;
+            
+            for (let i = 0; i < n - 1; i++) {
+                let minIdx = i;
+                
+                for (let j = i + 1; j < n; j++) {
+                    if (gameState.isPaused) return;
+                    
+                    await highlightBars([minIdx, j], 'comparing');
+                    gameState.comparisons++;
+                    playSound('compare');
+                    
+                    if (gameState.array[j] < gameState.array[minIdx]) {
+                        minIdx = j;
+                    }
+                    
+                    await delay(1100 - gameState.speed * 100);
+                    clearHighlights();
+                }
+                
+                if (minIdx !== i) {
+                    await swap(i, minIdx);
+                }
+                
+                document.getElementById(`bar-${i}`).classList.add('sorted');
+            }
+            
+            if (!gameState.isPaused) {
+                document.getElementById(`bar-${n-1}`).classList.add('sorted');
+                completeSorting();
+            }
+        }
+        
+        async function insertionSort() {
+            const n = gameState.array.length;
+            
+            for (let i = 1; i < n; i++) {
+                let key = gameState.array[i];
+                let j = i - 1;
+                
+                while (j >= 0) {
+                    if (gameState.isPaused) return;
+                    
+                    await highlightBars([j, j + 1], 'comparing');
+                    gameState.comparisons++;
+                    playSound('compare');
+                    
+                    if (gameState.array[j] > key) {
+                        gameState.array[j + 1] = gameState.array[j];
+                        await updateBar(j + 1, gameState.array[j + 1]);
+                        gameState.swaps++;
+                        j--;
+                    } else {
+                        break;
+                    }
+                    
+                    await delay(1100 - gameState.speed * 100);
+                    clearHighlights();
+                }
+                
+                gameState.array[j + 1] = key;
+                await updateBar(j + 1, key);
+                document.getElementById(`bar-${i}`).classList.add('sorted');
+            }
+            
+            if (!gameState.isPaused) {
+                document.getElementById(`bar-0`).classList.add('sorted');
+                completeSorting();
+            }
+        }
+        
+        async function quickSort(low, high) {
+            if (low < high && !gameState.isPaused) {
+                const pi = await partition(low, high);
+                await quickSort(low, pi - 1);
+                await quickSort(pi + 1, high);
+            }
+            
+            if (low === 0 && high === gameState.array.length - 1 && !gameState.isPaused) {
+                for (let i = 0; i < gameState.array.length; i++) {
+                    document.getElementById(`bar-${i}`).classList.add('sorted');
+                }
+                completeSorting();
+            }
+        }
+        
+        async function partition(low, high) {
+            const pivot = gameState.array[high];
+            let i = low - 1;
+            
+            for (let j = low; j < high; j++) {
+                if (gameState.isPaused) return i + 1;
+                
+                await highlightBars([j, high], 'comparing');
+                gameState.comparisons++;
+                playSound('compare');
+                
+                if (gameState.array[j] < pivot) {
+                    i++;
+                    if (i !== j) {
+                        await swap(i, j);
+                    }
+                }
+                
+                await delay(1100 - gameState.speed * 100);
+                clearHighlights();
+            }
+            
+            await swap(i + 1, high);
+            return i + 1;
+        }
+        
+        async function swap(i, j) {
+            await highlightBars([i, j], 'swapping');
+            
+            const temp = gameState.array[i];
+            gameState.array[i] = gameState.array[j];
+            gameState.array[j] = temp;
+            
+            await updateBar(i, gameState.array[i]);
+            await updateBar(j, gameState.array[j]);
+            
+            gameState.swaps++;
+            playSound('swap');
+            updateStats();
+            
+            await delay(200);
+        }
+        
+        async function highlightBars(indices, className) {
+            indices.forEach(index => {
+                const bar = document.getElementById(`bar-${index}`);
+                if (bar) bar.classList.add(className);
+            });
+        }
+        
+        function clearHighlights() {
+            document.querySelectorAll('.array-bar').forEach(bar => {
+                bar.classList.remove('comparing', 'swapping');
+            });
+        }
+        
+        async function updateBar(index, value) {
+            const bar = document.getElementById(`bar-${index}`);
+            if (bar) {
+                bar.style.height = value + 'px';
+                bar.textContent = value;
+            }
+        }
+        
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        function completeSorting() {
+            gameState.isRunning = false;
+            document.getElementById('startBtn').textContent = 'Start Sort';
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('status').textContent = 'Complete!';
+            playSound('complete');
+        }
+        
+        function toggleQuiz() {
+            gameState.quizMode = !gameState.quizMode;
+            const quizDiv = document.getElementById('quizMode');
+            
+            if (gameState.quizMode) {
+                quizDiv.style.display = 'block';
+                document.getElementById('quizBtn').textContent = 'Hide Quiz';
+                showQuizQuestion();
+            } else {
+                quizDiv.style.display = 'none';
+                document.getElementById('quizBtn').textContent = 'Quiz Mode';
+            }
+        }
+        
+        function showQuizQuestion() {
+            const question = quizQuestions[gameState.currentQuiz];
+            document.getElementById('quizQuestion').textContent = question.question;
+            
+            const optionsDiv = document.getElementById('quizOptions');
+            optionsDiv.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'quiz-option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectQuizAnswer(index);
+                optionsDiv.appendChild(optionDiv);
+            });
+            
+            document.getElementById('quizFeedback').textContent = '';
+            document.getElementById('nextQuizBtn').style.display = 'none';
+        }
+        
+        function selectQuizAnswer(selected) {
+            const question = quizQuestions[gameState.currentQuiz];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options.forEach((opt, index) => {
+                opt.onclick = null;
+                if (index === question.correct) opt.classList.add('correct');
+                else if (index === selected) opt.classList.add('wrong');
+            });
+            
+            const feedback = document.getElementById('quizFeedback');
+            if (selected === question.correct) {
+                feedback.textContent = '✅ Correct!';
+                feedback.style.color = '#27ae60';
+            } else {
+                feedback.textContent = `❌ Wrong! Correct answer: ${question.options[question.correct]}`;
+                feedback.style.color = '#e74c3c';
+            }
+            
+            document.getElementById('nextQuizBtn').style.display = 'inline-block';
+        }
+        
+        function nextQuizQuestion() {
+            gameState.currentQuiz = (gameState.currentQuiz + 1) % quizQuestions.length;
+            showQuizQuestion();
+        }
+        
+        // Speed control
+        document.getElementById('speedSlider').addEventListener('input', (e) => {
+            gameState.speed = parseInt(e.target.value);
+            document.getElementById('speedValue').textContent = gameState.speed;
+        });
+        
+        // Initialize
+        generateArray();
+        setInterval(updateStats, 100);
+    </script>
+</body>
+</html>

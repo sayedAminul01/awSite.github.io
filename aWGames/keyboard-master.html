@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Master - AlienWeb Games</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff; font-family: 'Orbitron', sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 10px;
+        }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem); background: linear-gradient(45deg, #00ff88, #00ccff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px; text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+        
+        .stats { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .stat {
+            background: rgba(0, 255, 136, 0.2); padding: 8px 16px; border-radius: 8px;
+            border: 1px solid #00ff88; font-weight: bold; min-width: 80px; text-align: center;
+        }
+        
+        .game-area {
+            background: rgba(0, 0, 0, 0.4); border: 2px solid #00ff88; border-radius: 15px;
+            padding: 30px; max-width: 800px; width: 100%; margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3); text-align: center;
+        }
+        
+        .question {
+            font-size: 24px; margin-bottom: 20px; color: #00ccff;
+            font-family: 'JetBrains Mono', monospace; min-height: 60px;
+        }
+        
+        .options {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; margin-bottom: 20px;
+        }
+        
+        .option {
+            background: linear-gradient(45deg, #00ff88, #00ccff); color: #000;
+            padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;
+            transition: all 0.3s ease; border: none; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .option:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4); }
+        .option.correct { background: #00ff88; }
+        .option.wrong { background: #ff4444; }
+        
+        .progress-bar {
+            width: 100%; height: 20px; background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px; overflow: hidden; margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%; background: linear-gradient(45deg, #00ff88, #00ccff);
+            width: 0%; transition: width 0.3s ease;
+        }
+        
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+        
+        .btn {
+            background: linear-gradient(45deg, #00ff88, #00ccff); border: none;
+            padding: 10px 20px; border-radius: 20px; color: #000; font-weight: bold;
+            cursor: pointer; transition: all 0.3s ease; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4); }
+        
+        #gameOver {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9); padding: 30px; border-radius: 15px;
+            text-align: center; border: 2px solid #00ff88; display: none; z-index: 100;
+        }
+        
+        .category-selector {
+            display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;
+        }
+        
+        .category-btn {
+            background: rgba(0, 255, 136, 0.2); border: 1px solid #00ff88;
+            padding: 8px 16px; border-radius: 8px; color: #fff; cursor: pointer;
+            transition: all 0.3s ease; font-family: 'Orbitron', sans-serif;
+        }
+        
+        .category-btn.active { background: #00ff88; color: #000; }
+        .category-btn:hover { background: #00ccff; color: #000; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⌨️ Keyboard Master</h1>
+        <p>Learn shortcuts and computer skills!</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat">Score: <span id="score">0</span></div>
+        <div class="stat">Question: <span id="current">1</span>/<span id="total">10</span></div>
+        <div class="stat">Correct: <span id="correct">0</span></div>
+        <div class="stat">Streak: <span id="streak">0</span></div>
+    </div>
+    
+    <div class="category-selector">
+        <div class="category-btn active" onclick="selectCategory('shortcuts')">Keyboard Shortcuts</div>
+        <div class="category-btn" onclick="selectCategory('terms')">Computer Terms</div>
+        <div class="category-btn" onclick="selectCategory('files')">File Management</div>
+        <div class="category-btn" onclick="selectCategory('mixed')">Mixed Quiz</div>
+    </div>
+    
+    <div class="game-area">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="question" id="question">Click Start Quiz to begin!</div>
+        
+        <div class="options" id="options"></div>
+        
+        <div id="feedback" style="font-size: 18px; margin-top: 15px; min-height: 25px;"></div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="startQuiz()" id="startBtn">Start Quiz</button>
+        <button class="btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">Next Question</button>
+        <button class="btn" onclick="resetQuiz()">Reset</button>
+        <button class="btn" onclick="toggleSound()" id="soundBtn">🔊 Sound ON</button>
+    </div>
+    
+    <div id="gameOver">
+        <h2>Quiz Complete!</h2>
+        <p>Final Score: <span id="finalScore">0</span>/10</p>
+        <p>Accuracy: <span id="accuracy">0</span>%</p>
+        <p id="grade" style="font-size: 24px; margin: 15px 0;"></p>
+        <div style="margin-top: 20px;">
+            <button class="btn" onclick="closeResults()">Continue</button>
+            <button class="btn" onclick="startQuiz()">Try Again</button>
+            <button class="btn" onclick="window.location.href='index.html'">Back to Menu</button>
+        </div>
+    </div>
+
+    <script>
+        let audioContext, soundEnabled = true;
+        
+        function createSound(freq, dur, type = 'sine', vol = 0.1) {
+            if (!soundEnabled || !audioContext) return;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain); gain.connect(audioContext.destination);
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+            osc.type = type;
+            gain.gain.setValueAtTime(vol, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + dur);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + dur);
+        }
+        
+        function playSound(type) {
+            switch(type) {
+                case 'correct': createSound(523, 0.3, 'sine', 0.15); break;
+                case 'wrong': createSound(200, 0.4, 'sawtooth', 0.2); break;
+                case 'complete': createSound(659, 0.5, 'sine', 0.2); break;
+            }
+        }
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            if (soundEnabled && !audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        const questions = {
+            shortcuts: [
+                { q: "What does Ctrl+C do?", a: ["Copy", "Cut", "Paste", "Close"], correct: 0 },
+                { q: "What does Ctrl+V do?", a: ["Copy", "Cut", "Paste", "Save"], correct: 2 },
+                { q: "What does Ctrl+S do?", a: ["Select All", "Save", "Search", "Sort"], correct: 1 },
+                { q: "What does Ctrl+Z do?", a: ["Zoom", "Undo", "Cut", "Close"], correct: 1 },
+                { q: "What does Alt+Tab do?", a: ["New Tab", "Close Tab", "Switch Windows", "Refresh"], correct: 2 },
+                { q: "What does Ctrl+A do?", a: ["Select All", "About", "Add", "Apply"], correct: 0 },
+                { q: "What does F5 do?", a: ["Help", "Save", "Refresh", "Find"], correct: 2 },
+                { q: "What does Ctrl+F do?", a: ["File", "Find", "Format", "Font"], correct: 1 },
+                { q: "What does Ctrl+N do?", a: ["New", "Next", "Name", "Note"], correct: 0 },
+                { q: "What does Delete key do?", a: ["Copy text", "Move cursor", "Remove text", "Select text"], correct: 2 }
+            ],
+            terms: [
+                { q: "What is RAM?", a: ["Hard disk", "Memory", "Processor", "Monitor"], correct: 1 },
+                { q: "What is CPU?", a: ["Memory", "Storage", "Processor", "Screen"], correct: 2 },
+                { q: "What is an Operating System?", a: ["Hardware", "Software that manages computer", "Internet browser", "Game"], correct: 1 },
+                { q: "What is a Browser?", a: ["File manager", "Internet program", "Text editor", "Calculator"], correct: 1 },
+                { q: "What is WiFi?", a: ["Cable connection", "Wireless internet", "Computer part", "Software"], correct: 1 },
+                { q: "What is a File?", a: ["Computer program", "Stored data", "Internet page", "Hardware part"], correct: 1 },
+                { q: "What is a Folder?", a: ["Single file", "Container for files", "Internet link", "Computer game"], correct: 1 },
+                { q: "What is Software?", a: ["Computer programs", "Physical parts", "Internet connection", "Monitor"], correct: 0 },
+                { q: "What is Hardware?", a: ["Computer programs", "Physical computer parts", "Internet data", "Files"], correct: 1 },
+                { q: "What is a Desktop?", a: ["Computer table", "Main computer screen", "Internet page", "File type"], correct: 1 }
+            ],
+            files: [
+                { q: "How do you create a new folder?", a: ["Right-click → New → Folder", "Ctrl+F", "Delete key", "Alt+Tab"], correct: 0 },
+                { q: "How do you rename a file?", a: ["Delete it", "Right-click → Rename", "Copy it", "Move it"], correct: 1 },
+                { q: "What does .txt mean?", a: ["Image file", "Text file", "Music file", "Video file"], correct: 1 },
+                { q: "How do you select multiple files?", a: ["Click once", "Hold Ctrl and click", "Right-click", "Press Delete"], correct: 1 },
+                { q: "Where do deleted files go?", a: ["Disappear forever", "Recycle Bin", "Desktop", "Documents"], correct: 1 },
+                { q: "What is Copy vs Cut?", a: ["Same thing", "Copy keeps original, Cut removes it", "Cut is faster", "Copy is better"], correct: 1 },
+                { q: "How do you open a file?", a: ["Right-click", "Double-click", "Single-click", "Press Enter"], correct: 1 },
+                { q: "What does .jpg mean?", a: ["Text file", "Music file", "Image file", "Program file"], correct: 2 },
+                { q: "How do you move a file?", a: ["Copy then delete", "Cut then paste", "Right-click only", "Double-click"], correct: 1 },
+                { q: "What is file extension?", a: ["File size", "File location", "File type indicator", "File name"], correct: 2 }
+            ]
+        };
+        
+        let gameState = {
+            category: 'shortcuts',
+            currentQuestion: 0,
+            score: 0,
+            streak: 0,
+            questions: [],
+            isActive: false
+        };
+        
+        function selectCategory(category) {
+            gameState.category = category;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (!gameState.isActive) {
+                document.getElementById('question').textContent = `Selected: ${category.charAt(0).toUpperCase() + category.slice(1)}. Click Start Quiz!`;
+            }
+        }
+        
+        function startQuiz() {
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.streak = 0;
+            gameState.isActive = true;
+            
+            if (gameState.category === 'mixed') {
+                gameState.questions = [...questions.shortcuts, ...questions.terms, ...questions.files]
+                    .sort(() => Math.random() - 0.5).slice(0, 10);
+            } else {
+                gameState.questions = [...questions[gameState.category]].sort(() => Math.random() - 0.5).slice(0, 10);
+            }
+            
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('feedback').textContent = '';
+            
+            showQuestion();
+            updateUI();
+        }
+        
+        function showQuestion() {
+            const q = gameState.questions[gameState.currentQuestion];
+            document.getElementById('question').textContent = q.q;
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            q.a.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.textContent = option;
+                btn.onclick = () => selectAnswer(index);
+                optionsDiv.appendChild(btn);
+            });
+            
+            updateProgress();
+        }
+        
+        function selectAnswer(selected) {
+            const q = gameState.questions[gameState.currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((opt, index) => {
+                opt.onclick = null;
+                if (index === q.correct) opt.classList.add('correct');
+                else if (index === selected) opt.classList.add('wrong');
+            });
+            
+            if (selected === q.correct) {
+                gameState.score++;
+                gameState.streak++;
+                document.getElementById('feedback').innerHTML = '✅ Correct!';
+                document.getElementById('feedback').style.color = '#00ff88';
+                playSound('correct');
+            } else {
+                gameState.streak = 0;
+                document.getElementById('feedback').innerHTML = `❌ Wrong! Correct answer: ${q.a[q.correct]}`;
+                document.getElementById('feedback').style.color = '#ff4444';
+                playSound('wrong');
+            }
+            
+            updateUI();
+            
+            setTimeout(() => {
+                if (gameState.currentQuestion < 9) {
+                    document.getElementById('nextBtn').style.display = 'inline-block';
+                } else {
+                    endQuiz();
+                }
+            }, 1500);
+        }
+        
+        function nextQuestion() {
+            gameState.currentQuestion++;
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('feedback').textContent = '';
+            showQuestion();
+        }
+        
+        function endQuiz() {
+            gameState.isActive = false;
+            const accuracy = Math.round((gameState.score / 10) * 100);
+            
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('accuracy').textContent = accuracy;
+            
+            const gradeElement = document.getElementById('grade');
+            if (accuracy >= 90) {
+                gradeElement.textContent = '🏆 Excellent!';
+                gradeElement.style.color = '#00ff88';
+            } else if (accuracy >= 70) {
+                gradeElement.textContent = '👍 Good Job!';
+                gradeElement.style.color = '#00ccff';
+            } else if (accuracy >= 50) {
+                gradeElement.textContent = '📚 Keep Learning!';
+                gradeElement.style.color = '#ffaa00';
+            } else {
+                gradeElement.textContent = '💪 Practice More!';
+                gradeElement.style.color = '#ff6666';
+            }
+            
+            playSound('complete');
+            document.getElementById('gameOver').style.display = 'block';
+        }
+        
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('current').textContent = gameState.currentQuestion + 1;
+            document.getElementById('total').textContent = gameState.questions.length;
+            document.getElementById('correct').textContent = gameState.score;
+            document.getElementById('streak').textContent = gameState.streak;
+        }
+        
+        function updateProgress() {
+            const progress = ((gameState.currentQuestion + 1) / 10) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+        
+        function resetQuiz() {
+            gameState.isActive = false;
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.streak = 0;
+            
+            document.getElementById('question').textContent = 'Click Start Quiz to begin!';
+            document.getElementById('options').innerHTML = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('progressFill').style.width = '0%';
+            
+            updateUI();
+        }
+        
+        function closeResults() {
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('startBtn').style.display = 'inline-block';
+        }
+        
+        // Initialize
+        updateUI();
+    </script>
+</body>
+</html>
