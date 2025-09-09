@@ -114,6 +114,14 @@ document.addEventListener('DOMContentLoaded', () => {
             postCount: 1,
             description: 'Backend development',
             // url: './learningZone/layout.html'
+        },
+           {
+            id: 'node',
+            title: 'aW Games',
+            icon: 'fa-brands fa-playstation',
+            postCount: 1,
+            description: 'Backend development',
+            url: './learningZone/layout.html'
         }
 
     ];
@@ -191,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
