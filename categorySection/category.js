@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
            {
             id: 'node',
             title: 'aW Games',
-            icon: 'fa-brands fa-playstation',
+            icon: 'fa-brands fa-xbox',
             postCount: 1,
             description: 'Backend development',
             url: './aWGames/index.html'
@@ -199,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
