@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 
         {
             id: 'test02',
-            title: 'Month 1',
+            title: 'Month 2',
             icon: 'fa-solid fa-code',
             postCount: 50,
             description: 'Programming basics test',
-            url: '../adcaCourseTestContent/Troubleshooting/index.html'
+            url: '../adcaCourseTestContent/generation/index.html'
         },
         {
             id: 'test1',
