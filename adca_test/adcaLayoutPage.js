@@ -11,6 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
             url: '../adca/index.html'
         }, 
         {
+            id: 'test02',
+            title: 'Month 1',
+            icon: 'fa-solid fa-code',
+            postCount: 50,
+            description: 'Programming basics test',
+            url: '../adcaCourseTestContent/Troubleshooting/index.html'
+        },
+        {
             id: 'test1',
             title: 'Welcome Test',
             icon: 'fa-solid fa-desktop',
@@ -165,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
