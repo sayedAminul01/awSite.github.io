@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete step-by-step guide to secure your VPS before deploying applications. Learn essential security measures for beginners to advanced users.">
+    <meta name="keywords" content="VPS security, server hardening, SSH security, firewall setup, fail2ban, VPS setup">
+    <title>Complete VPS Security Guide: Fortify Your Server Step-by-Step | alienweb</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #c9d1d9;
+            --text-tertiary: #8b949e;
+            --accent-primary: #58a6ff;
+            --accent-secondary: #1f6feb;
+            --border-color: #30363d;
+            --success: #3fb950;
+            --warning: #d29922;
+            --danger: #f85149;
+            --code-bg: #161b22;
+            --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --font-code: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+        }
+
+        .light-mode {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f6f8fa;
+            --bg-tertiary: #ffffff;
+            --text-primary: #24292f;
+            --text-secondary: #57606a;
+            --text-tertiary: #6e7781;
+            --accent-primary: #0969da;
+            --accent-secondary: #0a3069;
+            --border-color: #d0d7de;
+            --success: #1a7f37;
+            --warning: #9a6700;
+            --danger: #cf222e;
+            --code-bg: #f6f8fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+            padding: 3rem 0;
+        }
+
+        .main-content {
+            max-width: 100%;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .toc {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .toc h3 {
+            margin-bottom: 1rem;
+            color: var(--accent-primary);
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+            display: block;
+            padding: 0.3rem 0;
+        }
+
+        .toc a:hover {
+            color: var(--accent-primary);
+        }
+
+        .step {
+            margin-bottom: 3rem;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-number {
+            background-color: var(--accent-secondary);
+            color: white;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+        }
+
+        .step-content p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .command-box {
+            background-color: var(--code-bg);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .command-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .command-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .copy-btn {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--accent-secondary);
+        }
+
+        .command {
+            font-family: var(--font-code);
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .explanation {
+            background-color: var(--bg-tertiary);
+            border-left: 4px solid var(--accent-primary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .explanation h4 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .tip {
+            background-color: rgba(88, 166, 255, 0.1);
+            border-left: 4px solid var(--accent-primary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .tip h4 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .warning {
+            background-color: rgba(248, 81, 73, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .warning h4 {
+            margin-bottom: 0.5rem;
+            color: var(--danger);
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .checklist li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .checklist li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: var(--bg-secondary);
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .copyright {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: -1;
+                position: static;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="https://computer.alienweb.in" class="logo">aliebWeb</a>
+                <button class="theme-toggle" id="themeToggle">
+                    <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Complete VPS Security Guide: Fortify Your Server Step-by-Step</h1>
+            <p>Learn how to properly secure your VPS before deploying applications. A comprehensive guide for beginners to advanced users.</p>
+            <div class="meta-info">
+                <span>By: Alex Chen</span>
+                <span>Updated: March 15, 2023</span>
+                <span>Reading Time: 15 min</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="content">
+            <main class="main-content">
+                <div class="intro">
+                    <p>As a founder and sysadmin mentor, I've seen too many servers compromised due to basic security oversights. In this guide, I'll walk you through the essential steps to transform your vulnerable VPS into a fortress before you deploy your application.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h2 class="step-title">Initial Connection to Your VPS</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>First, connect to your VPS using SSH from your local machine:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Connect via SSH</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">ssh root@YOUR_SERVER_IP</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>This is your first interaction with the server. Replace <code>YOUR_SERVER_IP</code> with your actual server IP address. If this is your first time connecting, you'll be asked to accept the server's fingerprint - this is a security measure to ensure you're connecting to the right server.</p>
+                        </div>
+                        
+                        <div class="tip">
+                            <h4>Pro Tip:</h4>
+                            <p>If you're using a cloud provider like DigitalOcean, AWS, or Vultr, they usually provide the IP address and initial root password in your control panel.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h2 class="step-title">Change the Root Password</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>Even if your VPS provider gave you a secure password, change it immediately:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Change Root Password</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">passwd</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>Your VPS provider might have generated a password that could be predictable or reused. Creating your own strong, unique password ensures that only you have access to the root account.</p>
+                        </div>
+                        
+                        <div class="tip">
+                            <h4>Password Best Practices:</h4>
+                            <ul class="checklist">
+                                <li>Use at least 12 characters</li>
+                                <li>Mix uppercase, lowercase, numbers, and symbols</li>
+                                <li>Avoid dictionary words and personal information</li>
+                                <li>Consider using a password manager</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h2 class="step-title">Create a New User Account</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>Using the root account for daily tasks is dangerous. Create a regular user with sudo privileges:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Create New User</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">adduser alex</pre>
+                        </div>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Grant Administrative Privileges</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">usermod -aG sudo alex</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>The root account has unlimited power over your system. A single typo as root can destroy your entire system. By creating a regular user with sudo privileges, you add a layer of protection - you'll need to prefix destructive commands with <code>sudo</code>, making you think twice before executing them.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h2 class="step-title">Disable Root SSH Login</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>Prevent direct root access via SSH to protect against brute-force attacks:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Edit SSH Configuration</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo nano /etc/ssh/sshd_config</pre>
+                        </div>
+                        
+                        <p>Find and modify these lines:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">SSH Configuration Changes</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">PermitRootLogin no
+PasswordAuthentication no</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>Root is the most targeted account by attackers. Disabling direct root SSH login forces attackers to guess both a username and password. Disabling password authentication entirely and requiring SSH keys makes your server virtually immune to brute-force attacks.</p>
+                        </div>
+                        
+                        <div class="warning">
+                            <h4>Important:</h4>
+                            <p>Make sure you've set up SSH key authentication for your new user (next step) before restarting SSH, or you'll lock yourself out of the server!</p>
+                        </div>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Restart SSH Service</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo systemctl restart ssh</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">5</div>
+                        <h2 class="step-title">Set Up SSH Key Authentication</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>On your local machine, generate an SSH key pair:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Generate SSH Key</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">ssh-keygen -t ed25519 -C "alex@cyberfort"</pre>
+                        </div>
+                        
+                        <p>Copy the public key to your server:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Copy Public Key to Server</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">ssh-copy-id alex@YOUR_SERVER_IP</pre>
+                        </div>
+                        
+                        <p>Test the connection:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Test SSH Connection</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">ssh alex@YOUR_SERVER_IP</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>SSH keys are exponentially more secure than passwords. While a password can be guessed through brute force, SSH keys use cryptographic algorithms that are practically impossible to crack. The private key stays on your local machine, and only the public key is stored on the server.</p>
+                        </div>
+                        
+                        <div class="tip">
+                            <h4>Pro Tip:</h4>
+                            <p>If you want maximum security, protect your SSH key with a passphrase. For automated processes, you can use keys without passphrases, but store them securely.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">6</div>
+                        <h2 class="step-title">Configure the Firewall (UFW)</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>Set up a firewall to control incoming and outgoing traffic:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Configure Firewall Rules</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo ufw allow OpenSSH
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw enable</pre>
+                        </div>
+                        
+                        <p>Check the firewall status:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Check Firewall Status</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo ufw status</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>A firewall acts as a gatekeeper for your server, blocking all unnecessary ports. By default, UFW denies all incoming connections and allows all outgoing. We're specifically allowing SSH (port 22), HTTP (port 80), and HTTPS (port 443) while blocking everything else.</p>
+                        </div>
+                        
+                        <div class="tip">
+                            <h4>Port Explanation:</h4>
+                            <ul class="checklist">
+                                <li><strong>Port 22 (SSH):</strong> For secure remote administration</li>
+                                <li><strong>Port 80 (HTTP):</strong> For web traffic (will redirect to HTTPS)</li>
+                                <li><strong>Port 443 (HTTPS):</strong> For encrypted web traffic</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">7</div>
+                        <h2 class="step-title">Install Fail2Ban for Brute-Force Protection</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>Fail2Ban monitors log files and bans IPs that show malicious signs:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Install and Enable Fail2Ban</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo apt install fail2ban -y
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban</pre>
+                        </div>
+                        
+                        <p>Check if Fail2Ban is running:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Check Fail2Ban Status</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo fail2ban-client status</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>Even with SSH key authentication, your server will still receive thousands of login attempts from bots scanning the internet. Fail2Ban automatically detects these repeated failed attempts and temporarily bans the offending IP addresses, reducing noise in your logs and protecting against dictionary attacks.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">8</div>
+                        <h2 class="step-title">Keep Your System Updated</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>Regular updates patch security vulnerabilities:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Update System Packages</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo apt update && sudo apt upgrade -y
+sudo apt autoremove -y</pre>
+                        </div>
+                        
+                        <p>Set up automatic security updates:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Enable Automatic Updates</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo apt install unattended-upgrades -y
+sudo dpkg-reconfigure unattended-upgrades</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>Software vulnerabilities are discovered daily. Unpatched systems are the #1 cause of security breaches. Regular updates ensure you have the latest security patches. Automatic updates for security patches ensure you're protected even if you forget to manually update.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">9</div>
+                        <h2 class="step-title">Disable Unused Services</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>Reduce your attack surface by disabling unnecessary services:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">List Enabled Services</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo systemctl list-unit-files --type=service --state=enabled</pre>
+                        </div>
+                        
+                        <p>Disable any unnecessary services:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Disable Unnecessary Service</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo systemctl disable SERVICE_NAME</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>Every running service is a potential entry point for attackers. By disabling services you don't need, you reduce your "attack surface" - the number of ways someone can potentially compromise your system. Common services to consider disabling include FTP, telnet, and unnecessary database services if you're not using them.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">10</div>
+                        <h2 class="step-title">Monitor Login Attempts</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>Regularly check your authentication logs for suspicious activity:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Check Failed Login Attempts</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo cat /var/log/auth.log | grep "Failed"</pre>
+                        </div>
+                        
+                        <p>Monitor logs in real-time:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Real-time Log Monitoring</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo tail -f /var/log/auth.log</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why This Matters:</h4>
+                            <p>Monitoring your logs helps you understand the threats your server faces. You'll be able to see attempted attacks, identify patterns, and take additional protective measures if necessary. Regular monitoring is a key part of security hygiene.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">+</div>
+                        <h2 class="step-title">Bonus Security Measures</h2>
+                    </div>
+                    <div class="step-content">
+                        <p>For enhanced security, consider these additional measures:</p>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Install Rootkit Scanner</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo apt install rkhunter -y
+sudo rkhunter --update
+sudo rkhunter --check</pre>
+                        </div>
+                        
+                        <div class="command-box">
+                            <div class="command-header">
+                                <div class="command-title">Restrict SSH to Specific IP (If Static)</div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre class="command">sudo ufw allow from YOUR_IP to any port 22</pre>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why These Matter:</h4>
+                            <p>RKHunter scans for rootkits and other malware that might have bypassed your other security measures. Restricting SSH to your specific IP address (if you have a static IP) completely blocks SSH access from any other location, dramatically reducing your attack surface.</p>
+                        </div>
+                        
+                        <div class="tip">
+                            <h4>Advanced Security Considerations:</h4>
+                            <ul class="checklist">
+                                <li>Set up intrusion detection with AIDE or similar tools</li>
+                                <li>Configure automatic security audits</li>
+                                <li>Implement two-factor authentication for SSH</li>
+                                <li>Set up centralized logging</li>
+                                <li>Regularly backup your configuration and data</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conclusion">
+                    <h2>Conclusion</h2>
+                    <p>By following these steps, you've transformed your vulnerable VPS into a secure fortress. Your server now has:</p>
+                    <ul class="checklist">
+                        <li>Protected administrative access</li>
+                        <li>Firewall protection</li>
+                        <li>Brute-force attack prevention</li>
+                        <li>Automatic security updates</li>
+                        <li>Reduced attack surface</li>
+                    </ul>
+                    <p>Remember that security is an ongoing process, not a one-time setup. Regularly review your security measures, monitor logs, and stay informed about new threats. Your VPS is now ready for application deployment with a solid security foundation.</p>
+                </div>
+            </main>
+
+            <aside class="sidebar">
+                <div class="toc">
+                    <h3>Table of Contents</h3>
+                    <ul>
+                        <li><a href="#step1">1. Initial Connection</a></li>
+                        <li><a href="#step2">2. Change Root Password</a></li>
+                        <li><a href="#step3">3. Create New User</a></li>
+                        <li><a href="#step4">4. Disable Root SSH</a></li>
+                        <li><a href="#step5">5. SSH Key Authentication</a></li>
+                        <li><a href="#step6">6. Configure Firewall</a></li>
+                        <li><a href="#step7">7. Install Fail2Ban</a></li>
+                        <li><a href="#step8">8. System Updates</a></li>
+                        <li><a href="#step9">9. Disable Unused Services</a></li>
+                        <li><a href="#step10">10. Monitor Logins</a></li>
+                        <li><a href="#bonus">Bonus Security Measures</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#">Home</a>
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="copyright">
+                    &copy; 2025 alienweb.in || All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        
+        // Check for saved theme preference or prefer OS setting
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'light' || (!currentTheme && !prefersDarkScheme.matches)) {
+            document.body.classList.add('light-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        } else {
+            themeIcon.textContent = '🌙';
+            themeText.textContent = 'Dark Mode';
+        }
+        
+        themeToggle.addEventListener('click', function() {
+            if (document.body.classList.contains('light-mode')) {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            } else {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            }
+        });
+        
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.parentElement.nextElementSibling;
+            const textToCopy = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Visual feedback
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.backgroundColor = 'var(--success)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+        
+        // Add IDs to steps for TOC navigation
+        document.querySelectorAll('.step').forEach((step, index) => {
+            step.id = `step${index + 1}`;
+        });
+        
+        // Add ID to bonus section
+        document.querySelector('.step:last-child').id = 'bonus';
+    </script>
+</body>
+</html>
