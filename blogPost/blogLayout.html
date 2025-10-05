@@ -3,121 +3,571 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore the latest tech insights, development trends, and industry news on AlienWeb - Your gateway to the digital future">
-    <meta name="keywords" content="tech blog, web development, AI, cybersecurity, cloud computing, programming">
-    <meta name="author" content="AlienWeb">
-    <meta property="og:title" content="AlienWeb - Tech Blog">
-    <meta property="og:description" content="Discover cutting-edge tech insights and development trends">
-    <meta property="og:url" content="https://alienweb.in">
-    <link rel="canonical" href="https://alienweb.in">
-    <title>AlienWeb - Tech Blog | Latest Tech Insights and Trends</title>
-    <link rel="stylesheet" href="blogLayout.css">
-    <link rel="preconnect" href="https://images.unsplash.com">
+    <title>alienWeb tech articles - alienweb.in</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<!--     Google Ads -->
+        :root {
+            --primary: #250119;
+            --primary-light: #220117;
+            --bg-light: #ffffff;
+            --bg-dark: #121212;
+            --card-light: #ffffff;
+            --card-dark: #1e1e1e;
+            --text-light: #333333;
+            --text-dark: #e0e0e0;
+            --border-light: #e0e0e0;
+            --border-dark: #333333;
+        }
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3056427584192481"
-     crossorigin="anonymous"></script>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light-mode {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-name {
+            font-size: 1.2rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .site-name:hover {
+            opacity: 0.8;
+        }
+
+        .header-title {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .header-title h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .header-title a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .header-title a:hover {
+            opacity: 0.8;
+        }
+
+        .dark-mode-toggle {
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode-toggle:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .main-content {
+            min-width: 0;
+        }
+
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .dark-mode .search-box input {
+            background-color: var(--card-dark);
+            color: var(--text-dark);
+            border-color: var(--border-dark);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-box button {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .search-box button:hover {
+            background-color: var(--primary-light);
+        }
+
+        .search-results {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .clear-search {
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .clear-search:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-card {
+            background-color: var(--card-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dark-mode .blog-card {
+            background-color: var(--card-dark);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(61, 0, 41, 0.3);
+        }
+
+        .blog-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .blog-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+        }
+
+        .dark-mode .blog-card h2 {
+            color: #0f6b06;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .dark-mode .blog-meta {
+            color: #999;
+        }
+
+        .blog-card p {
+            margin-bottom: 1rem;
+        }
+
+        .read-more {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .read-more:hover {
+            background-color: var(--primary-light);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .ad-space {
+            background-color: var(--card-light);
+            border: 2px dashed var(--border-light);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .dark-mode .ad-space {
+            background-color: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: #999;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.4rem;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-box button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="light-mode">
+    <header>
+        <div class="header-content">
+            <a href="https://alienweb.in" class="site-name">alienweb.in</a>
+            <div class="header-title">
+                <h1><a href="https://computer.alienweb.in">alienWeb tech articles</a></h1>
+            </div>
+            <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓 Toggle</button>
+        </div>
+    </header>
+
     <div class="container">
-        <header>
-            <h1 class="site-title">AlienWeb Tech Blog</h1>
+        <main class="main-content">
             <div class="search-container">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Search posts..."
-                    aria-label="Search blog posts"
-                >
-                <button id="searchButton" aria-label="Search">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </button>
-            </div>
-        </header>
-        <main>
-            <div class="grid" id="postsGrid">
-                <!-- Posts will be dynamically added here -->
-            </div>
-            <button id="loadMoreBtn" class="load-more-btn">Load More Posts</button>
-        </main>
-    </div>
-
-
-    
-<!--Footer Section  -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="service.html">Services</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Resources</h3>
-                <ul>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                    <li><a href="disclaimer.html">Disclaimer</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <div class="footer-section">
-                <h3>Connect With Us</h3>
-                <div class="social-icons">
-                    <a href="#" aria-label="LinkedIn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                        </svg>
-                    </a>
-                    <a href="https://www.facebook.com/AlienWeb.K/" aria-label="Facebook">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-3 7h-1.924c-.615 0-1.076.252-1.076.889v1.111h3l-.238 3h-2.762v8h-3v-8h-2v-3h2v-1.923c0-2.022 1.064-3.077 3.461-3.077h2.539v3z" />
-                        </svg>
-                    </a>
-                    <a href="#" aria-label="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                        </svg>
-                    </a>
-                    <a href="https://t.me/alienwebin" aria-label="Telegram">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M19 24h-14c-2.761 0-5-2.239-5-5v-14c0-2.761 2.239-5 5-5h14c2.762 0 5 2.239 5 5v14c0 2.761-2.238 5-5 5zm-3.288-4.888l-.454-5.454 6.742-6.742-8.729 5.388-4.271-1.329v-3.975l15-7-15 16.112z" />
-                        </svg>
-                    </a>
-                    <a href="#" aria-label="Twitter">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-.139 9.237c.209 4.617-3.234 9.765-9.33 9.765-1.854 0-3.579-.543-5.032-1.475 1.742.205 3.48-.278 4.86-1.359-1.437-.027-2.649-.976-3.066-2.28.515.098 1.021.069 1.482-.056-1.579-.317-2.668-1.739-2.633-3.26.442.246.949.394 1.486.411-1.461-.977-1.875-2.907-1.016-4.383 1.619 1.986 4.038 3.293 6.766 3.43-.479-2.053 1.08-4.03 3.199-4.03.943 0 1.797.398 2.395 1.037.748-.147 1.451-.42 2.086-.796-.246.767-.766 1.41-1.443 1.816.664-.08 1.297-.256 1.885-.517-.439.656-.996 1.234-1.639 1.697z" />
-                        </svg>
-                    </a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search articles...">
+                    <button onclick="searchPosts()">Search</button>
                 </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Alienweb.in All rights reserved.</p>
-        </div>
-    </footer>
-<!--     Footer Section End -->
-    
 
-    
-    <script src="blogLayout.js" defer></script>
+            <div class="search-results" id="searchResults">
+                <span id="searchResultText"></span>
+                <button class="clear-search" onclick="clearSearch()">Clear Search</button>
+            </div>
+
+            <div class="blog-grid" id="blogGrid"></div>
+            <div class="no-results" id="noResults" style="display: none;">No articles found</div>
+        </main>
+
+        <aside class="sidebar">
+            <div class="ad-space">
+                <p>Advertisement Space<br>300x250</p>
+            </div>
+            <div class="ad-space">
+                <p>Advertisement Space<br>300x250</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const blogPosts = [
+            {
+                id: 1,
+                title: "Getting Started with JavaScript in 2025",
+                date: "Oct 5, 2025",
+                readTime: "5 min",
+                image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=200&fit=crop",
+                excerpt: "Learn the fundamentals of JavaScript and why it remains the most popular programming language for web development.",
+                link: "https://computer.alienweb.in/post/javascript-basics"
+            },
+            {
+                id: 2,
+                title: "The Future of AI and Machine Learning",
+                date: "Oct 4, 2025",
+                readTime: "8 min",
+                image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=200&fit=crop",
+                excerpt: "Exploring the latest trends in artificial intelligence and how machine learning is transforming industries.",
+                link: "https://computer.alienweb.in/post/ai-future"
+            },
+            {
+                id: 3,
+                title: "Building Responsive Web Applications",
+                date: "Oct 3, 2025",
+                readTime: "6 min",
+                image: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=400&h=200&fit=crop",
+                excerpt: "Master the art of creating responsive designs that work seamlessly across all devices and screen sizes.",
+                link: "https://computer.alienweb.in/post/responsive-design"
+            },
+            {
+                id: 4,
+                title: "Cloud Computing: A Comprehensive Guide",
+                date: "Oct 2, 2025",
+                readTime: "10 min",
+                image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&h=200&fit=crop",
+                excerpt: "Understand the basics of cloud computing and how to leverage AWS, Azure, and Google Cloud for your projects.",
+                link: "https://computer.alienweb.in/post/cloud-computing"
+            },
+            {
+                id: 5,
+                title: "Cybersecurity Best Practices for 2025",
+                date: "Oct 1, 2025",
+                readTime: "7 min",
+                image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&h=200&fit=crop",
+                excerpt: "Stay safe online with these essential cybersecurity practices every developer and user should know.",
+                link: "https://computer.alienweb.in/post/cybersecurity"
+            },
+            {
+                id: 6,
+                title: "Introduction to Blockchain Technology",
+                date: "Sep 30, 2025",
+                readTime: "9 min",
+                image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=200&fit=crop",
+                excerpt: "Demystifying blockchain technology and its applications beyond cryptocurrency.",
+                link: "https://computer.alienweb.in/post/blockchain-intro"
+            },
+            {
+                id: 7,
+                title: "React vs Vue: Which Framework to Choose?",
+                date: "Sep 29, 2025",
+                readTime: "6 min",
+                image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=200&fit=crop",
+                excerpt: "A detailed comparison of React and Vue to help you make the right choice for your next project.",
+                link: "https://computer.alienweb.in/post/react-vs-vue"
+            },
+            {
+                id: 8,
+                title: "DevOps Tools Every Developer Should Know",
+                date: "Sep 28, 2025",
+                readTime: "8 min",
+                image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=400&h=200&fit=crop",
+                excerpt: "Explore essential DevOps tools that streamline development, testing, and deployment processes.",
+                link: "https://computer.alienweb.in/post/devops-tools"
+            },
+            {
+                id: 9,
+                title: "Mobile App Development Trends",
+                date: "Sep 27, 2025",
+                readTime: "5 min",
+                image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=200&fit=crop",
+                excerpt: "Discover the latest trends in mobile app development including cross-platform frameworks and native solutions.",
+                link: "https://computer.alienweb.in/post/mobile-trends"
+            }
+        ];
+
+        let allPosts = [...blogPosts];
+        let filteredPosts = [...blogPosts];
+
+        function renderPosts(posts) {
+            const blogGrid = document.getElementById('blogGrid');
+            const noResults = document.getElementById('noResults');
+            
+            blogGrid.innerHTML = '';
+            
+            if (posts.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            posts.forEach(post => {
+                const card = document.createElement('div');
+                card.className = 'blog-card';
+                card.innerHTML = `
+                    <img src="${post.image}" alt="${post.title}">
+                    <div class="blog-card-content">
+                        <h2>${post.title}</h2>
+                        <div class="blog-meta">
+                            <span>📅 ${post.date}</span>
+                            <span>⏱️ ${post.readTime}</span>
+                        </div>
+                        <a href="${post.link}" class="read-more">Read More</a>
+                    </div>
+                `;
+                blogGrid.appendChild(card);
+            });
+        }
+
+        function searchPosts() {
+            const searchInput = document.getElementById('searchInput').value.trim();
+            const searchResults = document.getElementById('searchResults');
+            const searchResultText = document.getElementById('searchResultText');
+            
+            if (searchInput === '') {
+                filteredPosts = [...allPosts];
+                searchResults.classList.remove('active');
+                renderPosts(filteredPosts);
+                return;
+            }
+            
+            // Split search terms by spaces and filter out empty strings
+            const searchTerms = searchInput.toLowerCase().split(' ').filter(term => term.length > 0);
+            
+            filteredPosts = allPosts.filter(post => {
+                const titleLower = post.title.toLowerCase();
+                const excerptLower = post.excerpt.toLowerCase();
+                const combinedText = titleLower + ' ' + excerptLower;
+                
+                // Check if ANY search term matches
+                return searchTerms.some(term => 
+                    titleLower.includes(term) || excerptLower.includes(term)
+                );
+            });
+            
+            searchResults.classList.add('active');
+            searchResultText.textContent = `Found ${filteredPosts.length} article(s) for "${searchInput}"`;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderPosts(filteredPosts);
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResults').classList.remove('active');
+            filteredPosts = [...allPosts];
+            renderPosts(filteredPosts);
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+            
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode === 'true') {
+                document.body.classList.remove('light-mode');
+                document.body.classList.add('dark-mode');
+            }
+            
+            renderPosts(allPosts);
+        });
+    </script>
 </body>
 </html>
