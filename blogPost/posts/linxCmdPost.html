@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Master essential Linux terminal commands with this comprehensive guide. Learn file operations, system monitoring, text processing, and networking commands.">
+    <meta name="keywords" content="Linux commands, terminal, bash, command line, Linux tutorial, sysadmin">
+    <title>Essential Linux Terminal Commands: A Comprehensive Guide | CyberFort</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #0f1419;
+            --bg-tertiary: #151b21;
+            --text-primary: #e6e1cf;
+            --text-secondary: #b8b5b0;
+            --text-tertiary: #8b8883;
+            --accent-primary: #39bae6;
+            --accent-secondary: #59c2ff;
+            --border-color: #2a313a;
+            --success: #7fd962;
+            --warning: #ffb454;
+            --danger: #ff6573;
+            --code-bg: #0f1419;
+            --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --font-code: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+        }
+
+        .light-mode {
+            --bg-primary: #faf9f7;
+            --bg-secondary: #f5f4f2;
+            --bg-tertiary: #f0efec;
+            --text-primary: #2a2a2a;
+            --text-secondary: #4a4a4a;
+            --text-tertiary: #6a6a6a;
+            --accent-primary: #0a6ea9;
+            --accent-secondary: #0a3069;
+            --border-color: #d6d4d0;
+            --success: #1a7f37;
+            --warning: #9a6700;
+            --danger: #cf222e;
+            --code-bg: #f5f4f2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: 400;
+        }
+
+        header {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            font-weight: 600;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+            padding: 3rem 0;
+        }
+
+        .main-content {
+            max-width: 100%;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .toc {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .toc h3 {
+            margin-bottom: 1rem;
+            color: var(--accent-primary);
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+            display: block;
+            padding: 0.3rem 0;
+        }
+
+        .toc a:hover {
+            color: var(--accent-primary);
+        }
+
+        .category {
+            margin-bottom: 3rem;
+        }
+
+        .category-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .category-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .command-card {
+            margin-bottom: 2rem;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+
+        .command-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .command-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .command-title {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .command-syntax {
+            font-family: var(--font-code);
+            background-color: var(--code-bg);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--accent-secondary);
+        }
+
+        .explanation {
+            margin: 1.5rem 0;
+        }
+
+        .explanation h4 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .examples {
+            margin: 1.5rem 0;
+        }
+
+        .examples h4 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .example-item {
+            margin-bottom: 1rem;
+        }
+
+        .example-desc {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .example-code {
+            font-family: var(--font-code);
+            background-color: var(--code-bg);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .tip {
+            background-color: rgba(57, 186, 230, 0.05);
+            border-left: 4px solid var(--accent-primary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .tip h4 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .warning {
+            background-color: rgba(255, 101, 115, 0.05);
+            border-left: 4px solid var(--danger);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .warning h4 {
+            margin-bottom: 0.5rem;
+            color: var(--danger);
+        }
+
+        footer {
+            background-color: var(--bg-secondary);
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .copyright {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: -1;
+                position: static;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">CyberFort</a>
+                <button class="theme-toggle" id="themeToggle">
+                    <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Essential Linux Terminal Commands: A Comprehensive Guide</h1>
+            <p>Master the Linux command line with this detailed reference of the most widely used terminal commands for developers and sysadmins.</p>
+            <div class="meta-info">
+                <span>By: Alex Chen</span>
+                <span>Updated: April 10, 2023</span>
+                <span>Reading Time: 20 min</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="content">
+            <main class="main-content">
+                <div class="intro">
+                    <p>The Linux command line is a powerful tool that can dramatically improve your productivity and control over your system. Whether you're a developer, system administrator, or power user, mastering these essential commands will help you work more efficiently. This guide covers the most widely used commands with practical examples and explanations.</p>
+                </div>
+
+                <div class="category">
+                    <div class="category-header">
+                        <h2 class="category-title">File and Directory Operations</h2>
+                        <p class="category-description">Commands for navigating, creating, and managing files and directories.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">ls - List Directory Contents</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">ls [options] [directory]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>ls</code> command lists files and directories in the current working directory or a specified directory. It's one of the most frequently used commands for exploring the file system.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">List files with details (permissions, owner, size, etc.):</div>
+                                <div class="example-code">ls -l</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">List all files including hidden ones (starting with '.'):</div>
+                                <div class="example-code">ls -a</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">List files with details and human-readable sizes:</div>
+                                <div class="example-code">ls -lh</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">List files sorted by modification time (newest first):</div>
+                                <div class="example-code">ls -lt</div>
+                            </div>
+                        </div>
+                        <div class="tip">
+                            <h4>Pro Tip</h4>
+                            <p>Create an alias for <code>ls -la</code> in your <code>.bashrc</code> file to always see all files with details: <code>alias ll='ls -la'</code></p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">cd - Change Directory</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">cd [directory]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>cd</code> command changes the current working directory to the specified directory. Without arguments, it returns to your home directory.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Change to home directory:</div>
+                                <div class="example-code">cd</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Change to a specific directory:</div>
+                                <div class="example-code">cd /var/www/html</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Move up one directory level:</div>
+                                <div class="example-code">cd ..</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Change to the previous directory:</div>
+                                <div class="example-code">cd -</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">cp - Copy Files and Directories</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">cp [options] source destination</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>cp</code> command copies files and directories from a source to a destination location. It can copy single files, multiple files, or entire directory structures.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Copy a file to another location:</div>
+                                <div class="example-code">cp file.txt /backup/</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Copy a file with a new name:</div>
+                                <div class="example-code">cp file.txt file_backup.txt</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Copy a directory recursively (including all contents):</div>
+                                <div class="example-code">cp -r directory/ new_directory/</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Copy with preservation of attributes:</div>
+                                <div class="example-code">cp -p file.txt backup/</div>
+                            </div>
+                        </div>
+                        <div class="warning">
+                            <h4>Important</h4>
+                            <p>Be careful when copying files - the <code>cp</code> command will overwrite existing files without warning unless you use the <code>-i</code> (interactive) option.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header">
+                        <h2 class="category-title">File Viewing and Editing</h2>
+                        <p class="category-description">Commands for viewing, searching, and editing file contents.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">cat - Concatenate and Display Files</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">cat [options] [file(s)]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>cat</code> command reads files sequentially and writes them to standard output. It's commonly used to view file contents, create files, and concatenate multiple files.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Display file contents:</div>
+                                <div class="example-code">cat filename.txt</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Display multiple files:</div>
+                                <div class="example-code">cat file1.txt file2.txt</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Create a new file (type content, then Ctrl+D):</div>
+                                <div class="example-code">cat > newfile.txt</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Number all output lines:</div>
+                                <div class="example-code">cat -n filename.txt</div>
+                            </div>
+                        </div>
+                        <div class="tip">
+                            <h4>Pro Tip</h4>
+                            <p>For viewing large files, use <code>less</code> or <code>more</code> instead of <code>cat</code> as they provide paginated output that's easier to read.</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">grep - Search Text</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">grep [options] pattern [file(s)]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>grep</code> command searches for patterns in files or input. It's one of the most powerful and versatile commands for text processing and searching.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Search for a pattern in a file:</div>
+                                <div class="example-code">grep "error" logfile.txt</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Case-insensitive search:</div>
+                                <div class="example-code">grep -i "warning" logfile.txt</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Recursive search in directory:</div>
+                                <div class="example-code">grep -r "function_name" src/</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show line numbers with matches:</div>
+                                <div class="example-code">grep -n "TODO" *.py</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Invert match (show non-matching lines):</div>
+                                <div class="example-code">grep -v "success" results.txt</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">find - Search for Files</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">find [path] [expression]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>find</code> command searches for files in a directory hierarchy based on various criteria like name, size, modification time, and permissions.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Find files by name:</div>
+                                <div class="example-code">find /home -name "*.txt"</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Find files modified in the last 7 days:</div>
+                                <div class="example-code">find /var/log -mtime -7</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Find and delete files:</div>
+                                <div class="example-code">find /tmp -name "*.tmp" -delete</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Find files larger than 100MB:</div>
+                                <div class="example-code">find / -size +100M</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Find files and execute a command on them:</div>
+                                <div class="example-code">find . -name "*.js" -exec chmod 644 {} \;</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header">
+                        <h2 class="category-title">System Information and Monitoring</h2>
+                        <p class="category-description">Commands for checking system status, resources, and performance.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">ps - Process Status</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">ps [options]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>ps</code> command displays information about active processes. It's essential for monitoring what's running on your system and troubleshooting performance issues.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Show all processes for current user:</div>
+                                <div class="example-code">ps aux</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show processes in a tree format:</div>
+                                <div class="example-code">ps -ef --forest</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show processes for a specific user:</div>
+                                <div class="example-code">ps -u username</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show process by PID:</div>
+                                <div class="example-code">ps -p 1234</div>
+                            </div>
+                        </div>
+                        <div class="tip">
+                            <h4>Pro Tip</h4>
+                            <p>For interactive process monitoring, use <code>top</code> or <code>htop</code> instead of <code>ps</code> as they provide real-time updating views of system processes.</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">top - System Monitoring</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">top [options]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>top</code> command provides a dynamic real-time view of running system processes. It displays system summary information and a list of processes ordered by CPU usage.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Start top with custom update interval (3 seconds):</div>
+                                <div class="example-code">top -d 3</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show processes for a specific user:</div>
+                                <div class="example-code">top -u username</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Start top in batch mode (for scripting):</div>
+                                <div class="example-code">top -b -n 1</div>
+                            </div>
+                        </div>
+                        <div class="tip">
+                            <h4>Interactive Commands in top</h4>
+                            <p>While running <code>top</code>, you can use these keys: <code>P</code> (sort by CPU), <code>M</code> (sort by memory), <code>k</code> (kill process), <code>q</code> (quit).</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">df - Disk Space Usage</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">df [options] [file]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>df</code> command reports file system disk space usage. It shows the amount of disk space available and used on mounted file systems.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Show disk usage in human-readable format:</div>
+                                <div class="example-code">df -h</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show disk usage for a specific filesystem:</div>
+                                <div class="example-code">df -h /home</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show inode usage instead of block usage:</div>
+                                <div class="example-code">df -i</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show all filesystems including dummy ones:</div>
+                                <div class="example-code">df -a</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header">
+                        <h2 class="category-title">Networking</h2>
+                        <p class="category-description">Commands for network configuration, troubleshooting, and monitoring.</p>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">ping - Test Network Connectivity</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">ping [options] destination</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>ping</code> command sends ICMP ECHO_REQUEST packets to network hosts to test connectivity and measure round-trip time.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Ping a host with a count of 5 packets:</div>
+                                <div class="example-code">ping -c 5 google.com</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Ping with specific interval (2 seconds):</div>
+                                <div class="example-code">ping -i 2 example.com</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Ping with timestamp for each packet:</div>
+                                <div class="example-code">ping -D 8.8.8.8</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Flood ping (for stress testing):</div>
+                                <div class="example-code">ping -f localhost</div>
+                            </div>
+                        </div>
+                        <div class="warning">
+                            <h4>Important</h4>
+                            <p>Some networks block ICMP packets for security reasons, so a failed ping doesn't always mean the host is down.</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">netstat - Network Statistics</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">netstat [options]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>netstat</code> command displays network connections, routing tables, interface statistics, masquerade connections, and multicast memberships.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Show all listening ports:</div>
+                                <div class="example-code">netstat -tulpn</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show routing table:</div>
+                                <div class="example-code">netstat -r</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show network interface statistics:</div>
+                                <div class="example-code">netstat -i</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Show all established connections:</div>
+                                <div class="example-code">netstat -t</div>
+                            </div>
+                        </div>
+                        <div class="tip">
+                            <h4>Pro Tip</h4>
+                            <p>On modern systems, <code>ss</code> is often preferred over <code>netstat</code> as it's faster and provides more information.</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <h3 class="command-title">ssh - Secure Shell</h3>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="command-syntax">ssh [options] [user@]hostname [command]</div>
+                        <div class="explanation">
+                            <h4>Description</h4>
+                            <p>The <code>ssh</code> command provides a secure encrypted connection between two hosts over an insecure network. It's the standard for remote administration of Linux systems.</p>
+                        </div>
+                        <div class="examples">
+                            <h4>Common Examples</h4>
+                            <div class="example-item">
+                                <div class="example-desc">Connect to a remote server:</div>
+                                <div class="example-code">ssh username@server.example.com</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Connect with a specific port:</div>
+                                <div class="example-code">ssh -p 2222 user@hostname</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Execute a command on remote host:</div>
+                                <div class="example-code">ssh user@hostname 'ls -la'</div>
+                            </div>
+                            <div class="example-item">
+                                <div class="example-desc">Tunnel a local port to remote host:</div>
+                                <div class="example-code">ssh -L 8080:localhost:80 user@hostname</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conclusion">
+                    <h2>Mastering the Linux Command Line</h2>
+                    <p>These essential Linux commands form the foundation of effective system administration and development work. With practice, you'll find yourself combining these commands in powerful ways using pipes (<code>|</code>), redirection (<code>></code>, <code>>></code>), and command substitution (<code>$()</code>).</p>
+                    <p>Remember that the best way to learn is through practice. Set up a test environment and experiment with these commands to build your confidence and understanding of the Linux command line.</p>
+                </div>
+            </main>
+
+            <aside class="sidebar">
+                <div class="toc">
+                    <h3>Table of Contents</h3>
+                    <ul>
+                        <li><a href="#file-ops">File and Directory Operations</a></li>
+                        <li><a href="#file-viewing">File Viewing and Editing</a></li>
+                        <li><a href="#system-info">System Information</a></li>
+                        <li><a href="#networking">Networking</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#">Home</a>
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="copyright">
+                    &copy; 2023 CyberFort. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        
+        // Check for saved theme preference or prefer OS setting
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'light' || (!currentTheme && !prefersDarkScheme.matches)) {
+            document.body.classList.add('light-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        } else {
+            themeIcon.textContent = '🌙';
+            themeText.textContent = 'Dark Mode';
+        }
+        
+        themeToggle.addEventListener('click', function() {
+            if (document.body.classList.contains('light-mode')) {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            } else {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            }
+        });
+        
+        // Copy code functionality
+        function copyCode(button) {
+            const commandCard = button.closest('.command-card');
+            const syntaxElement = commandCard.querySelector('.command-syntax');
+            const textToCopy = syntaxElement.textContent;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Visual feedback
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.backgroundColor = 'var(--success)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+        
+        // Add IDs to categories for TOC navigation
+        document.querySelectorAll('.category').forEach((category, index) => {
+            const titles = ['file-ops', 'file-viewing', 'system-info', 'networking'];
+            if (titles[index]) {
+                category.id = titles[index];
+            }
+        });
+    </script>
+</body>
+</html>
