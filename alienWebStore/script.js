@@ -92,9 +92,9 @@ const products = [
         affiliateLink: "https://amzn.to/4gcZEBT"
     },
     {
-        title: "Logitech G102 USB Light Sync Gaming Mouse with Customizable RGB Lighting",
-        image: "images/iqcover.jpg", // Upload your image to images folder
-        affiliateLink: "https://amzn.to/47Zdp3y"
+        title: "Ant Esports VS400L NonModular High Efficiency Gaming Power Supply",
+        image: "images/psu.jpg", // Upload your image to images folder
+        affiliateLink: "https://amzn.to/4oKKveC"
     }
 ];
 
