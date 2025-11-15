@@ -87,9 +87,9 @@ const products = [
         affiliateLink: "https://amzn.to/4nklrdc"
     },
     {
-        title: "Mi Redmi Note 12 Pro Plus 5G Back cover",
-        image: "images/cover12.jpg", // Upload your image to images folder
-        affiliateLink: "https://amzn.to/4gcZEBT"
+        title: "Western Digital WD Blue SN5000 NVMe 500GB, Upto 5000MB/s",
+        image: "images/wd500.jpg", // Upload your image to images folder
+        affiliateLink: "https://amzn.to/4oSCS5C"
     },
     {
         title: "Ant Esports VS400L NonModular High Efficiency Gaming Power Supply",
