@@ -127,6 +127,16 @@ const products = [
         image: "images/acerNVME.jpg", // Upload your image to images folder
         affiliateLink: "https://amzn.to/3JRnNlO"
     },
+    ,
+    {
+        title: "Ant Esports VS600L Non-Modular High Efficiency Gaming Power Supply/PSU with 1 x PCIe and 120mm Silent Fan",
+        image: "images/ant600.jpg", // Upload your image to images folder
+        affiliateLink: "https://amzn.to/4ibQ1EE"
+    },
+
+
+
+
 
 
     
