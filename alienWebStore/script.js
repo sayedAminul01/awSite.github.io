@@ -109,7 +109,7 @@ const products = [
     },
     {
         title: "Corsair Vengeance LPX 8GB (1x8GB) DDR4 3200MHZ C16 Desktop RAM (Black)",
-        image: "images/asumotherboard.jpg", // Upload your image to images folder
+        image: "images/Corsair.jpg", // Upload your image to images folder
         affiliateLink: "https://amzn.to/3XCMwgJ"
     },
     {
