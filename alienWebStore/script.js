@@ -99,7 +99,7 @@ const products = [
     ,
     {
         title: "MSI PRO H610M-E DDR4 Motherboard, Micro-ATX - Supports 14th/13th/12th Gen Intel Core Processors",
-        image: "images/motherboard.jpg", // Upload your image to images folder
+        image: "images/msiM.jpg", // Upload your image to images folder
         affiliateLink: "https://amzn.to/4o0MMRA"
     },
     {
