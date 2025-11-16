@@ -113,8 +113,8 @@ const products = [
         affiliateLink: "https://amzn.to/3XCMwgJ"
     },
     {
-        title: "AMD 5000 Series Ryzen 5 5500 Desktop Processor 6 cores 12 Threads 19 MB Cache 3.6 GHz Upto 4.2 GHz Socket AM4 500 Series Chipset (100-100000457BOX)",
-        image: "images/asumotherboard.jpg", // Upload your image to images folder
+        title: "TP-Link Nano AC600 USB Wi-Fi Adapter(Archer T2U Nano)- 2.4G/5G Dual Band Wireless Network Adapter for PC Desktop Laptop",
+        image: "images/tplink.jpg", // Upload your image to images folder
         affiliateLink: "https://amzn.to/3LFXZJW"
     },
     {
