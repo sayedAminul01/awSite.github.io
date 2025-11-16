@@ -101,7 +101,38 @@ const products = [
         title: "MSI PRO H610M-E DDR4 Motherboard, Micro-ATX - Supports 14th/13th/12th Gen Intel Core Processors",
         image: "images/motherboard.jpg", // Upload your image to images folder
         affiliateLink: "https://amzn.to/4o0MMRA"
-    }
+    },
+    {
+        title: "ASUS Prime B450M-K II (AMD AM4 Socket for AMD Ryzen 5000/4000/ 3rd/2nd/1st Gen) DIMM Micro ATX Motherboard with M.2 HDMI/DVI-D/D-Sub SATA 6 Gbps 1 Gb Ethernet USB 3.2 Gen 1 Type-A, BIOS Flashback",
+        image: "images/asumotherboard.jpg", // Upload your image to images folder
+        affiliateLink: "https://amzn.to/3LIJ1Tt"
+    },
+    {
+        title: "Corsair Vengeance LPX 8GB (1x8GB) DDR4 3200MHZ C16 Desktop RAM (Black)",
+        image: "images/asumotherboard.jpg", // Upload your image to images folder
+        affiliateLink: "https://amzn.to/3XCMwgJ"
+    },
+    {
+        title: "AMD 5000 Series Ryzen 5 5500 Desktop Processor 6 cores 12 Threads 19 MB Cache 3.6 GHz Upto 4.2 GHz Socket AM4 500 Series Chipset (100-100000457BOX)",
+        image: "images/asumotherboard.jpg", // Upload your image to images folder
+        affiliateLink: "https://amzn.to/3LFXZJW"
+    },
+    {
+        title: "AMD 5000 Series Ryzen 5 5500 Desktop Processor 6 cores 12 Threads 19 MB Cache 3.6 GHz Upto 4.2 GHz Socket AM4 500 Series Chipset (100-100000457BOX)",
+        image: "images/asumotherboard.jpg", // Upload your image to images folder
+        affiliateLink: "https://amzn.to/3LFXZJW"
+    },
+    {
+        title: "Acer FA100 256GB PCIe Gen3 x4 NVMe 3D NAND SSD M.2 Internal SSD -1950MB/s R, 1300MB/s W Speed",
+        image: "images/acerNVME.jpg", // Upload your image to images folder
+        affiliateLink: "https://amzn.to/3JRnNlO"
+    },
+
+
+    
+
+
+    
 ];
 
 // DOM elements
