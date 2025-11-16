@@ -119,7 +119,7 @@ const products = [
     },
     {
         title: "AMD 5000 Series Ryzen 5 5500 Desktop Processor 6 cores 12 Threads 19 MB Cache 3.6 GHz Upto 4.2 GHz Socket AM4 500 Series Chipset (100-100000457BOX)",
-        image: "images/asumotherboard.jpg", // Upload your image to images folder
+        image: "images/amd.jpg", // Upload your image to images folder
         affiliateLink: "https://amzn.to/3LFXZJW"
     },
     {
