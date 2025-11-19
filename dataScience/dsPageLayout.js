@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-desktop',
             postCount: 50,
             description: 'Practice Data science with MCQs',
-            // url: '../adcaCourseTestContent/index.html'
+            url: './dSMcqs/dSMcqsL.html'
         },
         {
             id: 'test2',
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
