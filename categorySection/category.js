@@ -122,7 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
             postCount: 1,
             description: 'Backend development',
             url: './aWGames/index.html'
-        }
+        },
+        {
+            id: 'javascript',
+            title: 'dataScience',
+            icon: 'fa-solid fa-database',
+            postCount: 1,
+            description: 'go with dataScience',
+            url: './dataScience/dsPageLayout.html'
+        },
 
     ];
 
@@ -199,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
