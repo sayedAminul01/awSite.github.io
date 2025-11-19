@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // icon: 'fa-solid fa-test',
             postCount: 1,
             description: 'Basic computer fundamentals test',
-            url: '../adca/index.html'
+            url: './dSMcqsContent/intro_Mcqs.html'
         }, 
         // {
         //     id: 'test02',
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
