@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postCount: 1,
             description: 'go with dataScience',
             url: './dataScience/dsPageLayout.html'
-        },
+        }
 
     ];
 
@@ -207,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
