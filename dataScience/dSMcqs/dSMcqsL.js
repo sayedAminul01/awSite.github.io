@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'dS introduction Test',
             // icon: 'fa-solid fa-test',
             postCount: 1,
-            description: 'Basic computer fundamentals test',
+            description: 'Data Science intro test',
             url: './dSMcqsContent/intro_Mcqs.html'
         }, 
         // {
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
