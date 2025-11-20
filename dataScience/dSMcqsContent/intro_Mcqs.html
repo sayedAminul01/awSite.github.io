@@ -1,134 +1,57 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alien Institute of Computer CS Test</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="mcqs.css">
-<!--     Google Ads -->
+    <title>Alien Institute of Computer - Knowledge Test</title>
+    <link rel="icon" href="/api/placeholder/32/32" type="image/png">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="description" content="Interactive placement quiz for Alien Institute of Computer students">
+    <meta name="keywords" content="computer science, placement test, quiz, alien institute">
+
+<!--     Ads -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3056427584192481"
      crossorigin="anonymous"></script>
+<!-- All Rounder ads -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3056427584192481"
+     data-ad-slot="7840881821"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<!--     Ads End -->
 </head>
-    
-
 <body>
-    <div class="theme-toggle">
-        <button id="theme-toggle-btn">
-            <i class="fas fa-moon dark-icon"></i>
-            <i class="fas fa-sun light-icon"></i>
-        </button>
-    </div>
+    <div class="background-effect"></div>
+    <div class="quiz-container" id="quizContainer">
+        <div class="quiz-header">
+            <h2>Internship Program Final Test</h2>
+            <div class="timer" id="timer">00:00</div>
+        </div>
+        
+        <div id="registrationSection">
+            <form class="registration-form" id="registrationForm">
+                <input type="text" placeholder="Full Name" id="fullName" required>
+                <input type="email" placeholder="Email Address" id="emailAddress" required>
+                <input type="tel" placeholder="Phone Number" id="phoneNumber" required>
+                <button type="submit" class="btn">Start Test</button>
+            </form>
+        </div>
 
-    <div class="container">
-        <div class="quiz-card">
-            <!-- Start Screen -->
-            <div id="start-screen">
-                <div class="logo-container">
-                    <div class="logo">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                </div>
-                <h1 class="title1">Data Science</h1>
-                <h2 class="title2">Data Science Welcome Intro Test</h2>
-                
-                <div class="form-group">
-                    <label for="user-name">Enter Your Name</label>
-                    <input type="text" id="user-name" placeholder="Your full name" required>
-                </div>
-                
-                <button id="start-button" class="btn primary-btn">
-                    <span class="btn-text">Start Test</span>
-                    <i class="fas fa-rocket"></i>
-                </button>
-                
-                <div class="info-panel">
-                    <div class="info-item">
-                        <i class="fas fa-clock"></i>
-                        <span>40 Minutes</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-question-circle"></i>
-                        <span>15 Questions</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-award"></i>
-                        <span>Percentage</span>
-                    </div>
-                </div>
-            </div>
+        <div id="quizSection" style="display:none;">
+            <div class="question" id="questionText"></div>
+            <div class="options" id="optionsContainer"></div>
+        </div>
 
-            <!-- Quiz Screen -->
-            <div id="quiz-screen" class="hidden">
-                <div class="quiz-header">
-                    <div class="user-info">
-                        <i class="fas fa-user-astronaut"></i>
-                        <span id="user-name-display"></span>
-                    </div>
-                    <div class="timer-container">
-                        <i class="fas fa-hourglass-half pulse"></i>
-                        <div id="timer">40:00</div>
-                    </div>
-                </div>
-                
-                <div class="progress-container">
-                    <div class="progress-bar-container">
-                        <div class="progress-bar"></div>
-                    </div>
-                    <div class="progress-text">
-                        <span>Question <span id="current-question">1</span>5</span>
-                    </div>
-                </div>
-                
-                <div id="quiz-container"></div>
-            </div>
-
-            <!-- Result Screen -->
-            <div id="result-container" class="hidden">
-                <div class="result-header">
-                    <div class="result-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <h2>Test Completed</h2>
-                    <p>Great job, <span id="result-name"></span>!</p>
-                </div>
-                
-                <div class="motivational-quote">
-                    <i class="fas fa-quote-left"></i>
-                    <p id="motivation-message"></p>
-                    <i class="fas fa-quote-right"></i>
-                </div>
-
-                <div class="result-actions">
-                    <button id="submit-result" class="btn primary-btn">
-                        <span class="btn-text">Submit Results</span>
-                        <i class="fab fa-whatsapp"></i>
-                    </button>
-                    
-                    <button id="restart-button" class="btn secondary-btn">
-                        <span class="btn-text">Try Again</span>
-                        <i class="fas fa-redo"></i>
-                    </button>
-                </div>
-                
-                <div class="footer-links">
-                    <a href="../index.html"><i class="fas fa-home"></i> AlienWeb</a>
-                    <a href="../learningZone/index.html"><i class="fas fa-graduation-cap"></i> Learning Zone</a>
-                    <a href="../learningZone/computerZone.html"><i class="fas fa-laptop-code"></i> Computer Zone</a>
-                </div>
-            </div>
-
-            <!-- Hidden Results -->
-            <div id="hidden-results" class="hidden">
-                <p>Correct Answers: <span id="correct-answers"></span></p>
-                <p>Incorrect Answers: <span id="incorrect-answers"></span></p>
-                <p>Percentage: <span id="percentage"></span>%</p>
-                <!-- <p>Grade: <span id="grade"></span></p> -->
-            </div>
+        <div id="completionSection" style="display:none;" class="completion-message">
+            <h2>Thank You for Taking the Internship Test!</h2>
+            <p>Your test has been submitted. We appreciate your participation.</p>
         </div>
     </div>
-
-    <script src="mcqs.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
