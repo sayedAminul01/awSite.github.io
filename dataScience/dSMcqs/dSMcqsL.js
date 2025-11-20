@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // icon: 'fa-solid fa-test',
             postCount: 1,
             description: 'Data Science intro test',
-            url: './dSMcqsContent/intro_Mcqs.html'
+            url: '.dSMcqsContent/intro_Mcqs.html'
         }
         // {
         //     id: 'test02',
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
