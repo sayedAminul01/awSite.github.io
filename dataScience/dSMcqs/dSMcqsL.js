@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postCount: 1,
             description: 'Data Science intro test',
             url: './dSMcqsContent/intro_Mcqs.html'
-        }
+        },
         // {
         //     id: 'test02',
         //     title: 'Month 2',
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
