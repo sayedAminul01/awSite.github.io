@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postCount: 50,
             description: 'Programming basics test',
             url: './dSMcqsContent/intro_Mcqs.html'
-        }
+        },
         // {
         //     id: 'test1',
         //     // title: 'Welcome Test',
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
