@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 'test011',
             title: 'dS introduction Test',
-            // icon: 'fa-solid fa-test',
+            icon: 'fa-solid fa-test',
             postCount: 1,
             description: 'Data Science intro test',
             url: '/dSMcqsContent/intro_Mcqs.html'
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 'test02',
             title: 'Month 2',
-            // icon: 'fa-solid fa-code',
+            icon: 'fa-solid fa-code',
             postCount: 50,
             description: 'Programming basics test',
             url: './dSMcqsContent/intro_Mcqs.html'
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
