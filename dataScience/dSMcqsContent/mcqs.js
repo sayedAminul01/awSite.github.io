@@ -145,6 +145,158 @@ const fallbackQuestionBank = [
         ],
         correctAnswer: "Personalized product recommendations"
     },
+
+    {
+        question: "What is the first step in a typical Data Science workflow?",
+        options: [
+            "Data Collection",
+            "Model Deployment",
+            "Feature Tuning",
+            "Presentation Design"
+        ],
+        correctAnswer: "Data Collection"
+    },
+    {
+        question: "What does 'cleaning data' usually involve?",
+        options: [
+            "Adding more errors",
+            "Removing noise, fixing missing values, and correcting errors",
+            "Deleting all data",
+            "Turning data into images"
+        ],
+        correctAnswer: "Removing noise, fixing missing values, and correcting errors"
+    },
+    {
+        question: "Which programming language is widely used in Data Science?",
+        options: [
+            "Python",
+            "HTML",
+            "CSS",
+            "Scratch"
+        ],
+        correctAnswer: "Python"
+    },
+    {
+        question: "What is machine learning mainly used for in Data Science?",
+        options: [
+            "Making predictions and finding patterns",
+            "Cleaning computer screens",
+            "Designing buildings",
+            "Drawing cartoons"
+        ],
+        correctAnswer: "Making predictions and finding patterns"
+    },
+    {
+        question: "Why do companies collect user data?",
+        options: [
+            "To make random decisions",
+            "To improve products and personalize experience",
+            "To increase storage costs",
+            "To delete it later"
+        ],
+        correctAnswer: "To improve products and personalize experience"
+    },
+    {
+        question: "Which example represents predictive analytics?",
+        options: [
+            "Forecasting tomorrow's weather",
+            "Counting total website visitors",
+            "Sorting a list alphabetically",
+            "Measuring table height"
+        ],
+        correctAnswer: "Forecasting tomorrow's weather"
+    },
+    {
+        question: "Which tool is commonly used for data visualization?",
+        options: [
+            "PowerPoint",
+            "Matplotlib",
+            "Notepad",
+            "Paint"
+        ],
+        correctAnswer: "Matplotlib"
+    },
+    {
+        question: "What does 'domain knowledge' mean in Data Science?",
+        options: [
+            "Knowing how to cook",
+            "Understanding the specific field you're analyzing",
+            "Learning new languages",
+            "Downloading random apps"
+        ],
+        correctAnswer: "Understanding the specific field you're analyzing"
+    },
+    {
+        question: "What is Big Data?",
+        options: [
+            "A small Excel file",
+            "Data too large and complex for traditional tools",
+            "Images stored on a phone",
+            "Only video files"
+        ],
+        correctAnswer: "Data too large and complex for traditional tools"
+    },
+    {
+        question: "Which of the following is an example of classification in machine learning?",
+        options: [
+            "Predicting whether an email is spam or not",
+            "Calculating average age of users",
+            "Sorting items by price",
+            "Counting number of customers"
+        ],
+        correctAnswer: "Predicting whether an email is spam or not"
+    },
+    {
+        question: "What is the main purpose of data visualization?",
+        options: [
+            "Make data easier to understand using charts and graphs",
+            "Encrypt data",
+            "Delete useless files",
+            "Convert data into music"
+        ],
+        correctAnswer: "Make data easier to understand using charts and graphs"
+    },
+    {
+        question: "Which of these is an example of unsupervised learning?",
+        options: [
+            "Grouping customers based on buying patterns",
+            "Predicting exam marks",
+            "Detecting fraud in transactions",
+            "Forecasting stock prices"
+        ],
+        correctAnswer: "Grouping customers based on buying patterns"
+    },
+    {
+        question: "What is the purpose of a dataset?",
+        options: [
+            "To store organized data that can be analyzed",
+            "To delete unnecessary files",
+            "To print documents",
+            "To reduce computer speed"
+        ],
+        correctAnswer: "To store organized data that can be analyzed"
+    },
+    {
+        question: "Why is data visualization important in communication?",
+        options: [
+            "It confuses people",
+            "It helps present insights clearly and quickly",
+            "It makes reports longer",
+            "It hides mistakes"
+        ],
+        correctAnswer: "It helps present insights clearly and quickly"
+    },
+    {
+        question: "Which is an example of Data Science in healthcare?",
+        options: [
+            "Coloring X-ray reports",
+            "Predicting disease risks using patient data",
+            "Making hospital posters",
+            "Arranging chairs in hospitals"
+        ],
+        correctAnswer: "Predicting disease risks using patient data"
+    },
+   
     {
         question: "What is the average salary of a data scientist in India for experienced professionals?",
         options: [
@@ -330,3 +482,4 @@ Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
 document.addEventListener('DOMContentLoaded', () => {
     new QuizApp();
 });
+
