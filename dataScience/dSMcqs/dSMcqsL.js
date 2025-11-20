@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
             description: 'Programming basics test',
             url: './dSMcqsContent/intro_Mcqs.html'
         },
-        // {
-        //     id: 'test1',
-        //     // title: 'Welcome Test',
-        //     icon: 'fa-solid fa-desktop',
-        //     postCount: 50,
-        //     description: 'Basic computer fundamentals test',
-        //     url: '../adcaCourseTestContent/index.html'
-        // },
+        {
+            id: 'test1',
+            // title: 'Welcome Test',
+            icon: 'fa-solid fa-desktop',
+            postCount: 50,
+            description: 'Basic computer fundamentals test',
+            url: '../adcaCourseTestContent/index.html'
+        },
         // {
         //     id: 'test2',
         //     title: 'Troubleshooting Test',
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
