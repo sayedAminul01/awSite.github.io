@@ -1,472 +1,681 @@
-// Questions array from the original file
-const questions = [
-{
-    question: "What is Data Science?",
-    options: [
-        "A field about painting data",
-        "A study of stars and planets",
-        "A field that extracts insights from data using math, statistics, and programming",
-        "A method to design websites"
-    ],
-    correctAnswer: 2
-},
-{
-    question: "Which simple definition best describes Data Science?",
-    options: [
-        "A way to delete unwanted files",
-        "The process of collecting, cleaning, analyzing, and interpreting data to make decisions",
-        "A method to create animations",
-        "A process to format computers"
-    ],
-    correctAnswer: 1
-},
-{
-    question: "Why is Data Science important today?",
-    options: [
-        "Because data does not exist anywhere",
-        "Because companies dislike using data",
-        "Because data is everywhere and helps in making decisions",
-        "Because it replaces mobile apps"
-    ],
-    correctAnswer: 2
-},
-{
-    question: "Which of the following is a key step in Data Science?",
-    options: [
-        "Data dancing",
-        "Data singing",
-        "Data Collection",
-        "Data printing"
-    ],
-    correctAnswer: 2
-},
-{
-    question: "What takes up around 80% of a data scientist’s time?",
-    options: [
-        "Data Collection",
-        "Data Cleaning",
-        "Model Deployment",
-        "Preparing presentations"
-    ],
-    correctAnswer: 1
-},
-{
-    question: "What is Data Analysis?",
-    options: [
-        "Using statistical methods to find patterns and insights",
-        "Installing apps on a computer",
-        "Deleting corrupted files",
-        "Designing social media posts"
-    ],
-    correctAnswer: 0
-},
-{
-    question: "What is the purpose of Model Building in Data Science?",
-    options: [
-        "To make predictions using machine learning",
-        "To build houses and structures",
-        "To create 3D models",
-        "To decorate websites"
-    ],
-    correctAnswer: 0
-},
-{
-    question: "Where is Data Science used in entertainment?",
-    options: [
-        "Choosing the color of TV remotes",
-        "Content recommendations on YouTube and Netflix",
-        "Making cartoon characters talk",
-        "Selecting songs randomly"
-    ],
-    correctAnswer: 1
-},
-{
-    question: "Which of the following is an example of Data Science in finance?",
-    options: [
-        "Detecting fraudulent transactions",
-        "Decorating office spaces",
-        "Creating bank logos",
-        "Printing bank passbooks"
-    ],
-    correctAnswer: 0
-},
-{
-    question: "Which device category can be a source of data?",
-    options: [
-        "IoT devices",
-        "Chalkboards",
-        "Carpets",
-        "Shoes"
-    ],
-    correctAnswer: 0
-},
-{
-    question: "Why should you care about Data Science?",
-    options: [
-        "It is not useful for any industry",
-        "It has high demand, great pay, and future scope",
-        "It only works on old computers",
-        "It is only used for gaming"
-    ],
-    correctAnswer: 1
-},
-{
-    question: "Which of the following industries uses Data Science?",
-    options: [
-        "Healthcare",
-        "Toy-making only",
-        "Oil painting",
-        "Only education"
-    ],
-    correctAnswer: 0
-},
-{
-    question: "What is the role of Interpretation & Communication in Data Science?",
-    options: [
-        "To confuse people",
-        "To present findings clearly for decision-making",
-        "To translate languages",
-        "To write novels"
-    ],
-    correctAnswer: 1
-},
-{
-    question: "What is an example of Data Science in e-commerce?",
-    options: [
-        "Writing product reviews manually",
-        "Personalized product recommendations",
-        "Delivering products door-to-door",
-        "Printing shipping labels"
-    ],
-    correctAnswer: 1
-},
-{
-    question: "What is the average salary of a data scientist in India for experienced professionals?",
-    options: [
-        "₹1-2 LPA",
-        "₹3-5 LPA",
-        "₹10-30 LPA",
-        "₹1 crore"
-    ],
-    correctAnswer: 2
-}
+/* Quiz App - loads MCQs from test.txt, falls back to embedded bank if fetch fails.
+   Sends results to WhatsApp (no backend needed). Keeps existing design. */
 
+let questionBank = [];
+
+// Embedded fallback copied from test.txt so it also works from file:// or if fetch fails
+const fallbackQuestionBank = [
+    {
+        question: "What is the main function of a computer?",
+        options: [
+            "To store, process, and retrieve data",
+            "To cook food",
+            "To drive a car",
+            "To generate electricity"
+        ],
+        correctAnswer: "To store, process, and retrieve data"
+    },
+    {
+        question: "Which of the following is an example of hardware?",
+        options: [
+            "Microsoft Word",
+            "Google Chrome",
+            "Keyboard",
+            "Photoshop"
+        ],
+        correctAnswer: "Keyboard"
+    },
+    {
+        question: "Which of these is an example of software?",
+        options: [
+            "Mouse",
+            "Printer",
+            "Windows 11",
+            "Monitor"
+        ],
+        correctAnswer: "Windows 11"
+    },
+    {
+        question: "What does CPU stand for?",
+        options: [
+            "Central Processing Unit",
+            "Central Printing Unit",
+            "Central Program Utility",
+            "Central Processing Utility"
+        ],
+        correctAnswer: "Central Processing Unit"
+    },
+    {
+        question: "Which device is used to store large amounts of data permanently?",
+        options: [
+            "RAM",
+            "Hard Drive",
+            "CPU",
+            "Keyboard"
+        ],
+        correctAnswer: "Hard Drive"
+    },
+    {
+        question: "What is ChatGPT primarily used for?",
+        options: [
+            "Cooking",
+            "Generating and understanding text",
+            "Designing clothes",
+            "Playing music"
+        ],
+        correctAnswer: "Generating and understanding text"
+    },
+    {
+        question: "Which company created ChatGPT?",
+        options: [
+            "Google",
+            "Microsoft",
+            "OpenAI",
+            "Adobe"
+        ],
+        correctAnswer: "OpenAI"
+    },
+    {
+        question: "What is 'prompt engineering'?",
+        options: [
+            "Designing mechanical prompts",
+            "Writing effective instructions for AI",
+            "Fixing computer errors",
+            "Engineering chat software"
+        ],
+        correctAnswer: "Writing effective instructions for AI"
+    },
+    {
+        question: "Which tool is best known for creating presentations and social media designs?",
+        options: [
+            "Blogger.com",
+            "Canva",
+            "Leonardo AI",
+            "ChatGPT"
+        ],
+        correctAnswer: "Canva"
+    },
+    {
+        question: "What does Canva mainly help users do?",
+        options: [
+            "Create images and designs easily",
+            "Code programs",
+            "Host websites",
+            "Play games"
+        ],
+        correctAnswer: "Create images and designs easily"
+    },
+    {
+        question: "Leonardo AI is mainly used for:",
+        options: [
+            "Generating AI images",
+            "Making spreadsheets",
+            "Sending emails",
+            "Hosting videos"
+        ],
+        correctAnswer: "Generating AI images"
+    },
+    {
+        question: "Which of the following is an AI image generator?",
+        options: [
+            "Canva",
+            "Leonardo AI",
+            "Blogger",
+            "Excel"
+        ],
+        correctAnswer: "Leonardo AI"
+    },
+    {
+        question: "What is a 'reel' on social media?",
+        options: [
+            "A short video clip",
+            "A podcast episode",
+            "A blog post",
+            "An audio file"
+        ],
+        correctAnswer: "A short video clip"
+    },
+    {
+        question: "Which platform is most popular for creating and posting reels?",
+        options: [
+            "Facebook",
+            "Instagram",
+            "Blogger.com",
+            "LinkedIn"
+        ],
+        correctAnswer: "Instagram"
+    },
+    {
+        question: "Blogger.com is owned by which company?",
+        options: [
+            "Meta",
+            "Google",
+            "Microsoft",
+            "Amazon"
+        ],
+        correctAnswer: "Google"
+    },
+    {
+        question: "What is the main use of Blogger.com?",
+        options: [
+            "To create and publish blogs",
+            "To make presentations",
+            "To edit videos",
+            "To generate AI images"
+        ],
+        correctAnswer: "To create and publish blogs"
+    },
+    {
+        question: "Which of the following can help in making passive income?",
+        options: [
+            "Blogging",
+            "YouTube channel",
+            "Affiliate marketing",
+            "All of the above"
+        ],
+        correctAnswer: "All of the above"
+    },
+    {
+        question: "What is passive income?",
+        options: [
+            "Money earned with little ongoing effort",
+            "Money from a full-time job",
+            "Salary from office work",
+            "Loan repayment"
+        ],
+        correctAnswer: "Money earned with little ongoing effort"
+    },
+    {
+        question: "What is the meaning of 'online presence'?",
+        options: [
+            "Being online 24/7",
+            "How people can find you or your brand online",
+            "Having a big internet bill",
+            "Owning a computer"
+        ],
+        correctAnswer: "How people can find you or your brand online"
+    },
+    {
+        question: "Which is the first step to building an online presence?",
+        options: [
+            "Buying ads",
+            "Creating a website or social media profile",
+            "Making reels",
+            "Hiring a marketing agency"
+        ],
+        correctAnswer: "Creating a website or social media profile"
+    },
+    {
+        question: "Which is an example of hardware?",
+        options: [
+            "Monitor",
+            "PowerPoint",
+            "Google Docs",
+            "MS Word"
+        ],
+        correctAnswer: "Monitor"
+    },
+    {
+        question: "What does RAM stand for?",
+        options: [
+            "Random Access Memory",
+            "Read Access Memory",
+            "Ready Access Machine",
+            "Rapid Action Module"
+        ],
+        correctAnswer: "Random Access Memory"
+    },
+    {
+        question: "Which type of memory is temporary and clears when the computer is turned off?",
+        options: [
+            "Hard Disk",
+            "RAM",
+            "SSD",
+            "ROM"
+        ],
+        correctAnswer: "RAM"
+    },
+    {
+        question: "Which device outputs sound from a computer?",
+        options: [
+            "Keyboard",
+            "Speakers",
+            "Mouse",
+            "Monitor"
+        ],
+        correctAnswer: "Speakers"
+    },
+    {
+        question: "Which of the following is an example of an input device?",
+        options: [
+            "Printer",
+            "Scanner",
+            "Monitor",
+            "Speaker"
+        ],
+        correctAnswer: "Scanner"
+    },
+    {
+        question: "Which AI tool is best for answering questions and generating content?",
+        options: [
+            "Leonardo AI",
+            "Canva",
+            "ChatGPT",
+            "Blogger"
+        ],
+        correctAnswer: "ChatGPT"
+    },
+    {
+        question: "Which AI tool is best for creating social media post templates?",
+        options: [
+            "Leonardo AI",
+            "ChatGPT",
+            "Canva",
+            "Excel"
+        ],
+        correctAnswer: "Canva"
+    },
+    {
+        question: "Which is NOT a blogging platform?",
+        options: [
+            "Blogger.com",
+            "WordPress",
+            "Instagram",
+            "Medium"
+        ],
+        correctAnswer: "Instagram"
+    },
+    {
+        question: "What should you focus on when creating prompts for AI?",
+        options: [
+            "Using complex words",
+            "Clarity and detail",
+            "Writing short and unclear text",
+            "Adding random instructions"
+        ],
+        correctAnswer: "Clarity and detail"
+    },
+    {
+        question: "What is an example of an online passive income source?",
+        options: [
+            "Creating and selling an online course",
+            "Doing a part-time job",
+            "Running errands",
+            "Driving a taxi"
+        ],
+        correctAnswer: "Creating and selling an online course"
+    },
+    {
+        question: "Which of these can help your blog reach more people?",
+        options: [
+            "SEO",
+            "Ignoring keywords",
+            "Posting randomly",
+            "Avoiding images"
+        ],
+        correctAnswer: "SEO"
+    },
+    {
+        question: "What is the main purpose of SEO?",
+        options: [
+            "To decorate a website",
+            "To make a website faster",
+            "To create videos",
+            "To improve website ranking on search engines"
+        ],
+        correctAnswer: "To improve website ranking on search engines"
+    },
+    {
+        question: "Which is the best format for reels on Instagram?",
+        options: [
+            "Horizontal",
+            "Vertical",
+            "Square",
+            "Panorama"
+        ],
+        correctAnswer: "Vertical"
+    },
+    {
+        question: "Which of these is a benefit of using Canva?",
+        options: [
+            "Free design templates",
+            "AI image creation",
+            "Easy drag-and-drop interface",
+            "All of the above"
+        ],
+        correctAnswer: "All of the above"
+    },
+    {
+        question: "Which tool allows AI-powered image creation?",
+        options: [
+            "ChatGPT",
+            "Blogger.com",
+            "Leonardo AI",
+            "MS Word"
+        ],
+        correctAnswer: "Leonardo AI"
+    },
+    {
+        question: "What is the benefit of a blog?",
+        options: [
+            "Sharing your knowledge online",
+            "Building an audience",
+            "Making passive income",
+            "All of the above"
+        ],
+        correctAnswer: "All of the above"
+    },
+    {
+        question: "Which of the following is a social media platform?",
+        options: [
+            "Google Docs",
+            "MS Excel",
+            "Instagram",
+            "Notepad"
+        ],
+        correctAnswer: "Instagram"
+    },
+    {
+        question: "What is the primary benefit of having an online presence?",
+        options: [
+            "Working offline",
+            "Hiding from customers",
+            "Reaching more people",
+            "Spending more on ads"
+        ],
+        correctAnswer: "Reaching more people"
+    },
+    {
+        question: "Which of the following is an example of cloud storage?",
+        options: [
+            "Google Drive",
+            "RAM",
+            "SSD",
+            "Hard Disk"
+        ],
+        correctAnswer: "Google Drive"
+    },
+    {
+        question: "Which tool is used to publish your own articles online?",
+        options: [
+            "Blogger.com",
+            "Canva",
+            "Leonardo AI",
+            "Instagram"
+        ],
+        correctAnswer: "Blogger.com"
+    },
+    {
+        question: "What is the benefit of using AI tools like ChatGPT?",
+        options: [
+            "Faster content creation",
+            "Automated answers",
+            "Idea generation",
+            "All of the above"
+        ],
+        correctAnswer: "All of the above"
+    },
+    {
+        question: "Which device connects your computer to the internet?",
+        options: [
+            "Router",
+            "Printer",
+            "Mouse",
+            "Speaker"
+        ],
+        correctAnswer: "Router"
+    },
+    {
+        question: "Which of the following is NOT an input device?",
+        options: [
+            "Keyboard",
+            "Mouse",
+            "Monitor",
+            "Microphone"
+        ],
+        correctAnswer: "Monitor"
+    },
+    {
+        question: "Which of these is necessary for making reels?",
+        options: [
+            "Camera or smartphone",
+            "Cooking stove",
+            "Printer",
+            "Scanner"
+        ],
+        correctAnswer: "Camera or smartphone"
+    },
+    {
+        question: "What does URL stand for?",
+        options: [
+            "Uniform Resource Locator",
+            "Universal Resource Link",
+            "Uniform Remote Link",
+            "Universal Record Locator"
+        ],
+        correctAnswer: "Uniform Resource Locator"
+    },
+    {
+        question: "Which is a free blogging platform?",
+        options: [
+            "Blogger.com",
+            "Netflix",
+            "Amazon",
+            "Instagram"
+        ],
+        correctAnswer: "Blogger.com"
+    },
+    {
+        question: "Which is an example of active income?",
+        options: [
+            "Salary from a job",
+            "Earnings from a blog",
+            "Affiliate commissions",
+            "YouTube ad revenue"
+        ],
+        correctAnswer: "Salary from a job"
+    },
+    {
+        question: "Which type of storage is faster?",
+        options: [
+            "SSD",
+            "HDD",
+            "CD-ROM",
+            "Floppy disk"
+        ],
+        correctAnswer: "SSD"
+    },
+    {
+        question: "Which is an important skill for online growth?",
+        options: [
+            "Consistency",
+            "Random posting",
+            "Ignoring analytics",
+            "Avoiding engagement"
+        ],
+        correctAnswer: "Consistency"
+    },
+    {
+        question: "Which of these is the correct order of steps to publish a blog post on Blogger.com?",
+        options: [
+            "Write post → Add images → Publish",
+            "Publish → Write post → Add images",
+            "Add images → Write post → Publish",
+            "Publish → Add images → Write post"
+        ],
+        correctAnswer: "Write post → Add images → Publish"
+    }
 ];
 
-// Motivational quotes for different grade levels
-const motivationalQuotes = {
-    A: [
-    "Excellence comes from attitude—great job!",
-    "Big achievements come from strong commitment. Well done!",
-    "Your grasp of core data science concepts is impressive.",
-    "Your ideas and understanding show real depth. Keep it up!",
-    "Your success inspires others. Fantastic work!"
-]
-,
-    B: [
-    "Every expert starts as a beginner. You're progressing well!",
-    "Growth comes from learning, and you're proving that daily.",
-    "Small consistent efforts lead to big success. Great going!",
-    "Knowledge is power—you're gaining more every day!",
-    "A little extra effort makes you extraordinary. Keep pushing!"
-]
-,
-    C: [
-    "Every pro was once a beginner. Your journey is just starting.",
-    "Success follows hard work—keep giving your best!",
-    "Falling is normal; rising makes you stronger. Keep rising!",
-    "Improvement every day matters more than perfection.",
-    "Don’t worry about time—stay consistent and keep moving."
-]
-,
-    D: [
-    "Learning is yours forever—every step counts.",
-    "Effort matters more than perfection. Keep trying!",
-    "Showing up is courage. You did that—keep going.",
-    "Success isn’t final; failure isn’t the end. Continue forward.",
-    "Mistakes teach us—learn from this and move ahead."
-]
-};
+class QuizApp {
+    constructor() {
+        this.questions = [];
+        this.currentQuestionIndex = 0;
+        this.correctAnswers = 0;
+        this.totalQuestions = 50;
+        this.timer = 0;
+        this.timerInterval = null;
+        this.userDetails = {};
+        this.loadQuestions();
+    }
 
-// Variables
-let currentQuestion = 0;
-let correctAnswers = 0;
-let incorrectAnswers = 0;
-let timeLeft = 2400; // 40 minutes in seconds
-let timerInterval;
-let userName = "";
+    async loadQuestions() {
+        try {
+            const res = await fetch('test.txt', { cache: 'no-store' });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const text = await res.text();
+            const data = JSON.parse(text);
+            if (!Array.isArray(data) || data.length === 0) throw new Error('Invalid question data');
+            questionBank = data;
+            console.log('Loaded MCQs from test.txt:', questionBank.length);
+        } catch (err) {
+            console.warn('Failed to load test.txt, using embedded fallback MCQs.', err);
+            questionBank = fallbackQuestionBank;
+        }
+        this.registerEventListeners();
+    }
 
-// DOM Elements
-const startScreen = document.getElementById('start-screen');
-const quizScreen = document.getElementById('quiz-screen');
-const quizContainer = document.getElementById('quiz-container');
-const resultContainer = document.getElementById('result-container');
-const currentQuestionElement = document.getElementById('current-question');
-const progressBar = document.querySelector('.progress-bar');
-const timerElement = document.getElementById('timer');
-const userNameInput = document.getElementById('user-name');
-const userNameDisplay = document.getElementById('user-name-display');
-const resultName = document.getElementById('result-name');
-const motivationMessage = document.getElementById('motivation-message');
-const themeToggleBtn = document.getElementById('theme-toggle-btn');
-const submitResultBtn = document.getElementById('submit-result');
+    registerEventListeners() {
+        const form = document.getElementById('registrationForm');
+        if (form) form.addEventListener('submit', this.startQuiz.bind(this));
+    }
 
-// Event Listeners
-document.getElementById('start-button').addEventListener('click', startQuiz);
-document.getElementById('restart-button').addEventListener('click', restartQuiz);
-themeToggleBtn.addEventListener('click', toggleTheme);
-submitResultBtn.addEventListener('click', submitResultToWhatsApp);
+    shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 
-// Check for saved theme preference or set default
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.className = savedTheme;
-}
+    startQuiz(event) {
+        event.preventDefault();
 
-// Toggle between light and dark themes
-function toggleTheme() {
-    const currentTheme = document.documentElement.className;
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
-    document.documentElement.className = newTheme;
-    localStorage.setItem('theme', newTheme);
-    
-    // Add animation effect
-    document.body.classList.add('theme-transition');
-    setTimeout(() => {
-        document.body.classList.remove('theme-transition');
-    }, 500);
-}
+        this.userDetails = {
+            name: document.getElementById('fullName').value.trim(),
+            email: document.getElementById('emailAddress').value.trim(),
+            phone: document.getElementById('phoneNumber').value.trim()
+        };
 
-// Start the quiz
-function startQuiz() {
-    userName = userNameInput.value.trim();
-    if (userName === "") {
-        // Animated shake effect for invalid input
-        userNameInput.classList.add('shake-animation');
+        if (!Array.isArray(questionBank) || questionBank.length === 0) {
+            alert('Question bank is empty.');
+            return;
+        }
+
+        this.totalQuestions = questionBank.length;
+
+        this.questions = this.shuffleArray([...questionBank]).slice(0, this.totalQuestions);
+
+        document.getElementById('registrationSection').style.display = 'none';
+        document.getElementById('quizSection').style.display = 'block';
+
+        this.startTimer();
+        this.loadQuestion();
+    }
+
+    startTimer() {
+        const timerElement = document.getElementById('timer');
+        let remainingTime = 60 * 60;
+
+        this.timerInterval = setInterval(() => {
+            remainingTime--;
+
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            this.timer = (60 * 60) - remainingTime;
+
+            if (remainingTime <= 0) {
+                clearInterval(this.timerInterval);
+                this.endQuiz();
+            }
+        }, 1000);
+    }
+
+    loadQuestion() {
+        if (this.currentQuestionIndex >= this.questions.length) {
+            this.endQuiz();
+            return;
+        }
+
+        const currentQuestion = this.questions[this.currentQuestionIndex];
+        const questionElement = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+
+        questionElement.textContent = currentQuestion.question;
+        optionsContainer.innerHTML = '';
+
+        const shuffledOptions = this.shuffleArray([...currentQuestion.options]);
+
+        shuffledOptions.forEach(option => {
+            const optionElement = document.createElement('div');
+            optionElement.classList.add('option');
+            optionElement.textContent = option;
+            optionElement.addEventListener('click', () => this.selectOption(optionElement, currentQuestion));
+            optionsContainer.appendChild(optionElement);
+        });
+    }
+
+    selectOption(selectedElement, currentQuestion) {
+        const optionsContainer = document.getElementById('optionsContainer');
+        const allOptions = optionsContainer.querySelectorAll('.option');
+
+        let isCorrect = selectedElement.textContent === currentQuestion.correctAnswer;
+
+        allOptions.forEach(el => {
+            el.style.pointerEvents = 'none';
+            
+            if (el.textContent === currentQuestion.correctAnswer) {
+                el.classList.add('correct');
+            } else if (el === selectedElement && !isCorrect) {
+                el.classList.add('incorrect');
+            }
+        });
+
+        if (isCorrect) {
+            this.correctAnswers++;
+            selectedElement.classList.add('selected');
+        }
+
         setTimeout(() => {
-            userNameInput.classList.remove('shake-animation');
-        }, 500);
-        
-        // Show error message
-        const errorMsg = document.createElement('p');
-        errorMsg.textContent = "Please enter your name to continue";
-        errorMsg.className = "error-message";
-        
-        // Remove any existing error message
-        const existingError = document.querySelector('.error-message');
-        if (existingError) existingError.remove();
-        
-        userNameInput.parentNode.appendChild(errorMsg);
-        return;
-    }
-    
-    startScreen.classList.add('hidden');
-    quizScreen.classList.remove('hidden');
-    userNameDisplay.textContent = userName;
-    displayQuestion();
-    startTimer();
-}
-
-// Display the current question
-function displayQuestion() {
-    const question = questions[currentQuestion];
-    
-    let html = `
-        <div class="question-container">
-            <h2 class="question-text">${currentQuestion + 1}. ${question.question}</h2>
-            <div class="options">
-    `;
-
-    question.options.forEach((option, index) => {
-        html += `
-            <div class="option" data-index="${index}">
-                ${option}
-            </div>
-        `;
-    });
-
-    html += `
-            </div>
-        </div>
-    `;
-
-    quizContainer.innerHTML = html;
-
-    // Add event listeners to options
-    const options = document.querySelectorAll('.option');
-    options.forEach(option => {
-        option.addEventListener('click', handleAnswer);
-    });
-
-    // Update progress
-    currentQuestionElement.textContent = currentQuestion + 1;
-    progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-}
-
-// Handle user's answer selection
-function handleAnswer(e) {
-    const selectedOption = e.target;
-    const options = document.querySelectorAll('.option');
-    
-    // Disable all options to prevent multiple selections
-    options.forEach(option => {
-        option.style.pointerEvents = 'none';
-    });
-    
-    const selectedAnswer = parseInt(selectedOption.dataset.index);
-    const correctAnswer = questions[currentQuestion].correctAnswer;
-
-    if (selectedAnswer === correctAnswer) {
-        correctAnswers++;
-        selectedOption.classList.add('correct');
-        
-        // Add success sound effect
-        playSound('correct');
-    } else {
-        incorrectAnswers++;
-        selectedOption.classList.add('incorrect');
-        options[correctAnswer].classList.add('correct');
-        
-        // Add error sound effect
-        playSound('incorrect');
+            this.currentQuestionIndex++;
+            this.loadQuestion();
+        }, 1000);
     }
 
-    // Proceed to next question after delay
-    setTimeout(() => {
-        currentQuestion++;
-        if (currentQuestion < questions.length) {
-            displayQuestion();
-        } else {
-            showResults();
-        }
-    }, 1000);
-}
+    endQuiz() {
+        clearInterval(this.timerInterval);
+        document.getElementById('quizSection').style.display = 'none';
+        document.getElementById('completionSection').style.display = 'block';
 
-// Play sound effects
-function playSound(type) {
-    // This is a placeholder. You could implement actual sound effects
-    // by creating audio elements and playing them
-    console.log(`Playing ${type} sound`);
-}
+        const percentage = Math.round((this.correctAnswers / this.totalQuestions) * 100);
+        let grade = '';
 
-// Calculate the grade based on percentage
-function calculateGrade(percentage) {
-    if (percentage >= 80) return 'A';
-    if (percentage >= 60) return 'B';
-    if (percentage >= 40) return 'C';
-    return 'D';
-}
+        if (percentage >= 90) grade = 'A+';
+        else if (percentage >= 75) grade = 'A';
+        else if (percentage >= 60) grade = 'B';
+        else if (percentage >= 50) grade = 'C';
+        else grade = 'D';
 
-// Calculate percentage score with positive and negative marking
-function calculatePercentage() {
-    const totalQuestions = questions.length;
-    const positiveMarks = correctAnswers * 4; // 4 marks for each correct answer
-    const negativeMarks = incorrectAnswers * 1; // 1 negative mark for each incorrect answer
-    const totalMarks = positiveMarks - negativeMarks;
-    const maxMarks = totalQuestions * 4;
-    const percentage = (totalMarks / maxMarks) * 100;
-    
-    // Ensure percentage is not negative
-    return Math.max(0, percentage);
-}
+        const message =
+            `Alien Institute of Computer
+Name: ${this.userDetails.name}
+Phone: ${this.userDetails.phone}
+Email: ${this.userDetails.email}
+Total Questions: ${this.totalQuestions}
+Correct Answers: ${'507'+this.correctAnswers+'97852432'}
+Percentage: +${'5039'+percentage + '375480356'}%
+Grade: ${'DABCDB' + grade+'ADBACBA'}
+Time Taken: ${Math.floor(this.timer / 60)} min ${this.timer % 60} sec`;
 
-// Set motivational message based on percentage
-function getMotivationalQuoteByPercentage(percentage) {
-    let quotes;
-    if (percentage >= 80) {
-        quotes = motivationalQuotes.A; // Use quotes for grade A
-    } else if (percentage >= 60) {
-        quotes = motivationalQuotes.B; // Use quotes for grade B
-    } else if (percentage >= 40) {
-        quotes = motivationalQuotes.C; // Use quotes for grade C
-    } else {
-        quotes = motivationalQuotes.D; // Use quotes for grade D
+        const subject = encodeURIComponent("Internship Final Test - Alien Institute of Computer");
+        const body = encodeURIComponent(message);
+        const mailtoURL = `mailto:hellowsupprt@gmail.com?subject=${subject}&body=${body}`;
+        window.open(mailtoURL, '_blank');
     }
-
-    // Select a random quote from the appropriate category
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    return quotes[randomIndex];
 }
 
-// Show the results screen
-function showResults() {
-    clearInterval(timerInterval);
-    quizScreen.classList.add('hidden');
-    resultContainer.classList.remove('hidden');
-    
-    resultName.textContent = userName;
-    
-    // Calculate results
-    const percentage = calculatePercentage();
-    
-    // Set hidden result values (to be sent to WhatsApp)
-    document.getElementById('correct-answers').textContent = correctAnswers;
-    document.getElementById('incorrect-answers').textContent = incorrectAnswers;
-    document.getElementById('percentage').textContent = percentage.toFixed(2);
-
-    // Set motivational message based on percentage
-    const quote = getMotivationalQuoteByPercentage(percentage);
-    motivationMessage.textContent = quote;
-}
-// Submit results to WhatsApp
-function submitResultToWhatsApp() {
-    const phoneNumber = "9365489154";
-    const name = userName;
-    const correctAns = correctAnswers;
-    const incorrectAns = incorrectAnswers;
-    const percentage = document.getElementById('percentage').textContent;
-    
-    const message = `*Alien Institute ADCA Test Results*%0A
-Name: ${name}%0A
-Correct Answers: ${correctAns}%0A
-Incorrect Answers: ${incorrectAns}%0A
-Percentage: ${percentage}%25`;
-    
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    
-    // Open WhatsApp in a new tab
-    window.open(whatsappUrl, '_blank');
-}
-
-// Reset and restart the quiz
-function restartQuiz() {
-    currentQuestion = 0;
-    correctAnswers = 0;
-    incorrectAnswers = 0;
-    timeLeft = 1800;
-    clearInterval(timerInterval);
-    resultContainer.classList.add('hidden');
-    startScreen.classList.remove('hidden');
-    userNameInput.value = "";
-}
-
-// Start the timer
-function startTimer() {
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        updateTimerDisplay();
-        
-        // Add visual indicators when time is running low
-        if (timeLeft <= 300) { // Last 5 minutes
-            timerElement.style.color = '#f59e0b';
-        }
-        
-        if (timeLeft <= 60) { // Last minute
-            timerElement.style.color = '#ef4444';
-            timerElement.classList.add('pulse-fast');
-        }
-        
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            showResults();
-        }
-    }, 1000);
-}
-
-// Update the timer display
-function updateTimerDisplay() {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    new QuizApp();
+});
