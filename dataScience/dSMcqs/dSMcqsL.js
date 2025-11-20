@@ -10,14 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
             description: 'Data Science intro test',
             url: '/dSMcqsContent/intro_Mcqs.html'
         }
-        // {
-        //     id: 'test02',
-        //     title: 'Month 2',
-        //     // icon: 'fa-solid fa-code',
-        //     postCount: 50,
-        //     description: 'Programming basics test',
-        //     url: '../adcaCourseTestContent/generation/index.html'
-        // },
+        {
+            id: 'test02',
+            title: 'Month 2',
+            // icon: 'fa-solid fa-code',
+            postCount: 50,
+            description: 'Programming basics test',
+            url: './dSMcqsContent/intro_Mcqs.html'
+        },
         // {
         //     id: 'test1',
         //     // title: 'Welcome Test',
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
