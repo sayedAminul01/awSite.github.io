@@ -6,506 +6,157 @@ let questionBank = [];
 // Embedded fallback copied from test.txt so it also works from file:// or if fetch fails
 const fallbackQuestionBank = [
     {
-        question: "What is the main function of a computer?",
+        question: "What is Data Science?",
         options: [
-            "To store, process, and retrieve data",
-            "To cook food",
-            "To drive a car",
-            "To generate electricity"
+            "A field about painting data",
+            "A study of stars and planets",
+            "A field that extracts insights from data using math, statistics, and programming",
+            "A method to design websites"
         ],
-        correctAnswer: "To store, process, and retrieve data"
+        correctAnswer: "A field that extracts insights from data using math, statistics, and programming"
     },
     {
-        question: "Which of the following is an example of hardware?",
+        question: "Which simple definition best describes Data Science?",
         options: [
-            "Microsoft Word",
-            "Google Chrome",
-            "Keyboard",
-            "Photoshop"
+            "A way to delete unwanted files",
+            "The process of collecting, cleaning, analyzing, and interpreting data to make decisions",
+            "A method to create animations",
+            "A process to format computers"
         ],
-        correctAnswer: "Keyboard"
+        correctAnswer: "The process of collecting, cleaning, analyzing, and interpreting data to make decisions"
     },
     {
-        question: "Which of these is an example of software?",
+        question: "Why is Data Science important today?",
         options: [
-            "Mouse",
-            "Printer",
-            "Windows 11",
-            "Monitor"
+            "Because data does not exist anywhere",
+            "Because companies dislike using data",
+            "Because data is everywhere and helps in making decisions",
+            "Because it replaces mobile apps"
         ],
-        correctAnswer: "Windows 11"
+        correctAnswer: "Because data is everywhere and helps in making decisions"
     },
     {
-        question: "What does CPU stand for?",
+        question: "Which of the following is a key step in Data Science?",
         options: [
-            "Central Processing Unit",
-            "Central Printing Unit",
-            "Central Program Utility",
-            "Central Processing Utility"
+            "Data dancing",
+            "Data singing",
+            "Data Collection",
+            "Data printing"
         ],
-        correctAnswer: "Central Processing Unit"
+        correctAnswer: "Data Collection"
     },
     {
-        question: "Which device is used to store large amounts of data permanently?",
+        question: "What takes up around 80% of a data scientist’s time?",
         options: [
-            "RAM",
-            "Hard Drive",
-            "CPU",
-            "Keyboard"
+            "Data Collection",
+            "Data Cleaning",
+            "Model Deployment",
+            "Preparing presentations"
         ],
-        correctAnswer: "Hard Drive"
+        correctAnswer: "Data Cleaning"
     },
     {
-        question: "What is ChatGPT primarily used for?",
+        question: "What is Data Analysis?",
         options: [
-            "Cooking",
-            "Generating and understanding text",
-            "Designing clothes",
-            "Playing music"
+            "Using statistical methods to find patterns and insights",
+            "Installing apps on a computer",
+            "Deleting corrupted files",
+            "Designing social media posts"
         ],
-        correctAnswer: "Generating and understanding text"
+        correctAnswer: "Using statistical methods to find patterns and insights"
     },
     {
-        question: "Which company created ChatGPT?",
+        question: "What is the purpose of Model Building in Data Science?",
         options: [
-            "Google",
-            "Microsoft",
-            "OpenAI",
-            "Adobe"
+            "To make predictions using machine learning",
+            "To build houses and structures",
+            "To create 3D models",
+            "To decorate websites"
         ],
-        correctAnswer: "OpenAI"
+        correctAnswer: "To make predictions using machine learning"
     },
     {
-        question: "What is 'prompt engineering'?",
+        question: "Where is Data Science used in entertainment?",
         options: [
-            "Designing mechanical prompts",
-            "Writing effective instructions for AI",
-            "Fixing computer errors",
-            "Engineering chat software"
+            "Choosing the color of TV remotes",
+            "Content recommendations on YouTube and Netflix",
+            "Making cartoon characters talk",
+            "Selecting songs randomly"
         ],
-        correctAnswer: "Writing effective instructions for AI"
+        correctAnswer: "Content recommendations on YouTube and Netflix"
     },
     {
-        question: "Which tool is best known for creating presentations and social media designs?",
+        question: "Which of the following is an example of Data Science in finance?",
         options: [
-            "Blogger.com",
-            "Canva",
-            "Leonardo AI",
-            "ChatGPT"
+            "Detecting fraudulent transactions",
+            "Decorating office spaces",
+            "Creating bank logos",
+            "Printing bank passbooks"
         ],
-        correctAnswer: "Canva"
+        correctAnswer: "Detecting fraudulent transactions"
     },
     {
-        question: "What does Canva mainly help users do?",
+        question: "Which device category can be a source of data?",
         options: [
-            "Create images and designs easily",
-            "Code programs",
-            "Host websites",
-            "Play games"
+            "IoT devices",
+            "Chalkboards",
+            "Carpets",
+            "Shoes"
         ],
-        correctAnswer: "Create images and designs easily"
+        correctAnswer: "IoT devices"
     },
     {
-        question: "Leonardo AI is mainly used for:",
+        question: "Why should you care about Data Science?",
         options: [
-            "Generating AI images",
-            "Making spreadsheets",
-            "Sending emails",
-            "Hosting videos"
+            "It is not useful for any industry",
+            "It has high demand, great pay, and future scope",
+            "It only works on old computers",
+            "It is only used for gaming"
         ],
-        correctAnswer: "Generating AI images"
+        correctAnswer: "It has high demand, great pay, and future scope"
     },
     {
-        question: "Which of the following is an AI image generator?",
+        question: "Which of the following industries uses Data Science?",
         options: [
-            "Canva",
-            "Leonardo AI",
-            "Blogger",
-            "Excel"
+            "Healthcare",
+            "Toy-making only",
+            "Oil painting",
+            "Only education"
         ],
-        correctAnswer: "Leonardo AI"
+        correctAnswer: "Healthcare"
     },
     {
-        question: "What is a 'reel' on social media?",
+        question: "What is the role of Interpretation & Communication in Data Science?",
         options: [
-            "A short video clip",
-            "A podcast episode",
-            "A blog post",
-            "An audio file"
+            "To confuse people",
+            "To present findings clearly for decision-making",
+            "To translate languages",
+            "To write novels"
         ],
-        correctAnswer: "A short video clip"
+        correctAnswer: "To present findings clearly for decision-making"
     },
     {
-        question: "Which platform is most popular for creating and posting reels?",
+        question: "What is an example of Data Science in e-commerce?",
         options: [
-            "Facebook",
-            "Instagram",
-            "Blogger.com",
-            "LinkedIn"
+            "Writing product reviews manually",
+            "Personalized product recommendations",
+            "Delivering products door-to-door",
+            "Printing shipping labels"
         ],
-        correctAnswer: "Instagram"
+        correctAnswer: "Personalized product recommendations"
     },
     {
-        question: "Blogger.com is owned by which company?",
+        question: "What is the average salary of a data scientist in India for experienced professionals?",
         options: [
-            "Meta",
-            "Google",
-            "Microsoft",
-            "Amazon"
+            "₹1-2 LPA",
+            "₹3-5 LPA",
+            "₹10-30 LPA",
+            "₹1 crore"
         ],
-        correctAnswer: "Google"
-    },
-    {
-        question: "What is the main use of Blogger.com?",
-        options: [
-            "To create and publish blogs",
-            "To make presentations",
-            "To edit videos",
-            "To generate AI images"
-        ],
-        correctAnswer: "To create and publish blogs"
-    },
-    {
-        question: "Which of the following can help in making passive income?",
-        options: [
-            "Blogging",
-            "YouTube channel",
-            "Affiliate marketing",
-            "All of the above"
-        ],
-        correctAnswer: "All of the above"
-    },
-    {
-        question: "What is passive income?",
-        options: [
-            "Money earned with little ongoing effort",
-            "Money from a full-time job",
-            "Salary from office work",
-            "Loan repayment"
-        ],
-        correctAnswer: "Money earned with little ongoing effort"
-    },
-    {
-        question: "What is the meaning of 'online presence'?",
-        options: [
-            "Being online 24/7",
-            "How people can find you or your brand online",
-            "Having a big internet bill",
-            "Owning a computer"
-        ],
-        correctAnswer: "How people can find you or your brand online"
-    },
-    {
-        question: "Which is the first step to building an online presence?",
-        options: [
-            "Buying ads",
-            "Creating a website or social media profile",
-            "Making reels",
-            "Hiring a marketing agency"
-        ],
-        correctAnswer: "Creating a website or social media profile"
-    },
-    {
-        question: "Which is an example of hardware?",
-        options: [
-            "Monitor",
-            "PowerPoint",
-            "Google Docs",
-            "MS Word"
-        ],
-        correctAnswer: "Monitor"
-    },
-    {
-        question: "What does RAM stand for?",
-        options: [
-            "Random Access Memory",
-            "Read Access Memory",
-            "Ready Access Machine",
-            "Rapid Action Module"
-        ],
-        correctAnswer: "Random Access Memory"
-    },
-    {
-        question: "Which type of memory is temporary and clears when the computer is turned off?",
-        options: [
-            "Hard Disk",
-            "RAM",
-            "SSD",
-            "ROM"
-        ],
-        correctAnswer: "RAM"
-    },
-    {
-        question: "Which device outputs sound from a computer?",
-        options: [
-            "Keyboard",
-            "Speakers",
-            "Mouse",
-            "Monitor"
-        ],
-        correctAnswer: "Speakers"
-    },
-    {
-        question: "Which of the following is an example of an input device?",
-        options: [
-            "Printer",
-            "Scanner",
-            "Monitor",
-            "Speaker"
-        ],
-        correctAnswer: "Scanner"
-    },
-    {
-        question: "Which AI tool is best for answering questions and generating content?",
-        options: [
-            "Leonardo AI",
-            "Canva",
-            "ChatGPT",
-            "Blogger"
-        ],
-        correctAnswer: "ChatGPT"
-    },
-    {
-        question: "Which AI tool is best for creating social media post templates?",
-        options: [
-            "Leonardo AI",
-            "ChatGPT",
-            "Canva",
-            "Excel"
-        ],
-        correctAnswer: "Canva"
-    },
-    {
-        question: "Which is NOT a blogging platform?",
-        options: [
-            "Blogger.com",
-            "WordPress",
-            "Instagram",
-            "Medium"
-        ],
-        correctAnswer: "Instagram"
-    },
-    {
-        question: "What should you focus on when creating prompts for AI?",
-        options: [
-            "Using complex words",
-            "Clarity and detail",
-            "Writing short and unclear text",
-            "Adding random instructions"
-        ],
-        correctAnswer: "Clarity and detail"
-    },
-    {
-        question: "What is an example of an online passive income source?",
-        options: [
-            "Creating and selling an online course",
-            "Doing a part-time job",
-            "Running errands",
-            "Driving a taxi"
-        ],
-        correctAnswer: "Creating and selling an online course"
-    },
-    {
-        question: "Which of these can help your blog reach more people?",
-        options: [
-            "SEO",
-            "Ignoring keywords",
-            "Posting randomly",
-            "Avoiding images"
-        ],
-        correctAnswer: "SEO"
-    },
-    {
-        question: "What is the main purpose of SEO?",
-        options: [
-            "To decorate a website",
-            "To make a website faster",
-            "To create videos",
-            "To improve website ranking on search engines"
-        ],
-        correctAnswer: "To improve website ranking on search engines"
-    },
-    {
-        question: "Which is the best format for reels on Instagram?",
-        options: [
-            "Horizontal",
-            "Vertical",
-            "Square",
-            "Panorama"
-        ],
-        correctAnswer: "Vertical"
-    },
-    {
-        question: "Which of these is a benefit of using Canva?",
-        options: [
-            "Free design templates",
-            "AI image creation",
-            "Easy drag-and-drop interface",
-            "All of the above"
-        ],
-        correctAnswer: "All of the above"
-    },
-    {
-        question: "Which tool allows AI-powered image creation?",
-        options: [
-            "ChatGPT",
-            "Blogger.com",
-            "Leonardo AI",
-            "MS Word"
-        ],
-        correctAnswer: "Leonardo AI"
-    },
-    {
-        question: "What is the benefit of a blog?",
-        options: [
-            "Sharing your knowledge online",
-            "Building an audience",
-            "Making passive income",
-            "All of the above"
-        ],
-        correctAnswer: "All of the above"
-    },
-    {
-        question: "Which of the following is a social media platform?",
-        options: [
-            "Google Docs",
-            "MS Excel",
-            "Instagram",
-            "Notepad"
-        ],
-        correctAnswer: "Instagram"
-    },
-    {
-        question: "What is the primary benefit of having an online presence?",
-        options: [
-            "Working offline",
-            "Hiding from customers",
-            "Reaching more people",
-            "Spending more on ads"
-        ],
-        correctAnswer: "Reaching more people"
-    },
-    {
-        question: "Which of the following is an example of cloud storage?",
-        options: [
-            "Google Drive",
-            "RAM",
-            "SSD",
-            "Hard Disk"
-        ],
-        correctAnswer: "Google Drive"
-    },
-    {
-        question: "Which tool is used to publish your own articles online?",
-        options: [
-            "Blogger.com",
-            "Canva",
-            "Leonardo AI",
-            "Instagram"
-        ],
-        correctAnswer: "Blogger.com"
-    },
-    {
-        question: "What is the benefit of using AI tools like ChatGPT?",
-        options: [
-            "Faster content creation",
-            "Automated answers",
-            "Idea generation",
-            "All of the above"
-        ],
-        correctAnswer: "All of the above"
-    },
-    {
-        question: "Which device connects your computer to the internet?",
-        options: [
-            "Router",
-            "Printer",
-            "Mouse",
-            "Speaker"
-        ],
-        correctAnswer: "Router"
-    },
-    {
-        question: "Which of the following is NOT an input device?",
-        options: [
-            "Keyboard",
-            "Mouse",
-            "Monitor",
-            "Microphone"
-        ],
-        correctAnswer: "Monitor"
-    },
-    {
-        question: "Which of these is necessary for making reels?",
-        options: [
-            "Camera or smartphone",
-            "Cooking stove",
-            "Printer",
-            "Scanner"
-        ],
-        correctAnswer: "Camera or smartphone"
-    },
-    {
-        question: "What does URL stand for?",
-        options: [
-            "Uniform Resource Locator",
-            "Universal Resource Link",
-            "Uniform Remote Link",
-            "Universal Record Locator"
-        ],
-        correctAnswer: "Uniform Resource Locator"
-    },
-    {
-        question: "Which is a free blogging platform?",
-        options: [
-            "Blogger.com",
-            "Netflix",
-            "Amazon",
-            "Instagram"
-        ],
-        correctAnswer: "Blogger.com"
-    },
-    {
-        question: "Which is an example of active income?",
-        options: [
-            "Salary from a job",
-            "Earnings from a blog",
-            "Affiliate commissions",
-            "YouTube ad revenue"
-        ],
-        correctAnswer: "Salary from a job"
-    },
-    {
-        question: "Which type of storage is faster?",
-        options: [
-            "SSD",
-            "HDD",
-            "CD-ROM",
-            "Floppy disk"
-        ],
-        correctAnswer: "SSD"
-    },
-    {
-        question: "Which is an important skill for online growth?",
-        options: [
-            "Consistency",
-            "Random posting",
-            "Ignoring analytics",
-            "Avoiding engagement"
-        ],
-        correctAnswer: "Consistency"
-    },
-    {
-        question: "Which of these is the correct order of steps to publish a blog post on Blogger.com?",
-        options: [
-            "Write post → Add images → Publish",
-            "Publish → Write post → Add images",
-            "Add images → Write post → Publish",
-            "Publish → Add images → Write post"
-        ],
-        correctAnswer: "Write post → Add images → Publish"
+        correctAnswer: "₹10-30 LPA"
     }
 ];
+
 
 class QuizApp {
     constructor() {
