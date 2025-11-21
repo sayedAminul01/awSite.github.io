@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Science</title>
+    <title>Tech Blog</title>
     <style>
         * {
             margin: 0;
@@ -301,77 +301,92 @@
             {
                 title: "Introduction to Machine Learning Algorithms",
                 readTime: 8,
-                topic: "ML"
+                topic: "ML",
+                link: "posts/ml-intro.html"
             },
             {
                 title: "Data Cleaning and Preprocessing Best Practices",
                 readTime: 10,
-                topic: "Data Engineering"
+                topic: "Data Engineering",
+                link: "posts/data-cleaning.html"
             },
             {
                 title: "Exploratory Data Analysis with Python",
                 readTime: 7,
-                topic: "EDA"
+                topic: "EDA",
+                link: "posts/eda.html"
             },
             {
                 title: "Deep Learning Fundamentals",
                 readTime: 12,
-                topic: "Deep Learning"
+                topic: "Deep Learning",
+                link: "posts/deep-learning.html"
             },
             {
                 title: "Statistical Methods for Data Scientists",
                 readTime: 9,
-                topic: "Statistics"
+                topic: "Statistics",
+                link: "posts/statistics.html"
             },
             {
                 title: "Feature Engineering Techniques",
                 readTime: 11,
-                topic: "ML"
+                topic: "ML",
+                link: "posts/feature-engineering.html"
             },
             {
                 title: "Time Series Analysis and Forecasting",
                 readTime: 13,
-                topic: "Time Series"
+                topic: "Time Series",
+                link: "posts/time-series.html"
             },
             {
                 title: "Natural Language Processing Guide",
                 readTime: 14,
-                topic: "NLP"
+                topic: "NLP",
+                link: "posts/nlp.html"
             },
             {
                 title: "Classification Models Performance Metrics",
                 readTime: 8,
-                topic: "Metrics"
+                topic: "Metrics",
+                link: "posts/metrics.html"
             },
             {
                 title: "Clustering Algorithms Explained",
                 readTime: 10,
-                topic: "ML"
+                topic: "ML",
+                link: "posts/clustering.html"
             },
             {
                 title: "Building Recommender Systems",
                 readTime: 11,
-                topic: "Recommendation"
+                topic: "Recommendation",
+                link: "posts/recommender.html"
             },
             {
                 title: "Big Data Processing with Spark",
                 readTime: 15,
-                topic: "Big Data"
+                topic: "Big Data",
+                link: "posts/big-data.html"
             },
             {
                 title: "Neural Networks Architecture Design",
                 readTime: 12,
-                topic: "Deep Learning"
+                topic: "Deep Learning",
+                link: "posts/neural-networks.html"
             },
             {
                 title: "Dimensionality Reduction Techniques",
                 readTime: 9,
-                topic: "ML"
+                topic: "ML",
+                link: "posts/dimensionality.html"
             },
             {
                 title: "Data Visualization with Python Libraries",
                 readTime: 8,
-                topic: "Visualization"
+                topic: "Visualization",
+                link: "posts/visualization.html"
             }
         ];
 
@@ -396,7 +411,8 @@
                     id: i + 1,
                     title: `${template.title} ${i > 0 ? '- Part ' + Math.ceil((i + 1) / 15) : ''}`,
                     readTime: template.readTime,
-                    topic: template.topic
+                    topic: template.topic,
+                    link: template.link
                 });
             }
             filteredPosts = [...allPosts];
@@ -459,7 +475,13 @@
         }
 
         function handleReadClick(title) {
-            alert(`Opening: "${title}"\n\nIn a real application, this would navigate to the full article.`);
+            // Find the post in allPosts to get its link
+            const post = allPosts.find(p => p.title === title);
+            if (post && post.link) {
+                window.open(post.link, '_blank');
+            } else {
+                alert('External post link not configured yet.\n\nTo link this post:\n1. Create an HTML file for this post\n2. Add the "link" property to the blog post object');
+            }
         }
 
         // Infinite scroll observer
