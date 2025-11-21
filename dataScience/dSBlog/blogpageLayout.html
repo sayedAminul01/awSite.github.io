@@ -478,7 +478,7 @@
             // Find the post in allPosts to get its link
             const post = allPosts.find(p => p.title === title);
             if (post && post.link) {
-                window.open(post.link, '_blank');
+                window.location.href = post.link;
             } else {
                 alert('External post link not configured yet.\n\nTo link this post:\n1. Create an HTML file for this post\n2. Add the "link" property to the blog post object');
             }
@@ -530,6 +530,7 @@
     </script>
 </body>
 </html>
+
 
 
 
