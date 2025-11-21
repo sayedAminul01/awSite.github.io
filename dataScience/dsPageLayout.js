@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-code',
             postCount: 50,
             description: 'This is data Science blog post sections',
-            // url: '../adcaCourseTestContent/Troubleshooting/index.html'
+            url: '../dSBlog/blogpageLayout.html'
         },
         {
             id: 'test3',
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
