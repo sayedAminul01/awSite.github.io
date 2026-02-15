@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Reasoning Test',
             icon: 'fa-solid fa-brain',
             description: 'Logical and analytical reasoning questions',
-            url: 'https://computer.alienweb.in/adca_test/adcaLayoutPage.html'  // Update with actual links
+            url: './reasoningTest/maths.html'  // Update with actual links
         },
         {
             id: 'mathematics',
@@ -178,4 +178,5 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Interview test clicked:', card.dataset.category);
         }
     });
+
 });
