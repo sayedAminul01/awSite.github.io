@@ -109,11 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
         },
                 {
             id: 'node',
-            title: 'Learn Python',
+            title: 'Interview Preparation MCQs',
             icon: 'fa-brands fa-python',
             postCount: 1,
             description: 'Backend development',
-            // url: './learningZone/layout.html'
+            url: './interviewPreparation/index.html'
         },
            {
             id: 'node',
@@ -207,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
