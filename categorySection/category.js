@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const categories = [
         {
             id: 'node',
-            title: 'High School',
+            title: 'Biology HS 1st ',
             icon: 'fa-solid fa-brain',
             postCount: 50,
             description: 'Backend development',
@@ -215,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
