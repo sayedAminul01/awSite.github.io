@@ -1,0 +1,103 @@
+/* maths.css – custom styles + dark mode overrides */
+
+body {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light mode (default) */
+body.light {
+    background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+/* Dark mode */
+body.dark {
+    background: #1a202c;
+    color: #e2e8f0;
+}
+
+/* Card background handled by Tailwind classes, but we define some extras */
+.dark .bg-white {
+    background-color: #2d3748 !important;
+}
+
+.timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2d3748;
+}
+.dark .timer {
+    color: #f7fafc;
+    background-color: #4a5568;
+}
+
+.option {
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid #cbd5e0;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: white;
+    color: #1a202c;
+}
+.dark .option {
+    background-color: #4a5568;
+    border-color: #718096;
+    color: #f7fafc;
+}
+.option:hover {
+    background-color: #edf2f7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.dark .option:hover {
+    background-color: #2d3748;
+}
+.option.correct-highlight {
+    background-color: #48bb78 !important;
+    color: white;
+    border-color: #2f855a;
+}
+.option.wrong-highlight {
+    background-color: #f56565 !important;
+    color: white;
+    border-color: #c53030;
+}
+
+/* Disable clicks during feedback */
+.option.disabled {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Progress bar */
+.progress-bar {
+    transition: width 0.4s ease;
+}
+
+/* Title styles */
+.title1 {
+    font-family: 'Segoe UI', cursive, sans-serif;
+    font-weight: 600;
+    color: #2f855a;
+}
+.dark .title1 {
+    color: #9ae6b4;
+}
+
+.title2 {
+    color: #6a7588;
+    font-family: monospace;
+}
+.dark .title2 {
+    color: #cbd5e0;
+}
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+    .timer {
+        font-size: 1.25rem;
+    }
+    .title1 {
+        font-size: 1.5rem;
+    }
+}
