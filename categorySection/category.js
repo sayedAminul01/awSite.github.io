@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'node',
             title: 'Biology HS 1st ',
             icon: 'fa-solid fa-brain',
-            postCount: 50,
+            postCount: 01,
             description: 'Backend development',
             url: './promptEngineering/postsAppearPage.html'
         },
@@ -215,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
