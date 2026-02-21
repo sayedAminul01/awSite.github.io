@@ -5,7 +5,7 @@
     --text-primary: #ffffff;
     --text-secondary: #b3b3b3;
     --accent-color: #e95420;
-    --card-bg: #2d2d2d;
+    --card-bg: #0b3034c9;
     --hover-bg: #363636;
     --border-color: #404040;
     --spacing: 1rem;
@@ -319,3 +319,4 @@ h2::after {
     color: #636e72; /* Gray for Hosting Tools */
 }
 /* CSS for Category tools end */
+
