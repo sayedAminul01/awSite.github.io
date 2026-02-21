@@ -12,6 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 'node',
+            title: 'AI Prompt Engineering',
+            icon: 'fa-solid fa-brain',
+            postCount: 50,
+            description: 'Backend development',
+            url: './promptEngineering/postsAppearPage.html'
+        },
+        {
+            id: 'node',
             title: 'Ai Tools Directory',
             icon: 'fa-solid fa-robot',
             postCount: 1,
@@ -207,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
