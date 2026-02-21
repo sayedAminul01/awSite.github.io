@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-brain',
             postCount: 01,
             description: 'Backend development',
-            url: './promptEngineering/postsAppearPage.html'
+            url: './hs_1st_Bio/hs1stBioLayout.html'
         },
         {
             id: 'node',
@@ -215,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 
 
