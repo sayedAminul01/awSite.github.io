@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚔️ Verb Battle Arena</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<style>
+:root {
+  --neon-blue: #00d4ff;
+  --neon-purple: #bf5fff;
+  --neon-green: #39ff14;
+  --neon-orange: #ff6b35;
+  --neon-pink: #ff2d87;
+  --neon-yellow: #ffe600;
+  --bg-dark: #0a0a1a;
+  --bg-card: #111128;
+  --bg-card2: #1a1a35;
+  --text-light: #e8e8ff;
+  --text-muted: #8888aa;
+  --gold: #ffd700;
+  --danger: #ff4444;
+  --success: #44ff88;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(0,212,255,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(191,95,255,0.05) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ===== SCREENS ===== */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; align-items: center; }
+
+/* ===== HOME SCREEN ===== */
+#homeScreen {
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+.arena-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(3rem, 10vw, 6rem);
+  letter-spacing: 4px;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 0 20px rgba(0,212,255,0.5));
+  animation: titlePulse 3s ease-in-out infinite;
+  margin-bottom: 8px;
+}
+@keyframes titlePulse {
+  0%,100% { filter: drop-shadow(0 0 20px rgba(0,212,255,0.5)); }
+  50% { filter: drop-shadow(0 0 40px rgba(191,95,255,0.8)); }
+}
+.arena-subtitle {
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  color: var(--neon-yellow);
+  font-weight: 800;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+}
+.home-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 20px;
+}
+.section-title {
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  color: var(--neon-blue);
+  margin-bottom: 16px;
+  text-align: left;
+}
+.mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.mode-btn {
+  background: var(--bg-card2);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 14px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s;
+  font-family: 'Nunito', sans-serif;
+  color: var(--text-light);
+}
+.mode-btn:hover, .mode-btn.selected {
+  transform: translateY(-3px);
+}
+.mode-btn.selected[data-mode="normal"] { border-color: var(--neon-green); background: rgba(57,255,20,0.1); }
+.mode-btn.selected[data-mode="challenge"] { border-color: var(--neon-orange); background: rgba(255,107,53,0.1); }
+.mode-btn.selected[data-mode="speed"] { border-color: var(--neon-pink); background: rgba(255,45,135,0.1); }
+.mode-icon { font-size: 1.8rem; display: block; margin-bottom: 4px; }
+.mode-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; }
+.mode-desc { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; }
+
+.diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.diff-btn {
+  background: var(--bg-card2);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 12px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s;
+  font-family: 'Nunito', sans-serif;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.diff-btn:hover { transform: translateY(-2px); }
+.diff-btn.selected[data-diff="easy"] { border-color: var(--neon-green); background: rgba(57,255,20,0.1); color: var(--neon-green); }
+.diff-btn.selected[data-diff="medium"] { border-color: var(--neon-yellow); background: rgba(255,230,0,0.1); color: var(--neon-yellow); }
+.diff-btn.selected[data-diff="hard"] { border-color: var(--neon-pink); background: rgba(255,45,135,0.1); color: var(--neon-pink); }
+
+.start-btn {
+  width: 100%;
+  max-width: 520px;
+  padding: 18px;
+  font-family: 'Bangers', cursive;
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+  color: white;
+  transition: all 0.3s;
+  box-shadow: 0 0 30px rgba(0,212,255,0.3);
+  animation: startGlow 2s ease-in-out infinite;
+}
+@keyframes startGlow {
+  0%,100% { box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+  50% { box-shadow: 0 0 40px rgba(191,95,255,0.6); }
+}
+.start-btn:hover { transform: scale(1.03); }
+
+/* ===== GAME SCREEN ===== */
+#gameScreen { padding: 0; }
+.game-header {
+  width: 100%;
+  background: rgba(10,10,26,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0,212,255,0.2);
+  padding: 10px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 700px;
+  margin: 0 auto;
+  gap: 8px;
+}
+.hearts-display { display: flex; gap: 4px; font-size: 1.3rem; }
+.stat-pill {
+  background: var(--bg-card2);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.stat-pill.xp { color: var(--neon-yellow); border-color: rgba(255,230,0,0.3); }
+.stat-pill.score { color: var(--neon-green); border-color: rgba(57,255,20,0.3); }
+.stat-pill.streak { color: var(--neon-orange); border-color: rgba(255,107,53,0.3); }
+.stat-pill.level { color: var(--neon-blue); border-color: rgba(0,212,255,0.3); }
+.progress-container { margin-top: 8px; max-width: 700px; margin-left: auto; margin-right: auto; }
+.progress-bar-bg {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  height: 6px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px var(--neon-blue);
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.game-area {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px 16px 100px;
+  flex: 1;
+}
+
+/* Timer */
+.timer-ring-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.timer-ring {
+  position: relative;
+  width: 70px;
+  height: 70px;
+}
+.timer-ring svg { transform: rotate(-90deg); }
+.timer-ring circle {
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.1s linear, stroke 0.3s;
+}
+.timer-ring .bg-circle { stroke: rgba(255,255,255,0.1); }
+.timer-ring .fg-circle { stroke: var(--neon-blue); }
+.timer-count {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  color: var(--neon-blue);
+}
+
+/* Question card */
+.question-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.question-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+}
+.round-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.3);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--neon-blue);
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+.boss-badge {
+  background: rgba(255,107,53,0.15);
+  border-color: var(--neon-orange);
+  color: var(--neon-orange);
+  font-size: 0.9rem;
+}
+.verb-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  margin-bottom: 8px;
+}
+.verb-table th {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  font-weight: 700;
+}
+.verb-cell {
+  background: var(--bg-card2);
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  font-weight: 800;
+  text-align: center;
+  color: var(--text-light);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.verb-cell.present { color: var(--neon-blue); border-color: rgba(0,212,255,0.2); }
+.verb-cell.past { color: var(--neon-purple); border-color: rgba(191,95,255,0.2); }
+.verb-cell.participle { color: var(--neon-pink); border-color: rgba(255,45,135,0.2); }
+.verb-cell.hidden-cell {
+  background: rgba(0,212,255,0.05);
+  border: 2px dashed rgba(0,212,255,0.4);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.boss-sentence {
+  font-size: clamp(1rem, 4vw, 1.3rem);
+  font-weight: 700;
+  color: var(--neon-yellow);
+  background: rgba(255,107,53,0.1);
+  border: 1px solid rgba(255,107,53,0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.boss-instruction {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.answer-input-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.answer-input {
+  flex: 1;
+  background: var(--bg-card2);
+  border: 2px solid rgba(0,212,255,0.3);
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  font-weight: 700;
+  color: var(--text-light);
+  outline: none;
+  transition: all 0.3s;
+  caret-color: var(--neon-blue);
+}
+.answer-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0,212,255,0.2); }
+.answer-input.correct { border-color: var(--neon-green); background: rgba(57,255,20,0.05); animation: correctFlash 0.5s; }
+.answer-input.wrong { border-color: var(--danger); background: rgba(255,68,68,0.05); animation: wrongShake 0.5s; }
+@keyframes correctFlash {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); background: rgba(57,255,20,0.15); }
+  100% { transform: scale(1); }
+}
+@keyframes wrongShake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-8px); }
+  80% { transform: translateX(8px); }
+}
+.submit-btn {
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+  border: none;
+  border-radius: 14px;
+  padding: 14px 22px;
+  font-family: 'Bangers', cursive;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+.submit-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0,212,255,0.4); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.feedback-banner {
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 800;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 12px;
+  display: none;
+}
+.feedback-banner.correct { background: rgba(57,255,20,0.15); border: 1px solid var(--neon-green); color: var(--neon-green); display: block; }
+.feedback-banner.wrong { background: rgba(255,68,68,0.15); border: 1px solid var(--danger); color: var(--danger); display: block; }
+
+/* Floating XP notification */
+.xp-popup {
+  position: fixed;
+  pointer-events: none;
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  color: var(--neon-yellow);
+  text-shadow: 0 0 10px rgba(255,230,0,0.6);
+  z-index: 9999;
+  animation: xpFloat 1.5s forwards;
+  letter-spacing: 2px;
+}
+@keyframes xpFloat {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-80px) scale(1.4); }
+}
+
+/* Boss round overlay */
+.boss-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+.boss-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(3rem, 12vw, 6rem);
+  color: var(--neon-orange);
+  letter-spacing: 4px;
+  animation: bossAppear 0.5s ease-out;
+  filter: drop-shadow(0 0 30px var(--neon-orange));
+}
+@keyframes bossAppear {
+  from { transform: scale(0) rotate(-20deg); opacity: 0; }
+  to { transform: scale(1) rotate(0); opacity: 1; }
+}
+.boss-desc { font-size: 1.1rem; color: var(--text-muted); max-width: 400px; margin: 10px auto 24px; }
+.boss-continue-btn {
+  background: linear-gradient(135deg, var(--neon-orange), var(--neon-pink));
+  border: none;
+  border-radius: 14px;
+  padding: 14px 40px;
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  letter-spacing: 3px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.boss-continue-btn:hover { transform: scale(1.05); }
+
+/* Streak notification */
+.streak-toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  background: linear-gradient(135deg, var(--neon-orange), var(--neon-yellow));
+  color: #000;
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  padding: 12px 28px;
+  border-radius: 30px;
+  box-shadow: 0 0 30px rgba(255,107,53,0.6);
+  animation: toastIn 0.4s ease-out, toastOut 0.4s ease-in 2.2s forwards;
+  pointer-events: none;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(0.8); } to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); } }
+@keyframes toastOut { to { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(0.8); } }
+
+/* ===== RESULT SCREEN ===== */
+#resultScreen { padding: 20px; justify-content: flex-start; }
+.result-wrap { width: 100%; max-width: 600px; margin: 0 auto; padding-top: 20px; }
+.result-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  text-align: center;
+  background: linear-gradient(135deg, var(--neon-yellow), var(--neon-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+.result-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+.stat-card .num {
+  font-family: 'Bangers', cursive;
+  font-size: 2.2rem;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.stat-card .lbl { font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+.badges-section { margin-bottom: 20px; }
+.badge-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid;
+}
+.badge-pill.earned { background: rgba(255,230,0,0.1); border-color: var(--gold); color: var(--gold); }
+.badge-pill.unearned { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); color: var(--text-muted); opacity: 0.5; }
+.name-section {
+  background: var(--bg-card);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.name-input {
+  width: 100%;
+  background: var(--bg-card2);
+  border: 2px solid rgba(0,212,255,0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  color: var(--text-light);
+  outline: none;
+  margin-top: 8px;
+}
+.name-input:focus { border-color: var(--neon-blue); }
+.action-btns { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.action-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Bangers', cursive;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.action-btn.pdf { background: linear-gradient(135deg, var(--neon-orange), var(--neon-pink)); color: white; }
+.action-btn.again { background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)); color: white; }
+.action-btn:hover { transform: scale(1.03); }
+.leaderboard-section {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,230,0,0.2);
+  border-radius: 16px;
+  padding: 20px;
+}
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-rank {
+  font-family: 'Bangers', cursive;
+  font-size: 1.2rem;
+  width: 28px;
+  text-align: center;
+}
+.lb-rank.gold { color: var(--gold); }
+.lb-rank.silver { color: #C0C0C0; }
+.lb-rank.bronze { color: #CD7F32; }
+.lb-rank.other { color: var(--text-muted); }
+.lb-name { flex: 1; font-weight: 700; }
+.lb-xp { color: var(--neon-yellow); font-weight: 800; font-size: 0.9rem; }
+.lb-score { color: var(--neon-green); font-weight: 800; font-size: 0.9rem; margin-left: 8px; }
+
+/* Strong/Weak verbs */
+.verb-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.verb-list-card { background: var(--bg-card); border-radius: 16px; padding: 16px; }
+.verb-list-card.strong { border: 1px solid rgba(57,255,20,0.3); }
+.verb-list-card.weak { border: 1px solid rgba(255,68,68,0.3); }
+.verb-list-title { font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+.verb-list-title.strong { color: var(--neon-green); }
+.verb-list-title.weak { color: var(--danger); }
+.verb-tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin: 3px; }
+.verb-tag.strong { background: rgba(57,255,20,0.1); color: var(--neon-green); }
+.verb-tag.weak { background: rgba(255,68,68,0.1); color: var(--danger); }
+
+/* Level up overlay */
+.levelup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 400;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+}
+.levelup-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  background: linear-gradient(135deg, var(--neon-yellow), var(--neon-orange));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  letter-spacing: 4px;
+  animation: levelBounce 0.6s ease-out;
+}
+@keyframes levelBounce {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.levelup-name { font-size: 1.4rem; color: var(--text-light); margin: 8px 0 24px; }
+
+/* Game over overlay */
+.gameover-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 400;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 20px;
+}
+.gameover-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(3rem, 10vw, 5rem);
+  color: var(--danger);
+  letter-spacing: 4px;
+  filter: drop-shadow(0 0 20px var(--danger));
+}
+.gameover-score { font-size: 1.2rem; color: var(--text-muted); margin: 12px 0 24px; }
+.gameover-btn {
+  background: linear-gradient(135deg, var(--danger), #ff8888);
+  border: none; border-radius: 14px;
+  padding: 14px 40px;
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem; letter-spacing: 3px;
+  color: white; cursor: pointer; transition: all 0.3s;
+}
+.gameover-btn:hover { transform: scale(1.05); }
+
+/* Miscellaneous */
+.hidden { display: none !important; }
+.glow-blue { color: var(--neon-blue); }
+.glow-green { color: var(--neon-green); }
+.glow-orange { color: var(--neon-orange); }
+
+/* Sound toggle */
+.sound-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 200;
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+.sound-toggle:hover { border-color: var(--neon-blue); }
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .verb-lists { grid-template-columns: 1fr; }
+  .header-row { flex-wrap: wrap; }
+  .verb-table th { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="sound-toggle" id="soundToggle" title="Toggle sound">🔊</div>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen" class="screen active">
+  <div class="arena-title">⚔️ VERB BATTLE ARENA</div>
+  <div class="arena-subtitle">MASTER IRREGULAR VERBS • CLASS 7</div>
+
+  <div class="home-card">
+    <div class="section-title">🎮 GAME MODE</div>
+    <div class="mode-grid">
+      <div class="mode-btn selected" data-mode="normal" onclick="selectMode(this)">
+        <span class="mode-icon">🛡️</span>
+        <div class="mode-label">NORMAL</div>
+        <div class="mode-desc">No timer</div>
+      </div>
+      <div class="mode-btn" data-mode="challenge" onclick="selectMode(this)">
+        <span class="mode-icon">⚡</span>
+        <div class="mode-label">CHALLENGE</div>
+        <div class="mode-desc">10 sec timer</div>
+      </div>
+      <div class="mode-btn" data-mode="speed" onclick="selectMode(this)">
+        <span class="mode-icon">🔥</span>
+        <div class="mode-label">SPEED</div>
+        <div class="mode-desc">5 sec timer</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="home-card">
+    <div class="section-title">⚔️ DIFFICULTY</div>
+    <div class="diff-grid">
+      <div class="diff-btn selected" data-diff="easy" onclick="selectDiff(this)">🌱 EASY</div>
+      <div class="diff-btn" data-diff="medium" onclick="selectDiff(this)">⚔️ MEDIUM</div>
+      <div class="diff-btn" data-diff="hard" onclick="selectDiff(this)">💀 HARD</div>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startGame()">⚔️ ENTER THE ARENA ⚔️</button>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="gameScreen" class="screen">
+  <div class="game-header">
+    <div class="header-row">
+      <div class="hearts-display" id="heartsDisplay"></div>
+      <div class="stat-pill xp">⚡ <span id="xpDisplay">0</span> XP</div>
+      <div class="stat-pill score">🏆 <span id="scoreDisplay">0</span></div>
+      <div class="stat-pill streak">🔥 <span id="streakDisplay">0</span></div>
+      <div class="stat-pill level" id="levelPill">LVL 1</div>
+    </div>
+    <div class="progress-container">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+      <div class="progress-label">
+        <span id="progressLabel">Question 0 / 50</span>
+        <span id="modeLabel"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-area">
+    <div class="timer-ring-wrap hidden" id="timerWrap">
+      <div class="timer-ring">
+        <svg width="70" height="70" viewBox="0 0 70 70">
+          <circle class="bg-circle" cx="35" cy="35" r="30" stroke-dasharray="188.5" stroke-dashoffset="0"/>
+          <circle class="fg-circle" id="timerCircle" cx="35" cy="35" r="30" stroke-dasharray="188.5" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-count" id="timerCount">10</div>
+      </div>
+    </div>
+
+    <div class="question-card" id="questionCard">
+      <div id="roundBadge" class="round-badge">ROUND 1</div>
+
+      <!-- Normal question -->
+      <div id="normalQuestion">
+        <table class="verb-table">
+          <thead>
+            <tr>
+              <th>PRESENT</th>
+              <th>PAST SIMPLE</th>
+              <th>PAST PARTICIPLE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="verb-cell present" id="cellPresent">—</div></td>
+              <td><div class="verb-cell past" id="cellPast">—</div></td>
+              <td><div class="verb-cell participle" id="cellParticiple">—</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Boss question -->
+      <div id="bossQuestion" class="hidden">
+        <div class="boss-sentence" id="bossSentence"></div>
+        <div class="boss-instruction">✏️ Type the corrected sentence below:</div>
+      </div>
+
+      <div class="answer-input-wrap">
+        <input type="text" class="answer-input" id="answerInput" placeholder="Type your answer..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+        <button class="submit-btn" id="submitBtn" onclick="submitAnswer()">GO!</button>
+      </div>
+      <div class="feedback-banner" id="feedbackBanner"></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="screen">
+  <div class="result-wrap">
+    <div class="result-title">🏆 BATTLE COMPLETE!</div>
+    <div class="result-subtitle">Here's your performance report</div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num" id="r_correct" style="color:var(--neon-green)">0</div><div class="lbl">✅ Correct</div></div>
+      <div class="stat-card"><div class="num" id="r_wrong" style="color:var(--danger)">0</div><div class="lbl">❌ Wrong</div></div>
+      <div class="stat-card"><div class="num" id="r_score" style="color:var(--neon-yellow)">0</div><div class="lbl">🏆 Score</div></div>
+      <div class="stat-card"><div class="num" id="r_xp" style="color:var(--neon-blue)">0</div><div class="lbl">⚡ XP</div></div>
+      <div class="stat-card" style="grid-column:1/-1"><div class="num" id="r_pct" style="color:var(--neon-purple)">0%</div><div class="lbl">📊 Accuracy</div></div>
+    </div>
+
+    <div class="verb-lists">
+      <div class="verb-list-card strong">
+        <div class="verb-list-title strong">💪 STRONG VERBS</div>
+        <div id="strongVerbs"></div>
+      </div>
+      <div class="verb-list-card weak">
+        <div class="verb-list-title weak">🔴 WEAK VERBS</div>
+        <div id="weakVerbs"></div>
+      </div>
+    </div>
+
+    <div class="badges-section">
+      <div class="section-title" style="margin-bottom:10px;">🎖️ BADGES EARNED</div>
+      <div class="badge-grid" id="badgeGrid"></div>
+    </div>
+
+    <div class="name-section">
+      <div class="section-title" style="margin-bottom:4px;">📄 GENERATE REPORT</div>
+      <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:8px;">Enter your name to save to leaderboard & download PDF</div>
+      <input type="text" class="name-input" id="studentName" placeholder="Your name..." maxlength="30" />
+    </div>
+
+    <div class="action-btns">
+      <button class="action-btn pdf" onclick="generatePDF()">📄 DOWNLOAD PDF</button>
+      <button class="action-btn again" onclick="goHome()">🔄 PLAY AGAIN</button>
+    </div>
+
+    <div class="leaderboard-section">
+      <div class="section-title" style="color:var(--gold);">🏅 LEADERBOARD – TOP PLAYERS</div>
+      <div id="leaderboard"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Boss Overlay -->
+<div class="boss-overlay hidden" id="bossOverlay">
+  <div style="font-size:4rem;margin-bottom:10px;">👹</div>
+  <div class="boss-title">BOSS ROUND!</div>
+  <div class="boss-desc">Fix the incorrect sentence. Show your grammar power!</div>
+  <button class="boss-continue-btn" onclick="dismissBossOverlay()">⚔️ FACE THE BOSS!</button>
+</div>
+
+<!-- Level Up Overlay -->
+<div class="levelup-overlay hidden" id="levelupOverlay">
+  <div style="font-size:4rem;margin-bottom:16px;animation:bossAppear 0.5s">⬆️</div>
+  <div class="levelup-title">LEVEL UP!</div>
+  <div class="levelup-name" id="levelupName"></div>
+  <button class="boss-continue-btn" onclick="dismissLevelup()">🚀 KEEP GOING!</button>
+</div>
+
+<!-- Game Over Overlay -->
+<div class="gameover-overlay hidden" id="gameoverOverlay">
+  <div style="font-size:4rem;margin-bottom:10px;">💔</div>
+  <div class="gameover-title">GAME OVER!</div>
+  <div class="gameover-score" id="gameoverScore"></div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+    <button class="gameover-btn" onclick="showResults()">📊 SEE RESULTS</button>
+    <button class="gameover-btn" style="background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple))" onclick="goHome()">🔄 TRY AGAIN</button>
+  </div>
+</div>
+
+<script>
+// ===== VERB DATA =====
+const ALL_VERBS = [
+  // EASY - common verbs
+  {present:"go",past:"went",participle:"gone",diff:"easy"},
+  {present:"come",past:"came",participle:"come",diff:"easy"},
+  {present:"see",past:"saw",participle:"seen",diff:"easy"},
+  {present:"get",past:"got",participle:"got",diff:"easy"},
+  {present:"make",past:"made",participle:"made",diff:"easy"},
+  {present:"know",past:"knew",participle:"known",diff:"easy"},
+  {present:"think",past:"thought",participle:"thought",diff:"easy"},
+  {present:"take",past:"took",participle:"taken",diff:"easy"},
+  {present:"say",past:"said",participle:"said",diff:"easy"},
+  {present:"give",past:"gave",participle:"given",diff:"easy"},
+  {present:"find",past:"found",participle:"found",diff:"easy"},
+  {present:"tell",past:"told",participle:"told",diff:"easy"},
+  {present:"become",past:"became",participle:"become",diff:"easy"},
+  {present:"show",past:"showed",participle:"shown",diff:"easy"},
+  {present:"leave",past:"left",participle:"left",diff:"easy"},
+  {present:"feel",past:"felt",participle:"felt",diff:"easy"},
+  {present:"put",past:"put",participle:"put",diff:"easy"},
+  {present:"bring",past:"brought",participle:"brought",diff:"easy"},
+  {present:"begin",past:"began",participle:"begun",diff:"easy"},
+  {present:"keep",past:"kept",participle:"kept",diff:"easy"},
+  {present:"hold",past:"held",participle:"held",diff:"easy"},
+  {present:"write",past:"wrote",participle:"written",diff:"easy"},
+  {present:"stand",past:"stood",participle:"stood",diff:"easy"},
+  {present:"hear",past:"heard",participle:"heard",diff:"easy"},
+  {present:"let",past:"let",participle:"let",diff:"easy"},
+  {present:"mean",past:"meant",participle:"meant",diff:"easy"},
+  {present:"set",past:"set",participle:"set",diff:"easy"},
+  {present:"meet",past:"met",participle:"met",diff:"easy"},
+  {present:"run",past:"ran",participle:"run",diff:"easy"},
+  {present:"pay",past:"paid",participle:"paid",diff:"easy"},
+  {present:"sit",past:"sat",participle:"sat",diff:"easy"},
+  {present:"speak",past:"spoke",participle:"spoken",diff:"easy"},
+  {present:"lie",past:"lay",participle:"lain",diff:"easy"},
+  {present:"buy",past:"bought",participle:"bought",diff:"easy"},
+  {present:"cut",past:"cut",participle:"cut",diff:"easy"},
+  {present:"read",past:"read",participle:"read",diff:"easy"},
+  {present:"spend",past:"spent",participle:"spent",diff:"easy"},
+  {present:"lose",past:"lost",participle:"lost",diff:"easy"},
+  {present:"break",past:"broke",participle:"broken",diff:"easy"},
+  {present:"eat",past:"ate",participle:"eaten",diff:"easy"},
+  {present:"fall",past:"fell",participle:"fallen",diff:"easy"},
+  {present:"drive",past:"drove",participle:"driven",diff:"easy"},
+  {present:"send",past:"sent",participle:"sent",diff:"easy"},
+  {present:"build",past:"built",participle:"built",diff:"easy"},
+  {present:"hit",past:"hit",participle:"hit",diff:"easy"},
+  {present:"win",past:"won",participle:"won",diff:"easy"},
+  {present:"grow",past:"grew",participle:"grown",diff:"easy"},
+  {present:"open",past:"opened",participle:"opened",diff:"easy"},
+  {present:"turn",past:"turned",participle:"turned",diff:"easy"},
+  {present:"walk",past:"walked",participle:"walked",diff:"easy"},
+  // MEDIUM
+  {present:"arise",past:"arose",participle:"arisen",diff:"medium"},
+  {present:"awake",past:"awoke",participle:"awoken",diff:"medium"},
+  {present:"bear",past:"bore",participle:"borne",diff:"medium"},
+  {present:"beat",past:"beat",participle:"beaten",diff:"medium"},
+  {present:"bind",past:"bound",participle:"bound",diff:"medium"},
+  {present:"bite",past:"bit",participle:"bitten",diff:"medium"},
+  {present:"blow",past:"blew",participle:"blown",diff:"medium"},
+  {present:"catch",past:"caught",participle:"caught",diff:"medium"},
+  {present:"choose",past:"chose",participle:"chosen",diff:"medium"},
+  {present:"draw",past:"drew",participle:"drawn",diff:"medium"},
+  {present:"drink",past:"drank",participle:"drunk",diff:"medium"},
+  {present:"feed",past:"fed",participle:"fed",diff:"medium"},
+  {present:"fight",past:"fought",participle:"fought",diff:"medium"},
+  {present:"fly",past:"flew",participle:"flown",diff:"medium"},
+  {present:"forbid",past:"forbade",participle:"forbidden",diff:"medium"},
+  {present:"forget",past:"forgot",participle:"forgotten",diff:"medium"},
+  {present:"forgive",past:"forgave",participle:"forgiven",diff:"medium"},
+  {present:"freeze",past:"froze",participle:"frozen",diff:"medium"},
+  {present:"hang",past:"hung",participle:"hung",diff:"medium"},
+  {present:"hide",past:"hid",participle:"hidden",diff:"medium"},
+  {present:"lay",past:"laid",participle:"laid",diff:"medium"},
+  {present:"lead",past:"led",participle:"led",diff:"medium"},
+  {present:"lend",past:"lent",participle:"lent",diff:"medium"},
+  {present:"light",past:"lit",participle:"lit",diff:"medium"},
+  {present:"ride",past:"rode",participle:"ridden",diff:"medium"},
+  {present:"ring",past:"rang",participle:"rung",diff:"medium"},
+  {present:"rise",past:"rose",participle:"risen",diff:"medium"},
+  {present:"sell",past:"sold",participle:"sold",diff:"medium"},
+  {present:"shake",past:"shook",participle:"shaken",diff:"medium"},
+  {present:"shine",past:"shone",participle:"shone",diff:"medium"},
+  {present:"shoot",past:"shot",participle:"shot",diff:"medium"},
+  {present:"sing",past:"sang",participle:"sung",diff:"medium"},
+  {present:"sink",past:"sank",participle:"sunk",diff:"medium"},
+  {present:"sleep",past:"slept",participle:"slept",diff:"medium"},
+  {present:"slide",past:"slid",participle:"slid",diff:"medium"},
+  {present:"smell",past:"smelt",participle:"smelt",diff:"medium"},
+  {present:"steal",past:"stole",participle:"stolen",diff:"medium"},
+  {present:"stick",past:"stuck",participle:"stuck",diff:"medium"},
+  {present:"sting",past:"stung",participle:"stung",diff:"medium"},
+  {present:"strike",past:"struck",participle:"struck",diff:"medium"},
+  {present:"swear",past:"swore",participle:"sworn",diff:"medium"},
+  {present:"swim",past:"swam",participle:"swum",diff:"medium"},
+  {present:"swing",past:"swung",participle:"swung",diff:"medium"},
+  {present:"teach",past:"taught",participle:"taught",diff:"medium"},
+  {present:"tear",past:"tore",participle:"torn",diff:"medium"},
+  {present:"throw",past:"threw",participle:"thrown",diff:"medium"},
+  {present:"wake",past:"woke",participle:"woken",diff:"medium"},
+  {present:"wear",past:"wore",participle:"worn",diff:"medium"},
+  {present:"weep",past:"wept",participle:"wept",diff:"medium"},
+  {present:"wind",past:"wound",participle:"wound",diff:"medium"},
+  // HARD
+  {present:"abide",past:"abode",participle:"abode",diff:"hard"},
+  {present:"befall",past:"befell",participle:"befallen",diff:"hard"},
+  {present:"behold",past:"beheld",participle:"beheld",diff:"hard"},
+  {present:"bereave",past:"bereft",participle:"bereft",diff:"hard"},
+  {present:"bid",past:"bade",participle:"bidden",diff:"hard"},
+  {present:"broadcast",past:"broadcast",participle:"broadcast",diff:"hard"},
+  {present:"burst",past:"burst",participle:"burst",diff:"hard"},
+  {present:"chide",past:"chid",participle:"chidden",diff:"hard"},
+  {present:"cleave",past:"clove",participle:"cloven",diff:"hard"},
+  {present:"cling",past:"clung",participle:"clung",diff:"hard"},
+  {present:"creep",past:"crept",participle:"crept",diff:"hard"},
+  {present:"deal",past:"dealt",participle:"dealt",diff:"hard"},
+  {present:"dig",past:"dug",participle:"dug",diff:"hard"},
+  {present:"dream",past:"dreamt",participle:"dreamt",diff:"hard"},
+  {present:"dwell",past:"dwelt",participle:"dwelt",diff:"hard"},
+  {present:"fling",past:"flung",participle:"flung",diff:"hard"},
+  {present:"foretell",past:"foretold",participle:"foretold",diff:"hard"},
+  {present:"forsake",past:"forsook",participle:"forsaken",diff:"hard"},
+  {present:"grind",past:"ground",participle:"ground",diff:"hard"},
+  {present:"heave",past:"hove",participle:"hove",diff:"hard"},
+  {present:"kneel",past:"knelt",participle:"knelt",diff:"hard"},
+  {present:"knit",past:"knit",participle:"knit",diff:"hard"},
+  {present:"lean",past:"leant",participle:"leant",diff:"hard"},
+  {present:"leap",past:"leapt",participle:"leapt",diff:"hard"},
+  {present:"learn",past:"learnt",participle:"learnt",diff:"hard"},
+  {present:"melt",past:"melted",participle:"molten",diff:"hard"},
+  {present:"mow",past:"mowed",participle:"mown",diff:"hard"},
+  {present:"prove",past:"proved",participle:"proven",diff:"hard"},
+  {present:"quit",past:"quit",participle:"quit",diff:"hard"},
+  {present:"rid",past:"rid",participle:"rid",diff:"hard"},
+  {present:"saw",past:"sawed",participle:"sawn",diff:"hard"},
+  {present:"seek",past:"sought",participle:"sought",diff:"hard"},
+  {present:"sew",past:"sewed",participle:"sewn",diff:"hard"},
+  {present:"shed",past:"shed",participle:"shed",diff:"hard"},
+  {present:"shrink",past:"shrank",participle:"shrunk",diff:"hard"},
+  {present:"sow",past:"sowed",participle:"sown",diff:"hard"},
+  {present:"speed",past:"sped",participle:"sped",diff:"hard"},
+  {present:"spell",past:"spelt",participle:"spelt",diff:"hard"},
+  {present:"spin",past:"spun",participle:"spun",diff:"hard"},
+  {present:"spit",past:"spat",participle:"spat",diff:"hard"},
+  {present:"split",past:"split",participle:"split",diff:"hard"},
+  {present:"spread",past:"spread",participle:"spread",diff:"hard"},
+  {present:"spring",past:"sprang",participle:"sprung",diff:"hard"},
+  {present:"stride",past:"strode",participle:"stridden",diff:"hard"},
+  {present:"strive",past:"strove",participle:"striven",diff:"hard"},
+  {present:"sweat",past:"sweat",participle:"sweat",diff:"hard"},
+  {present:"swell",past:"swelled",participle:"swollen",diff:"hard"},
+  {present:"tread",past:"trod",participle:"trodden",diff:"hard"},
+  {present:"weave",past:"wove",participle:"woven",diff:"hard"},
+  {present:"wring",past:"wrung",participle:"wrung",diff:"hard"},
+];
+
+const BOSS_ROUNDS_SENTENCES = [
+  {wrong:"She goed to the market yesterday.", correct:"She went to the market yesterday.", verb:"go"},
+  {wrong:"He thinked about the problem for hours.", correct:"He thought about the problem for hours.", verb:"think"},
+  {wrong:"They buyed a new house last year.", correct:"They bought a new house last year.", verb:"buy"},
+  {wrong:"She sitted on the chair quietly.", correct:"She sat on the chair quietly.", verb:"sit"},
+  {wrong:"He runned to school in the morning.", correct:"He ran to school in the morning.", verb:"run"},
+  {wrong:"We eated breakfast at 7 am.", correct:"We ate breakfast at 7 am.", verb:"eat"},
+  {wrong:"She writed a beautiful poem.", correct:"She wrote a beautiful poem.", verb:"write"},
+  {wrong:"He bringed flowers for his mother.", correct:"He brought flowers for his mother.", verb:"bring"},
+  {wrong:"The bird flied over the lake.", correct:"The bird flew over the lake.", verb:"fly"},
+  {wrong:"She telled me the secret.", correct:"She told me the secret.", verb:"tell"},
+];
+
+const LEVELS = [
+  {name:"Beginner", min:0, icon:"🌱"},
+  {name:"Verb Warrior", min:100, icon:"⚔️"},
+  {name:"Grammar Ninja", min:250, icon:"🥷"},
+  {name:"Verb Master", min:450, icon:"🔮"},
+  {name:"English Champion", min:700, icon:"🏆"},
+];
+
+// ===== GAME STATE =====
+let gameMode = "normal";
+let gameDiff = "easy";
+let hearts = 5;
+let xp = 0;
+let score = 0;
+let streak = 0;
+let currentQuestion = 0;
+let totalQuestions = 50;
+let questionQueue = [];
+let currentVerb = null;
+let hiddenField = null;
+let isBossRound = false;
+let bossData = null;
+let timerInterval = null;
+let timerSeconds = 0;
+let startTime = 0;
+let pendingLevelup = false;
+let currentLevel = 0;
+let soundEnabled = true;
+let correctVerbs = {};
+let wrongVerbs = {};
+let answered = false;
+let bossQueue = [];
+let nextBossIndex = 0;
+
+// ===== SOUND ENGINE =====
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  return audioCtx;
+}
+function playTone(freq, dur, type="sine", vol=0.3) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudio();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = type; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
+  } catch(e) {}
+}
+function playCorrect() { playTone(523,0.1); setTimeout(()=>playTone(659,0.1),100); setTimeout(()=>playTone(784,0.2),200); }
+function playWrong() { playTone(200,0.3,"sawtooth"); }
+function playStreak() { [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,0.15),i*80)); }
+function playLevelup() { [523,659,784,1047,1319].forEach((f,i)=>setTimeout(()=>playTone(f,0.2),i*100)); }
+function playBoss() { [150,120,100].forEach((f,i)=>setTimeout(()=>playTone(f,0.3,"sawtooth"),i*150)); }
+function playTick() { playTone(800,0.05,"square",0.1); }
+
+document.getElementById("soundToggle").onclick = () => {
+  soundEnabled = !soundEnabled;
+  document.getElementById("soundToggle").textContent = soundEnabled ? "🔊" : "🔇";
+};
+
+// ===== UI HELPERS =====
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+function selectMode(el) {
+  document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("selected"));
+  el.classList.add("selected");
+  gameMode = el.dataset.mode;
+}
+function selectDiff(el) {
+  document.querySelectorAll(".diff-btn").forEach(b => b.classList.remove("selected"));
+  el.classList.add("selected");
+  gameDiff = el.dataset.diff;
+}
+
+// ===== GAME INIT =====
+function startGame() {
+  hearts = 5; xp = 0; score = 0; streak = 0; currentQuestion = 0;
+  currentLevel = 0; correctVerbs = {}; wrongVerbs = {};
+  answered = false; nextBossIndex = 0;
+
+  const filtered = ALL_VERBS.filter(v => gameDiff === "easy" ? v.diff === "easy" : gameDiff === "medium" ? v.diff !== "hard" : true);
+  const shuffled = shuffle([...filtered]);
+  questionQueue = shuffled.slice(0, totalQuestions);
+  bossQueue = shuffle([...BOSS_ROUNDS_SENTENCES]);
+
+  updateHeartsUI();
+  updateStatsUI();
+  document.getElementById("modeLabel").textContent = gameMode.toUpperCase() + " MODE";
+  showScreen("gameScreen");
+  loadQuestion();
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ===== LOAD QUESTION =====
+function loadQuestion() {
+  answered = false;
+  stopTimer();
+  document.getElementById("feedbackBanner").className = "feedback-banner";
+  document.getElementById("answerInput").className = "answer-input";
+  document.getElementById("answerInput").value = "";
+  document.getElementById("submitBtn").disabled = false;
+  document.getElementById("answerInput").disabled = false;
+
+  if (currentQuestion >= totalQuestions) {
+    endGame(true); return;
+  }
+
+  const qNum = currentQuestion + 1;
+  const isBoss = (qNum % 10 === 0);
+
+  updateProgressUI();
+
+  if (isBoss) {
+    isBossRound = true;
+    bossData = bossQueue[nextBossIndex % bossQueue.length];
+    nextBossIndex++;
+    showBossOverlay();
+  } else {
+    isBossRound = false;
+    loadVerbQuestion();
+  }
+}
+
+function loadVerbQuestion() {
+  currentVerb = questionQueue[currentQuestion];
+  const fields = ["present", "past", "participle"];
+  hiddenField = fields[Math.floor(Math.random() * fields.length)];
+
+  document.getElementById("roundBadge").className = "round-badge";
+  document.getElementById("roundBadge").textContent = `ROUND ${currentQuestion + 1} / ${totalQuestions}`;
+  document.getElementById("normalQuestion").classList.remove("hidden");
+  document.getElementById("bossQuestion").classList.add("hidden");
+
+  document.getElementById("cellPresent").className = `verb-cell present${hiddenField==="present"?" hidden-cell":""}`;
+  document.getElementById("cellPast").className = `verb-cell past${hiddenField==="past"?" hidden-cell":""}`;
+  document.getElementById("cellParticiple").className = `verb-cell participle${hiddenField==="participle"?" hidden-cell":""}`;
+
+  document.getElementById("cellPresent").textContent = hiddenField === "present" ? "❓ ?" : currentVerb.present;
+  document.getElementById("cellPast").textContent = hiddenField === "past" ? "❓ ?" : currentVerb.past;
+  document.getElementById("cellParticiple").textContent = hiddenField === "participle" ? "❓ ?" : currentVerb.participle;
+
+  const labels = {present:"PRESENT TENSE",past:"PAST SIMPLE",participle:"PAST PARTICIPLE"};
+  document.getElementById("answerInput").placeholder = `Type the ${labels[hiddenField].toLowerCase()}...`;
+
+  document.getElementById("answerInput").focus();
+  startTimer();
+}
+
+function showBossOverlay() {
+  playBoss();
+  document.getElementById("bossOverlay").classList.remove("hidden");
+}
+function dismissBossOverlay() {
+  document.getElementById("bossOverlay").classList.add("hidden");
+  loadBossQuestion();
+}
+function loadBossQuestion() {
+  document.getElementById("roundBadge").className = "round-badge boss-badge";
+  document.getElementById("roundBadge").textContent = `👹 BOSS ROUND ${currentQuestion + 1}`;
+  document.getElementById("normalQuestion").classList.add("hidden");
+  document.getElementById("bossQuestion").classList.remove("hidden");
+  document.getElementById("bossSentence").textContent = `❌ "${bossData.wrong}"`;
+  document.getElementById("answerInput").placeholder = "Type the correct sentence...";
+  document.getElementById("answerInput").focus();
+  startTimer();
+}
+
+// ===== ANSWER =====
+document.getElementById("answerInput").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !answered) submitAnswer();
+});
+
+function submitAnswer() {
+  if (answered) return;
+  answered = true;
+  stopTimer();
+
+  const input = document.getElementById("answerInput");
+  const userAnswer = input.value.trim().toLowerCase();
+  const timeTaken = (Date.now() - startTime) / 1000;
+  const fast = timeTaken <= 5;
+
+  let correct = false;
+  let verbKey = "";
+
+  if (isBossRound) {
+    verbKey = bossData.verb;
+    const expected = bossData.correct.toLowerCase().replace(/[^a-z\s]/g, "").trim();
+    const got = userAnswer.replace(/[^a-z\s]/g, "").trim();
+    correct = expected === got || got.includes(bossData.verb) && !got.includes(bossData.wrong.split(" ")[1].toLowerCase());
+    correct = got === expected;
+  } else {
+    verbKey = currentVerb.present;
+    const expected = currentVerb[hiddenField].toLowerCase();
+    correct = userAnswer === expected;
+  }
+
+  if (correct) {
+    input.classList.add("correct");
+    let gainedXP = 10;
+    if (fast) gainedXP += 5;
+    xp += gainedXP;
+    score += 10;
+    streak++;
+    correctVerbs[verbKey] = (correctVerbs[verbKey] || 0) + 1;
+    playCorrect();
+    showFeedback(true, fast ? `⚡ +${gainedXP} XP (Speed Bonus!)` : `✅ +${gainedXP} XP`);
+    showXPPopup(gainedXP, fast);
+    if (streak > 0 && streak % 5 === 0) {
+      setTimeout(showStreakToast, 300);
+      playStreak();
+    }
+    checkLevelUp();
+  } else {
+    input.classList.add("wrong");
+    hearts--;
+    streak = 0;
+    playWrong();
+    const correctAns = isBossRound ? bossData.correct : currentVerb[hiddenField];
+    wrongVerbs[verbKey] = (wrongVerbs[verbKey] || 0) + 1;
+    showFeedback(false, `❌ Correct: "${correctAns}"`);
+    updateHeartsUI();
+    if (hearts <= 0) {
+      setTimeout(() => { endGame(false); }, 1200);
+      return;
+    }
+  }
+
+  document.getElementById("submitBtn").disabled = true;
+  document.getElementById("answerInput").disabled = true;
+  updateStatsUI();
+
+  currentQuestion++;
+  const delay = correct ? 1200 : 1600;
+  if (pendingLevelup) {
+    setTimeout(() => {
+      pendingLevelup = false;
+      document.getElementById("levelupOverlay").classList.remove("hidden");
+    }, 500);
+  } else {
+    setTimeout(loadQuestion, delay);
+  }
+}
+
+function showFeedback(correct, msg) {
+  const fb = document.getElementById("feedbackBanner");
+  fb.className = "feedback-banner " + (correct ? "correct" : "wrong");
+  fb.textContent = msg;
+}
+
+function showXPPopup(amount, fast) {
+  const el = document.createElement("div");
+  el.className = "xp-popup";
+  el.textContent = "+" + amount + " XP" + (fast ? " ⚡" : "");
+  el.style.left = (Math.random() * 60 + 20) + "%";
+  el.style.top = "40%";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1600);
+}
+
+function showStreakToast() {
+  const old = document.querySelector(".streak-toast");
+  if (old) old.remove();
+  const el = document.createElement("div");
+  el.className = "streak-toast";
+  el.textContent = `🔥 ${streak} STREAK FIRE!`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2700);
+}
+
+// ===== TIMER =====
+function startTimer() {
+  if (gameMode === "normal") { document.getElementById("timerWrap").classList.add("hidden"); return; }
+  timerSeconds = gameMode === "speed" ? 5 : 10;
+  document.getElementById("timerWrap").classList.remove("hidden");
+  updateTimerUI(timerSeconds);
+  startTime = Date.now();
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    updateTimerUI(timerSeconds);
+    if (timerSeconds <= 3) playTick();
+    if (timerSeconds <= 0) {
+      stopTimer();
+      if (!answered) {
+        answered = true;
+        hearts--;
+        streak = 0;
+        playWrong();
+        updateHeartsUI();
+        const correctAns = isBossRound ? bossData.correct : currentVerb[hiddenField];
+        const vk = isBossRound ? bossData.verb : currentVerb.present;
+        wrongVerbs[vk] = (wrongVerbs[vk] || 0) + 1;
+        showFeedback(false, `⏱️ Time's up! Answer: "${correctAns}"`);
+        document.getElementById("submitBtn").disabled = true;
+        document.getElementById("answerInput").disabled = true;
+        updateStatsUI();
+        currentQuestion++;
+        if (hearts <= 0) { setTimeout(() => endGame(false), 1200); return; }
+        setTimeout(loadQuestion, 1500);
+      }
+    }
+  }, 1000);
+  startTime = Date.now();
+}
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+function updateTimerUI(secs) {
+  const max = gameMode === "speed" ? 5 : 10;
+  const pct = secs / max;
+  const circumference = 188.5;
+  const offset = circumference * (1 - pct);
+  const circle = document.getElementById("timerCircle");
+  circle.style.strokeDashoffset = offset;
+  circle.style.stroke = secs <= 3 ? "var(--danger)" : secs <= (max/2) ? "var(--neon-orange)" : "var(--neon-blue)";
+  document.getElementById("timerCount").textContent = secs;
+  document.getElementById("timerCount").style.color = secs <= 3 ? "var(--danger)" : "var(--neon-blue)";
+}
+
+// ===== LEVEL SYSTEM =====
+function checkLevelUp() {
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (xp >= LEVELS[i].min && i > currentLevel) {
+      currentLevel = i;
+      pendingLevelup = true;
+      document.getElementById("levelupName").textContent = LEVELS[i].icon + " " + LEVELS[i].name;
+      playLevelup();
+      break;
+    }
+  }
+}
+function dismissLevelup() {
+  document.getElementById("levelupOverlay").classList.add("hidden");
+  loadQuestion();
+}
+
+// ===== UI UPDATE =====
+function updateHeartsUI() {
+  let h = "";
+  for (let i = 0; i < 5; i++) h += i < hearts ? "❤️" : "🖤";
+  document.getElementById("heartsDisplay").textContent = h;
+}
+function updateStatsUI() {
+  document.getElementById("xpDisplay").textContent = xp;
+  document.getElementById("scoreDisplay").textContent = score;
+  document.getElementById("streakDisplay").textContent = streak;
+  const lv = LEVELS.filter(l => xp >= l.min).pop();
+  document.getElementById("levelPill").textContent = lv.icon + " " + lv.name.split(" ")[0].toUpperCase();
+}
+function updateProgressUI() {
+  const pct = (currentQuestion / totalQuestions) * 100;
+  document.getElementById("progressBar").style.width = pct + "%";
+  document.getElementById("progressLabel").textContent = `Question ${currentQuestion} / ${totalQuestions}`;
+}
+
+// ===== GAME END =====
+function endGame(completed) {
+  stopTimer();
+  if (completed) {
+    playLevelup();
+    setTimeout(() => {
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#00d4ff','#bf5fff','#ff2d87','#ffe600'] });
+      setTimeout(() => confetti({ particleCount: 100, spread: 120, origin: { y: 0.5 } }), 500);
+    }, 300);
+    setTimeout(showResults, 1200);
+  } else {
+    document.getElementById("gameoverScore").textContent = `Score: ${score} | XP: ${xp} | Correct: ${Object.keys(correctVerbs).length}`;
+    document.getElementById("gameoverOverlay").classList.remove("hidden");
+  }
+}
+
+function showResults() {
+  document.getElementById("gameoverOverlay").classList.add("hidden");
+  stopTimer();
+
+  const total = currentQuestion;
+  const correctCount = Object.values(correctVerbs).reduce((a, b) => a + b, 0);
+  const wrongCount = Object.values(wrongVerbs).reduce((a, b) => a + b, 0);
+  const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+
+  document.getElementById("r_correct").textContent = correctCount;
+  document.getElementById("r_wrong").textContent = wrongCount;
+  document.getElementById("r_score").textContent = score;
+  document.getElementById("r_xp").textContent = xp;
+  document.getElementById("r_pct").textContent = pct + "%";
+
+  // Strong/Weak verbs
+  const sv = document.getElementById("strongVerbs");
+  const wv = document.getElementById("weakVerbs");
+  sv.innerHTML = Object.keys(correctVerbs).slice(0,12).map(v => `<span class="verb-tag strong">${v}</span>`).join("") || "<span style='color:var(--text-muted);font-size:0.8rem'>None yet</span>";
+  wv.innerHTML = Object.keys(wrongVerbs).slice(0,12).map(v => `<span class="verb-tag weak">${v}</span>`).join("") || "<span style='color:var(--text-muted);font-size:0.8rem'>Great job!</span>";
+
+  // Badges
+  const badges = [
+    { id:"past_hero", label:"📜 Past Hero", earned: correctCount >= 20 },
+    { id:"speed_master", label:"⚡ Speed Master", earned: gameMode !== "normal" && correctCount >= 10 },
+    { id:"fifty_correct", label:"💯 50 Correct", earned: correctCount >= 50 },
+    { id:"verb_champion", label:"🏆 Verb Champion", earned: pct >= 80 },
+    { id:"no_mistake", label:"✨ Flawless", earned: wrongCount === 0 },
+    { id:"streak_king", label:"🔥 Streak King", earned: streak >= 10 },
+  ];
+  document.getElementById("badgeGrid").innerHTML = badges.map(b =>
+    `<div class="badge-pill ${b.earned?"earned":"unearned"}">${b.label}${b.earned?"":" 🔒"}</div>`
+  ).join("");
+
+  showLeaderboard();
+  showScreen("resultScreen");
+}
+
+function showLeaderboard() {
+  const lb = JSON.parse(localStorage.getItem("vba_leaderboard") || "[]");
+  const colors = ["gold","silver","bronze","other","other"];
+  document.getElementById("leaderboard").innerHTML = lb.length === 0
+    ? `<div style="color:var(--text-muted);text-align:center;padding:16px;">No records yet. Be the first!</div>`
+    : lb.slice(0, 10).map((e, i) =>
+        `<div class="lb-row">
+          <div class="lb-rank ${colors[i] || "other"}">${["🥇","🥈","🥉"][i] || (i+1)}</div>
+          <div class="lb-name">${e.name}</div>
+          <div class="lb-xp">⚡${e.xp}</div>
+          <div class="lb-score">🏆${e.score}</div>
+        </div>`
+    ).join("");
+}
+
+function saveToLeaderboard(name) {
+  const lb = JSON.parse(localStorage.getItem("vba_leaderboard") || "[]");
+  lb.push({ name, xp, score, date: new Date().toLocaleDateString() });
+  lb.sort((a, b) => b.xp - a.xp || b.score - a.score);
+  const unique = [];
+  const seen = new Set();
+  for (const e of lb) {
+    if (!seen.has(e.name)) { seen.add(e.name); unique.push(e); }
+  }
+  localStorage.setItem("vba_leaderboard", JSON.stringify(unique.slice(0, 20)));
+}
+
+// ===== PDF GENERATION =====
+function generatePDF() {
+  const name = document.getElementById("studentName").value.trim() || "Student";
+  saveToLeaderboard(name);
+  showLeaderboard();
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const correctCount = Object.values(correctVerbs).reduce((a, b) => a + b, 0);
+  const wrongCount = Object.values(wrongVerbs).reduce((a, b) => a + b, 0);
+  const total = currentQuestion;
+  const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+  const lv = LEVELS.filter(l => xp >= l.min).pop();
+
+  // Header
+  doc.setFillColor(10, 10, 26);
+  doc.rect(0, 0, 210, 40, "F");
+  doc.setTextColor(0, 212, 255);
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  doc.text("VERB BATTLE ARENA", 105, 18, { align: "center" });
+  doc.setTextColor(191, 95, 255);
+  doc.setFontSize(11);
+  doc.text("Performance Report – Class 7 English", 105, 28, { align: "center" });
+  doc.setTextColor(255, 230, 0);
+  doc.setFontSize(9);
+  doc.text(`Generated on ${new Date().toLocaleDateString()}`, 105, 36, { align: "center" });
+
+  // Student info box
+  doc.setFillColor(17, 17, 40);
+  doc.roundedRect(14, 45, 182, 36, 4, 4, "F");
+  doc.setTextColor(0, 212, 255);
+  doc.setFontSize(10);
+  doc.text("STUDENT", 20, 55);
+  doc.setTextColor(232, 232, 255);
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text(name, 20, 67);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(136, 136, 170);
+  doc.text(`Level: ${lv.icon} ${lv.name} | Mode: ${gameMode.toUpperCase()} | Difficulty: ${gameDiff.toUpperCase()}`, 20, 76);
+
+  // Stats
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(10, 10, 26);
+  const stats = [
+    { label: "✅ Correct Answers", value: correctCount, color: [57, 255, 20] },
+    { label: "❌ Wrong Answers", value: wrongCount, color: [255, 68, 68] },
+    { label: "🏆 Score", value: score, color: [255, 230, 0] },
+    { label: "⚡ XP Earned", value: xp, color: [0, 212, 255] },
+    { label: "📊 Accuracy", value: pct + "%", color: [191, 95, 255] },
+    { label: "🔥 Max Streak", value: streak, color: [255, 107, 53] },
+  ];
+  let sy = 90;
+  stats.forEach((s, i) => {
+    const x = i % 2 === 0 ? 14 : 112;
+    const y = sy + Math.floor(i / 2) * 22;
+    doc.setFillColor(...s.color);
+    doc.roundedRect(x, y, 90, 18, 3, 3, "F");
+    doc.setTextColor(10, 10, 26);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text(s.label, x + 5, y + 7);
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text(String(s.value), x + 5, y + 15);
+  });
+
+  sy += 72;
+
+  // Strong verbs
+  doc.setFillColor(26, 26, 53);
+  doc.roundedRect(14, sy, 86, 48, 4, 4, "F");
+  doc.setTextColor(57, 255, 20);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.text("💪 STRONG VERBS", 20, sy + 10);
+  doc.setTextColor(200, 255, 200);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  const svList = Object.keys(correctVerbs).slice(0, 10).join(", ") || "None";
+  const svLines = doc.splitTextToSize(svList, 76);
+  doc.text(svLines, 20, sy + 20);
+
+  // Weak verbs
+  doc.setFillColor(26, 26, 53);
+  doc.roundedRect(110, sy, 86, 48, 4, 4, "F");
+  doc.setTextColor(255, 68, 68);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.text("🔴 WEAK VERBS", 116, sy + 10);
+  doc.setTextColor(255, 200, 200);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  const wvList = Object.keys(wrongVerbs).slice(0, 10).join(", ") || "None – great job!";
+  const wvLines = doc.splitTextToSize(wvList, 76);
+  doc.text(wvLines, 116, sy + 20);
+
+  sy += 58;
+
+  // Teacher comment
+  doc.setFillColor(17, 17, 40);
+  doc.roundedRect(14, sy, 182, 34, 4, 4, "F");
+  doc.setTextColor(255, 230, 0);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.text("📝 TEACHER'S COMMENT", 20, sy + 10);
+  doc.setTextColor(200, 200, 220);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  const comment = pct >= 90 ? "Outstanding performance! Excellent command of irregular verbs." :
+                  pct >= 75 ? "Very good work! Keep practising for mastery." :
+                  pct >= 60 ? "Good effort. Review the weak verbs and try again." :
+                              "Keep practising! Focus on the weak verbs list above.";
+  doc.text(comment, 20, sy + 20);
+  doc.setDrawColor(0, 212, 255);
+  doc.setLineWidth(0.5);
+  doc.line(20, sy + 27, 160, sy + 27);
+
+  sy += 44;
+
+  // Footer
+  doc.setFillColor(10, 10, 26);
+  doc.rect(0, 270, 210, 27, "F");
+  doc.setTextColor(136, 136, 170);
+  doc.setFontSize(8);
+  doc.text("Verb Battle Arena | Class 7 English Learning Game | Keep learning! 🚀", 105, 282, { align: "center" });
+
+  doc.save(`VerbBattleArena_${name.replace(/\s+/g, "_")}.pdf`);
+}
+
+function goHome() {
+  document.getElementById("gameoverOverlay").classList.add("hidden");
+  document.getElementById("levelupOverlay").classList.add("hidden");
+  showScreen("homeScreen");
+}
+
+// Init
+updateHeartsUI();
+</script>
+</body>
+</html>
