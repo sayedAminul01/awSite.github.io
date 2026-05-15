@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alien Institute of Computer - English Reading Hero</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --bg: #0d0d2b;
+  --bg2: #13133a;
+  --card: #1a1a4a;
+  --card2: #22224f;
+  --accent: #7c3aed;
+  --accent2: #a855f7;
+  --gold: #f59e0b;
+  --green: #10b981;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --pink: #ec4899;
+  --cyan: #06b6d4;
+  --text: #e8e8ff;
+  --text2: #a0a0c8;
+  --glow: 0 0 20px rgba(124,58,237,0.5);
+  --glow2: 0 0 30px rgba(168,85,247,0.4);
+  --radius: 16px;
+  --radius2: 24px;
+}
+.light-mode {
+  --bg: #f0f0ff;
+  --bg2: #e8e8ff;
+  --card: #ffffff;
+  --card2: #f5f5ff;
+  --text: #1a1a4a;
+  --text2: #4a4a8a;
+  --glow: 0 0 20px rgba(124,58,237,0.2);
+}
+/* ===== RESET ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background 0.3s,color 0.3s;}
+.hidden{display:none!important;}
+button{cursor:pointer;border:none;outline:none;font-family:'Nunito',sans-serif;}
+/* ===== STARFIELD BG ===== */
+#stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle 3s infinite;}
+@keyframes twinkle{0%,100%{opacity:0.2;transform:scale(1);}50%{opacity:1;transform:scale(1.3);}}
+/* ===== LAYOUT ===== */
+#app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 0 80px 0;min-height:100vh;}
+/* ===== HEADER ===== */
+#main-header{background:linear-gradient(135deg,#1a0050,#2d0080);padding:14px 20px;text-align:center;position:sticky;top:0;z-index:100;border-bottom:2px solid var(--accent);box-shadow:0 4px 20px rgba(124,58,237,0.4);}
+#main-header .inst{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--accent2);letter-spacing:1px;}
+#main-header .app-title{font-family:'Fredoka One',cursive;font-size:1.5rem;background:linear-gradient(90deg,#f59e0b,#ec4899,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+#header-right{position:absolute;top:50%;right:14px;transform:translateY(-50%);display:flex;gap:8px;align-items:center;}
+.theme-btn,.sound-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:4px 10px;border-radius:20px;font-size:1rem;transition:all 0.2s;}
+.theme-btn:hover,.sound-btn:hover{background:rgba(255,255,255,0.2);}
+/* ===== NAV ===== */
+#bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--bg2);border-top:2px solid var(--accent);display:flex;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.4);}
+.nav-btn{flex:1;padding:10px 4px 8px;background:none;color:var(--text2);font-size:0.62rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all 0.2s;font-family:'Nunito',sans-serif;}
+.nav-btn .nav-icon{font-size:1.4rem;transition:transform 0.2s;}
+.nav-btn.active{color:var(--accent2);}
+.nav-btn.active .nav-icon{transform:scale(1.2);}
+.nav-btn:hover{color:var(--accent2);}
+/* ===== SCREENS ===== */
+.screen{padding:16px;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+/* ===== STATS BAR ===== */
+#stats-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
+.stat-chip{background:var(--card);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:6px 14px;display:flex;align-items:center;gap:6px;font-size:0.85rem;font-weight:700;box-shadow:var(--glow);}
+.stat-chip span:first-child{font-size:1.1rem;}
+/* ===== PROGRESS BAR ===== */
+.prog-wrap{background:var(--card);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;}
+.prog-label{display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text2);margin-bottom:6px;}
+.prog-bar{height:12px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--pink));border-radius:10px;transition:width 0.6s ease;position:relative;}
+.prog-fill::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shimmer 2s infinite;}
+@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+/* ===== CARDS ===== */
+.card{background:var(--card);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+.card-glow{box-shadow:var(--glow);}
+/* ===== BIG BUTTONS ===== */
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:14px 32px;border-radius:30px;font-size:1.1rem;font-weight:800;width:100%;margin:6px 0;box-shadow:0 4px 20px rgba(124,58,237,0.5);transition:all 0.2s;letter-spacing:0.5px;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(124,58,237,0.7);}
+.btn-primary:active{transform:translateY(0);}
+.btn-gold{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;padding:14px 32px;border-radius:30px;font-size:1.1rem;font-weight:800;width:100%;margin:6px 0;box-shadow:0 4px 20px rgba(245,158,11,0.5);transition:all 0.2s;}
+.btn-gold:hover{transform:translateY(-2px);}
+.btn-sm{padding:8px 18px;border-radius:20px;font-size:0.85rem;font-weight:700;transition:all 0.2s;}
+.btn-green{background:linear-gradient(135deg,var(--green),#059669);color:#fff;box-shadow:0 2px 12px rgba(16,185,129,0.4);}
+.btn-red{background:linear-gradient(135deg,var(--red),#dc2626);color:#fff;}
+.btn-blue{background:linear-gradient(135deg,var(--blue),#2563eb);color:#fff;}
+.btn-cyan{background:linear-gradient(135deg,var(--cyan),#0891b2);color:#fff;}
+/* ===== SECTION TITLE ===== */
+.sec-title{font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+/* ===== RULES GRID ===== */
+.rules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.rule-tile{background:var(--card2);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.rule-tile:hover{transform:translateY(-2px);border-color:var(--accent2);box-shadow:var(--glow);}
+.rule-tile .rule-sym{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--accent2);}
+.rule-tile .rule-as{font-size:0.72rem;color:var(--gold);margin-top:2px;}
+.rule-tile .rule-lock{position:absolute;top:4px;right:6px;font-size:0.7rem;}
+.rule-tile.locked{opacity:0.5;}
+/* ===== MODAL ===== */
+#modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn 0.2s;}
+#modal-box{background:var(--bg2);border-radius:var(--radius2) var(--radius2) 0 0;width:100%;max-width:480px;padding:20px 16px 100px;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease;}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+#modal-close{float:right;background:rgba(255,255,255,0.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:1.1rem;cursor:pointer;line-height:32px;text-align:center;}
+.modal-rule-head{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--accent2);text-align:center;margin:10px 0 4px;}
+.modal-rule-as{text-align:center;color:var(--gold);font-size:1.1rem;margin-bottom:10px;}
+.modal-rule-desc{color:var(--text2);font-size:0.9rem;text-align:center;margin-bottom:14px;}
+.word-list{display:flex;flex-direction:column;gap:8px;}
+.word-item{background:var(--card);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,0.07);}
+.word-item .wi-left{flex:1;}
+.wi-eng{font-weight:800;font-size:1rem;color:var(--text);}
+.wi-as{font-size:0.8rem;color:var(--gold);margin-top:2px;}
+.wi-mean{font-size:0.75rem;color:var(--text2);margin-top:1px;}
+.audio-btn{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#fff;border:none;padding:7px 14px;border-radius:20px;font-size:0.8rem;cursor:pointer;transition:all 0.2s;font-weight:700;white-space:nowrap;}
+.audio-btn:hover{transform:scale(1.05);}
+/* ===== QUIZ ===== */
+#quiz-screen .q-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.hearts-row{display:flex;gap:4px;font-size:1.3rem;}
+.q-progress{flex:1;margin:0 12px;height:10px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:10px;transition:width 0.4s;}
+.q-card{background:linear-gradient(135deg,#1a0050,#2d0080);border-radius:var(--radius2);padding:24px 20px;text-align:center;margin-bottom:16px;box-shadow:var(--glow2);border:1px solid var(--accent);}
+.q-question{font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;margin-bottom:8px;}
+.q-subtitle{color:var(--text2);font-size:0.9rem;}
+.q-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.q-opt{background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:14px;font-size:1.2rem;font-weight:800;color:var(--text);transition:all 0.2s;text-align:center;}
+.q-opt:hover{border-color:var(--accent2);transform:scale(1.03);box-shadow:var(--glow);}
+.q-opt.correct{background:rgba(16,185,129,0.2);border-color:var(--green);animation:pulse 0.3s;}
+.q-opt.wrong{background:rgba(239,68,68,0.2);border-color:var(--red);animation:shake 0.3s;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.xp-badge{display:inline-block;background:linear-gradient(135deg,var(--gold),#ef4444);color:#fff;padding:4px 14px;border-radius:20px;font-size:0.85rem;font-weight:800;margin-top:8px;}
+/* ===== HARD WORDS ===== */
+.hw-item{background:var(--card);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.07);}
+.hw-eng{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--accent2);}
+.hw-as{font-size:0.9rem;color:var(--gold);margin:3px 0;}
+.hw-mean{font-size:0.8rem;color:var(--text2);}
+.hw-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+/* ===== SENTENCES ===== */
+.sent-item{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.07);}
+.sent-eng{font-size:1rem;font-weight:800;line-height:1.6;margin-bottom:6px;}
+.sent-eng .s-word{cursor:pointer;display:inline-block;margin:0 2px;padding:2px 4px;border-radius:6px;transition:all 0.2s;}
+.sent-eng .s-word:hover,.sent-eng .s-word.active{background:var(--accent);color:#fff;}
+.sent-eng .s-word.hl{background:var(--gold);color:#000;}
+.sent-as{font-size:0.85rem;color:var(--gold);margin-bottom:8px;}
+.sent-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.speed-ctrl{display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--text2);}
+.speed-ctrl input{width:80px;accent-color:var(--accent2);}
+/* ===== SPEAKING ===== */
+.speak-card{background:linear-gradient(135deg,#0a0a2a,#1a0050);border:2px solid var(--accent);border-radius:var(--radius2);padding:20px;text-align:center;margin-bottom:14px;}
+.mic-btn{background:linear-gradient(135deg,var(--red),#ec4899);color:#fff;width:80px;height:80px;border-radius:50%;font-size:2rem;margin:16px auto;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(239,68,68,0.5);transition:all 0.2s;}
+.mic-btn.recording{animation:micPulse 1s infinite;box-shadow:0 4px 40px rgba(239,68,68,0.8);}
+@keyframes micPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+.score-ring{display:flex;justify-content:center;gap:20px;margin:12px 0;}
+.score-circle{text-align:center;}
+.score-num{font-family:'Fredoka One',cursive;font-size:1.8rem;}
+.score-label{font-size:0.72rem;color:var(--text2);}
+.accuracy-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;margin:4px 0;}
+.accuracy-fill{height:100%;border-radius:10px;transition:width 0.8s;}
+/* ===== LEADERBOARD ===== */
+.lb-item{background:var(--card);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,0.07);}
+.lb-rank{font-family:'Fredoka One',cursive;font-size:1.4rem;width:36px;text-align:center;}
+.lb-info{flex:1;}
+.lb-name{font-weight:800;}
+.lb-xp{font-size:0.8rem;color:var(--text2);}
+.lb-score{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--gold);}
+/* ===== CONFETTI ===== */
+.confetti-piece{position:fixed;top:-10px;border-radius:3px;animation:confettiFall linear forwards;z-index:999;pointer-events:none;}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+/* ===== TOAST ===== */
+#toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--accent);border-radius:20px;padding:10px 24px;font-weight:700;font-size:0.95rem;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;box-shadow:var(--glow);}
+#toast.show{opacity:1;}
+/* ===== DAILY CHALLENGE ===== */
+.challenge-tasks{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+.challenge-task{background:var(--card);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,0.07);}
+.task-check{width:28px;height:28px;border-radius:50%;border:2px solid var(--text2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;transition:all 0.3s;flex-shrink:0;}
+.task-check.done{background:var(--green);border-color:var(--green);}
+.task-text{flex:1;font-size:0.88rem;}
+.task-xp{font-size:0.78rem;color:var(--gold);font-weight:700;}
+/* ===== NAME INPUT ===== */
+#name-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:500;display:flex;align-items:center;justify-content:center;}
+#name-box{background:var(--bg2);border-radius:var(--radius2);padding:30px 24px;width:90%;max-width:380px;text-align:center;border:2px solid var(--accent);box-shadow:var(--glow2);}
+#name-box h2{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--accent2);margin-bottom:8px;}
+#name-box p{color:var(--text2);font-size:0.9rem;margin-bottom:16px;}
+#player-name-input{width:100%;background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:12px 16px;color:var(--text);font-size:1rem;font-family:'Nunito',sans-serif;outline:none;margin-bottom:14px;}
+#player-name-input:focus{border-color:var(--accent2);}
+/* ===== REPORT ===== */
+.report-section{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+.report-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.88rem;}
+.report-row:last-child{border:none;}
+.report-val{font-weight:800;color:var(--accent2);}
+/* ===== LEVEL BADGE ===== */
+.level-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--gold),#ef4444);color:#fff;padding:4px 12px;border-radius:20px;font-size:0.82rem;font-weight:800;}
+/* ===== RESPONSIVE ===== */
+@media(max-width:360px){
+  .rules-grid{grid-template-columns:repeat(2,1fr);}
+  .q-question{font-size:1.6rem;}
+  .modal-rule-head{font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+<!-- STARS -->
+<div id="stars"></div>
+<!-- NAME MODAL -->
+<div id="name-modal">
+  <div id="name-box">
+    <div style="font-size:3rem;">👾</div>
+    <h2>Welcome, Hero!</h2>
+    <p>Enter your name to start your English learning adventure!</p>
+    <input id="player-name-input" type="text" placeholder="Your name..." maxlength="20">
+    <button class="btn-primary" onclick="saveName()">🚀 Start Adventure!</button>
+  </div>
+</div>
+<!-- TOAST -->
+<div id="toast"></div>
+<!-- MAIN APP -->
+<div id="app">
+  <!-- HEADER -->
+  <div id="main-header">
+    <div id="header-right">
+      <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+      <button class="sound-btn" onclick="toggleSound()">🔊</button>
+    </div>
+    <div class="inst">👽 Alien Institute of Computer</div>
+    <div class="app-title">English Reading Hero</div>
+  </div>
+
+  <!-- HOME SCREEN -->
+  <div id="home-screen" class="screen">
+    <div id="stats-bar">
+      <div class="stat-chip"><span>⭐</span><span id="stat-xp">0 XP</span></div>
+      <div class="stat-chip"><span>🏆</span><span id="stat-level">Lv 1</span></div>
+      <div class="stat-chip"><span>❤️</span><span id="stat-hearts">5</span></div>
+      <div class="stat-chip"><span>🔥</span><span id="stat-streak">0</span></div>
+    </div>
+    <div class="prog-wrap card-glow">
+      <div class="prog-label"><span>Level Progress</span><span id="prog-pct">0%</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <!-- Daily Challenge -->
+    <div class="card card-glow">
+      <div class="sec-title">⚡ Daily Challenge</div>
+      <div class="challenge-tasks">
+        <div class="challenge-task"><div class="task-check" id="dc1">✓</div><div class="task-text">Complete 10 Quiz Questions</div><div class="task-xp">+50 XP</div></div>
+        <div class="challenge-task"><div class="task-check" id="dc2">✓</div><div class="task-text">Practice 5 Hard Words</div><div class="task-xp">+30 XP</div></div>
+        <div class="challenge-task"><div class="task-check" id="dc3">✓</div><div class="task-text">Read 3 Sentences Aloud</div><div class="task-xp">+20 XP</div></div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="goTo('rules-screen')">📖 Start Learning Rules</button>
+    <button class="btn-gold" onclick="startQuiz()">🎯 Play Quiz</button>
+    <button class="btn-primary" onclick="goTo('hard-screen')" style="background:linear-gradient(135deg,#06b6d4,#3b82f6)">🔤 Hard Words</button>
+    <button class="btn-primary" onclick="goTo('sentence-screen')" style="background:linear-gradient(135deg,#10b981,#059669)">📜 Sentence Reading</button>
+    <button class="btn-primary" onclick="goTo('speak-screen')" style="background:linear-gradient(135deg,#ec4899,#ef4444)">🎤 Speaking Practice</button>
+  </div>
+
+  <!-- RULES SCREEN -->
+  <div id="rules-screen" class="screen hidden">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <button class="btn-sm btn-blue" onclick="goTo('home-screen')">← Back</button>
+      <div class="sec-title" style="margin:0">📚 Reading Rules</div>
+    </div>
+    <p style="color:var(--text2);font-size:0.85rem;margin-bottom:12px;">Tap any rule to learn words and pronunciation!</p>
+    <div class="rules-grid" id="rules-grid"></div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen" class="screen hidden">
+    <div class="q-header">
+      <div class="hearts-row" id="quiz-hearts"></div>
+      <div class="q-progress"><div class="q-progress-fill" id="q-prog-fill" style="width:0%"></div></div>
+      <div style="font-size:0.8rem;font-weight:700;color:var(--gold)"><span id="q-count">1</span>/10</div>
+    </div>
+    <div class="q-card">
+      <div class="q-question" id="q-question">?</div>
+      <div class="q-subtitle" id="q-subtitle">Which Assamese sound is this?</div>
+      <div class="xp-badge">+10 XP per correct answer</div>
+    </div>
+    <div class="q-options" id="q-options"></div>
+    <div style="text-align:center;margin-top:4px;">
+      <span id="streak-display" style="font-size:0.9rem;font-weight:700;color:var(--gold)"></span>
+    </div>
+    <button class="btn-sm btn-red" onclick="goTo('home-screen')" style="width:100%;margin-top:10px">Quit Quiz</button>
+  </div>
+
+  <!-- HARD WORDS SCREEN -->
+  <div id="hard-screen" class="screen hidden">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <button class="btn-sm btn-blue" onclick="goTo('home-screen')">← Back</button>
+      <div class="sec-title" style="margin:0">💥 Hard Words</div>
+    </div>
+    <p style="color:var(--text2);font-size:0.82rem;margin-bottom:12px;">These English words are tricky! Learn their real pronunciation.</p>
+    <div id="hard-words-list"></div>
+  </div>
+
+  <!-- SENTENCE SCREEN -->
+  <div id="sentence-screen" class="screen hidden">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <button class="btn-sm btn-blue" onclick="goTo('home-screen')">← Back</button>
+      <div class="sec-title" style="margin:0">📜 Sentences</div>
+    </div>
+    <div class="speed-ctrl card" style="margin-bottom:12px;">
+      <span>🐢</span>
+      <input type="range" id="speed-slider" min="0.5" max="1.5" step="0.1" value="1">
+      <span>🐇</span>
+      <span id="speed-val" style="color:var(--accent2);font-weight:700;min-width:30px;">1x</span>
+    </div>
+    <div id="sentences-list"></div>
+  </div>
+
+  <!-- SPEAK SCREEN -->
+  <div id="speak-screen" class="screen hidden">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <button class="btn-sm btn-blue" onclick="goTo('home-screen')">← Back</button>
+      <div class="sec-title" style="margin:0">🎤 Speaking</div>
+    </div>
+    <div class="speak-card">
+      <p style="color:var(--text2);font-size:0.85rem">Read this sentence aloud:</p>
+      <div id="speak-sentence" style="font-size:1.1rem;font-weight:800;margin:10px 0;line-height:1.6"></div>
+      <div id="speak-assamese" style="color:var(--gold);font-size:0.85rem;margin-bottom:10px"></div>
+      <button class="mic-btn" id="mic-btn" onclick="toggleRecording()">🎤</button>
+      <div id="rec-status" style="font-size:0.85rem;color:var(--text2)">Press mic to start</div>
+    </div>
+    <div id="speak-result" class="hidden">
+      <div class="score-ring">
+        <div class="score-circle"><div class="score-num" id="acc-score" style="color:var(--green)">0%</div><div class="score-label">Accuracy</div></div>
+        <div class="score-circle"><div class="score-num" id="pron-score" style="color:var(--cyan)">0%</div><div class="score-label">Pronunciation</div></div>
+      </div>
+      <div id="missed-words" style="font-size:0.85rem;color:var(--text2);text-align:center;margin:6px 0"></div>
+    </div>
+    <button class="btn-primary" style="margin-top:8px" onclick="nextSpeakSent()">Next Sentence →</button>
+    <div id="speak-heard" style="color:var(--text2);font-size:0.8rem;text-align:center;margin-top:6px;min-height:20px"></div>
+  </div>
+
+  <!-- LEADERBOARD SCREEN -->
+  <div id="leaderboard-screen" class="screen hidden">
+    <div class="sec-title">🏆 Leaderboard</div>
+    <div id="lb-list"></div>
+    <button class="btn-primary" onclick="clearLB()" style="background:linear-gradient(135deg,#6b7280,#4b5563);margin-top:8px">Clear Board</button>
+  </div>
+
+  <!-- REPORT SCREEN -->
+  <div id="report-screen" class="screen hidden">
+    <div class="sec-title">📊 My Report</div>
+    <div class="report-section">
+      <div style="font-weight:800;margin-bottom:8px;color:var(--accent2)">👤 Student Info</div>
+      <div class="report-row"><span>Name</span><span class="report-val" id="r-name">-</span></div>
+      <div class="report-row"><span>Level</span><span class="report-val" id="r-level">-</span></div>
+      <div class="report-row"><span>Total XP</span><span class="report-val" id="r-xp">-</span></div>
+      <div class="report-row"><span>Streak</span><span class="report-val" id="r-streak">-</span></div>
+    </div>
+    <div class="report-section">
+      <div style="font-weight:800;margin-bottom:8px;color:var(--green)">📈 Performance</div>
+      <div class="report-row"><span>Quiz Score</span><span class="report-val" id="r-quiz">-</span></div>
+      <div class="report-row"><span>Rules Learned</span><span class="report-val" id="r-rules">-</span></div>
+      <div class="report-row"><span>Speaking Practice</span><span class="report-val" id="r-speak">-</span></div>
+      <div class="report-row"><span>Reading Accuracy</span><span class="report-val" id="r-readacc">-</span></div>
+    </div>
+    <div class="report-section">
+      <div style="font-weight:800;margin-bottom:8px;color:var(--gold)">💬 Teacher Comment</div>
+      <div id="r-comment" style="font-size:0.9rem;color:var(--text2);line-height:1.6"></div>
+    </div>
+    <button class="btn-primary" onclick="downloadReport()">📥 Download PDF Report</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal-overlay" class="hidden" onclick="closeModal(event)">
+  <div id="modal-box">
+    <button id="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div id="bottom-nav">
+  <button class="nav-btn active" onclick="goTo('home-screen')" id="nav-home"><span class="nav-icon">🏠</span>Home</button>
+  <button class="nav-btn" onclick="goTo('rules-screen')" id="nav-rules"><span class="nav-icon">📚</span>Rules</button>
+  <button class="nav-btn" onclick="startQuiz()" id="nav-quiz"><span class="nav-icon">🎯</span>Quiz</button>
+  <button class="nav-btn" onclick="goTo('leaderboard-screen')" id="nav-lb"><span class="nav-icon">🏆</span>Board</button>
+  <button class="nav-btn" onclick="openReport()" id="nav-rep"><span class="nav-icon">📊</span>Report</button>
+</div>
+
+<script>
+// ===== DATA =====
+const RULES = [
+  {sym:"PH",as:"ফ",desc:"PH sounds like 'F' (ফ) in English",words:[
+    {e:"Phone",a:"ফোন",m:"ফোন"},{e:"Photo",a:"ফটো",m:"ছবি"},{e:"Physics",a:"ফিজিক্স",m:"পদার্থবিদ্যা"},
+    {e:"Phrase",a:"ফ্রেজ",m:"বাক্যাংশ"},{e:"Phantom",a:"ফ্যান্টম",m:"ভূত"},{e:"Pharmacy",a:"ফার্মেসি",m:"ওষুধের দোকান"},
+    {e:"Phobia",a:"ফোবিয়া",m:"ভয়"},{e:"Phonics",a:"ফনিক্স",m:"ধ্বনিবিজ্ঞান"},{e:"Philosophy",a:"ফিলোসফি",m:"দর্শন"},
+    {e:"Photograph",a:"ফটোগ্রাফ",m:"ছবি"},{e:"Elephant",a:"এলিফ্যান্ট",m:"হাতি"},{e:"Alpha",a:"আলফা",m:"প্রথম"},
+    {e:"Alphabet",a:"আলফাবেট",m:"বর্ণমালা"},{e:"Physical",a:"ফিজিকাল",m:"শারীরিক"},{e:"Phase",a:"ফেজ",m:"পর্যায়"},
+    {e:"Phew",a:"ফিউ",m:"হাঁফ ছাড়া"},{e:"Trophy",a:"ট্রফি",m:"পুরস্কার"},{e:"Triumph",a:"ট্রায়াম্ফ",m:"জয়"},
+    {e:"Sphere",a:"স্ফিয়ার",m:"গোলক"},{e:"Orphan",a:"অরফান",m:"এতিম"}
+  ]},
+  {sym:"CH",as:"চ/ক/শ",desc:"CH can sound like চ, ক, or শ",words:[
+    {e:"Chair",a:"চেয়ার",m:"চেয়ার"},{e:"Cheese",a:"চিজ",m:"পনির"},{e:"Church",a:"চার্চ",m:"গির্জা"},
+    {e:"Chess",a:"চেস",m:"দাবা"},{e:"Chop",a:"চপ",m:"কাটা"},{e:"Chrome",a:"ক্রোম",m:"রঙ"},
+    {e:"Chemistry",a:"কেমিস্ট্রি",m:"রসায়ন"},{e:"Character",a:"ক্যারেক্টার",m:"চরিত্র"},{e:"Chaos",a:"কেয়স",m:"বিশৃঙ্খলা"},
+    {e:"Machine",a:"মাশিন",m:"যন্ত্র"},{e:"Chef",a:"শেফ",m:"রাঁধুনি"},{e:"Champagne",a:"শ্যাম্পেন",m:"মদ"},
+    {e:"Chili",a:"চিলি",m:"মরিচ"},{e:"Challenge",a:"চ্যালেঞ্জ",m:"চ্যালেঞ্জ"},{e:"Chain",a:"চেন",m:"শিকল"},
+    {e:"Choice",a:"চয়েস",m:"পছন্দ"},{e:"Chocolate",a:"চকলেট",m:"চকলেট"},{e:"Architect",a:"আর্কিটেক্ট",m:"স্থপতি"},
+    {e:"Chorus",a:"কোরাস",m:"গায়কদল"},{e:"Cheer",a:"চিয়ার",m:"উৎসাহ"}
+  ]},
+  {sym:"SH",as:"শ",desc:"SH always sounds like শ",words:[
+    {e:"Ship",a:"শিপ",m:"জাহাজ"},{e:"Shop",a:"শপ",m:"দোকান"},{e:"Shoe",a:"শু",m:"জুতা"},
+    {e:"Share",a:"শেয়ার",m:"ভাগ করা"},{e:"Shake",a:"শেক",m:"ঝাঁকানো"},{e:"Sheet",a:"শিট",m:"চাদর"},
+    {e:"Shell",a:"শেল",m:"খোল"},{e:"Show",a:"শো",m:"অনুষ্ঠান"},{e:"Shower",a:"শাওয়ার",m:"গোসল"},
+    {e:"Shadow",a:"শ্যাডো",m:"ছায়া"},{e:"Shark",a:"শার্ক",m:"হাঙর"},{e:"Should",a:"শুড",m:"উচিত"},
+    {e:"Short",a:"শর্ট",m:"ছোট"},{e:"Shoot",a:"শুট",m:"গুলি করা"},{e:"Shine",a:"শাইন",m:"উজ্জ্বল হওয়া"},
+    {e:"Shirt",a:"শার্ট",m:"শার্ট"},{e:"Sharp",a:"শার্প",m:"তীক্ষ্ণ"},{e:"Shelter",a:"শেলটার",m:"আশ্রয়"},
+    {e:"Shy",a:"শাই",m:"লাজুক"},{e:"Shift",a:"শিফট",m:"পরিবর্তন"}
+  ]},
+  {sym:"TH",as:"থ/দ",desc:"TH sounds like থ (think) or দ (this)",words:[
+    {e:"Think",a:"থিঙ্ক",m:"ভাবা"},{e:"Three",a:"থ্রি",m:"তিন"},{e:"Thank",a:"থ্যাঙ্ক",m:"ধন্যবাদ"},
+    {e:"Thin",a:"থিন",m:"পাতলা"},{e:"Thick",a:"থিক",m:"মোটা"},{e:"Theory",a:"থিওরি",m:"তত্ত্ব"},
+    {e:"This",a:"দিস",m:"এটি"},{e:"That",a:"দ্যাট",m:"সেটি"},{e:"The",a:"দ্য",m:"নির্দিষ্ট"},
+    {e:"There",a:"দেয়ার",m:"সেখানে"},{e:"Though",a:"দো",m:"যদিও"},{e:"Through",a:"থ্রু",m:"মধ্য দিয়ে"},
+    {e:"Thought",a:"থট",m:"চিন্তা"},{e:"Thousand",a:"থাউজেন্ড",m:"হাজার"},{e:"Throne",a:"থ্রোন",m:"সিংহাসন"},
+    {e:"Thunder",a:"থান্ডার",m:"বজ্রপাত"},{e:"Throw",a:"থ্রো",m:"ছোড়া"},{e:"Thread",a:"থ্রেড",m:"সুতা"},
+    {e:"Thirst",a:"থার্স্ট",m:"তৃষ্ণা"},{e:"Thumb",a:"থাম",m:"বুড়ো আঙ্গুল"}
+  ]},
+  {sym:"NG",as:"ং",desc:"NG sounds like ং (anuswar)",words:[
+    {e:"Ring",a:"রিং",m:"আংটি"},{e:"Sing",a:"সিং",m:"গান গাওয়া"},{e:"King",a:"কিং",m:"রাজা"},
+    {e:"Long",a:"লং",m:"দীর্ঘ"},{e:"Song",a:"সং",m:"গান"},{e:"Strong",a:"স্ট্রং",m:"শক্তিশালী"},
+    {e:"Wrong",a:"রং",m:"ভুল"},{e:"Among",a:"অ্যামং",m:"মধ্যে"},{e:"Bring",a:"ব্রিং",m:"আনা"},
+    {e:"Spring",a:"স্প্রিং",m:"বসন্ত"},{e:"Anything",a:"এনিথিং",m:"কিছু"},{e:"Nothing",a:"নাথিং",m:"কিছুই না"},
+    {e:"Something",a:"সামথিং",m:"কিছু একটা"},{e:"Morning",a:"মর্নিং",m:"সকাল"},{e:"Evening",a:"ইভনিং",m:"সন্ধ্যা"},
+    {e:"Running",a:"রানিং",m:"দৌড়ানো"},{e:"Swimming",a:"সুইমিং",m:"সাঁতার"},{e:"Jungle",a:"জাংগল",m:"জঙ্গল"},
+    {e:"Longer",a:"লংগার",m:"আরও দীর্ঘ"},{e:"Younger",a:"ইয়াংগার",m:"ছোট"}
+  ]},
+  {sym:"OO",as:"উ/উঊ",desc:"OO sounds like উ or উঊ",words:[
+    {e:"Food",a:"ফুড",m:"খাবার"},{e:"Moon",a:"মুন",m:"চাঁদ"},{e:"School",a:"স্কুল",m:"বিদ্যালয়"},
+    {e:"Cool",a:"কুল",m:"ঠান্ডা"},{e:"Pool",a:"পুল",m:"পুকুর"},{e:"Tool",a:"টুল",m:"যন্ত্র"},
+    {e:"Book",a:"বুক",m:"বই"},{e:"Cook",a:"কুক",m:"রাঁধুনি"},{e:"Look",a:"লুক",m:"দেখা"},
+    {e:"Good",a:"গুড",m:"ভালো"},{e:"Wood",a:"উড",m:"কাঠ"},{e:"Foot",a:"ফুট",m:"পা"},
+    {e:"Tooth",a:"টুথ",m:"দাঁত"},{e:"Roof",a:"রুফ",m:"ছাদ"},{e:"Room",a:"রুম",m:"ঘর"},
+    {e:"Bloom",a:"ব্লুম",m:"ফোটা"},{e:"Smooth",a:"স্মুথ",m:"মসৃণ"},{e:"Fool",a:"ফুল",m:"বোকা"},
+    {e:"Boost",a:"বুস্ট",m:"বাড়ানো"},{e:"Proof",a:"প্রুফ",m:"প্রমাণ"}
+  ]},
+  {sym:"EE",as:"ই/ঈ",desc:"EE sounds like ই or ঈ (long E)",words:[
+    {e:"Tree",a:"ট্রি",m:"গাছ"},{e:"Free",a:"ফ্রি",m:"মুক্ত"},{e:"See",a:"সি",m:"দেখা"},
+    {e:"Bee",a:"বি",m:"মৌমাছি"},{e:"Feel",a:"ফিল",m:"অনুভব"},{e:"Need",a:"নিড",m:"দরকার"},
+    {e:"Speed",a:"স্পিড",m:"গতি"},{e:"Green",a:"গ্রিন",m:"সবুজ"},{e:"Screen",a:"স্ক্রিন",m:"পর্দা"},
+    {e:"Street",a:"স্ট্রিট",m:"রাস্তা"},{e:"Sweet",a:"সুইট",m:"মিষ্টি"},{e:"Deep",a:"ডিপ",m:"গভীর"},
+    {e:"Sleep",a:"স্লিপ",m:"ঘুম"},{e:"Keep",a:"কিপ",m:"রাখা"},{e:"Meet",a:"মিট",m:"দেখা করা"},
+    {e:"Week",a:"উইক",m:"সপ্তাহ"},{e:"Feet",a:"ফিট",m:"পা"},{e:"Cheek",a:"চিক",m:"গাল"},
+    {e:"Teen",a:"টিন",m:"কিশোর"},{e:"Queen",a:"কুইন",m:"রানী"}
+  ]},
+  {sym:"TION",as:"শন",desc:"TION sounds like শন at end of words",words:[
+    {e:"Nation",a:"নেশন",m:"জাতি"},{e:"Station",a:"স্টেশন",m:"স্টেশন"},{e:"Education",a:"এডুকেশন",m:"শিক্ষা"},
+    {e:"Question",a:"কোয়েশ্চন",m:"প্রশ্ন"},{e:"Solution",a:"সলিউশন",m:"সমাধান"},{e:"Information",a:"ইনফরমেশন",m:"তথ্য"},
+    {e:"Communication",a:"কমিউনিকেশন",m:"যোগাযোগ"},{e:"Action",a:"অ্যাকশন",m:"কাজ"},{e:"Attention",a:"অ্যাটেনশন",m:"মনোযোগ"},
+    {e:"Condition",a:"কন্ডিশন",m:"অবস্থা"},{e:"Direction",a:"ডিরেকশন",m:"দিক"},{e:"Function",a:"ফাংশন",m:"কাজ"},
+    {e:"Section",a:"সেকশন",m:"অংশ"},{e:"Connection",a:"কানেকশন",m:"সংযোগ"},{e:"Collection",a:"কালেকশন",m:"সংগ্রহ"},
+    {e:"Position",a:"পজিশন",m:"অবস্থান"},{e:"Mention",a:"মেনশন",m:"উল্লেখ"},{e:"Vacation",a:"ভ্যাকেশন",m:"ছুটি"},
+    {e:"Emotion",a:"ইমোশন",m:"অনুভূতি"},{e:"Motion",a:"মোশন",m:"গতি"}
+  ]},
+  {sym:"SION",as:"শন/ঝন",desc:"SION sounds like শন or ঝন",words:[
+    {e:"Vision",a:"ভিশন",m:"দৃষ্টি"},{e:"Mission",a:"মিশন",m:"অভিযান"},{e:"Decision",a:"ডিসিশন",m:"সিদ্ধান্ত"},
+    {e:"Passion",a:"প্যাশন",m:"আবেগ"},{e:"Television",a:"টেলিভিশন",m:"টেলিভিশন"},{e:"Division",a:"ডিভিশন",m:"বিভাগ"},
+    {e:"Explosion",a:"এক্সপ্লোশন",m:"বিস্ফোরণ"},{e:"Confusion",a:"কনফিউশন",m:"বিভ্রান্তি"},{e:"Revision",a:"রিভিশন",m:"পুনরীক্ষণ"},
+    {e:"Version",a:"ভার্শন",m:"সংস্করণ"},{e:"Session",a:"সেশন",m:"অধিবেশন"},{e:"Invasion",a:"ইনভেশন",m:"আক্রমণ"},
+    {e:"Permission",a:"পার্মিশন",m:"অনুমতি"},{e:"Profession",a:"প্রফেশন",m:"পেশা"},{e:"Tension",a:"টেনশন",m:"উদ্বেগ"},
+    {e:"Extension",a:"এক্সটেনশন",m:"বিস্তার"},{e:"Dimension",a:"ডাইমেনশন",m:"মাত্রা"},{e:"Possession",a:"পজেশন",m:"অধিকার"},
+    {e:"Discussion",a:"ডিসকাশন",m:"আলোচনা"},{e:"Impression",a:"ইম্প্রেশন",m:"ছাপ"}
+  ]},
+  {sym:"TURE",as:"চার",desc:"TURE sounds like চার at end",words:[
+    {e:"Nature",a:"নেচার",m:"প্রকৃতি"},{e:"Future",a:"ফিউচার",m:"ভবিষ্যৎ"},{e:"Picture",a:"পিকচার",m:"ছবি"},
+    {e:"Culture",a:"কালচার",m:"সংস্কৃতি"},{e:"Creature",a:"ক্রিয়েচার",m:"প্রাণী"},{e:"Feature",a:"ফিচার",m:"বৈশিষ্ট্য"},
+    {e:"Structure",a:"স্ট্রাকচার",m:"কাঠামো"},{e:"Adventure",a:"অ্যাডভেঞ্চার",m:"অ্যাডভেঞ্চার"},{e:"Lecture",a:"লেকচার",m:"বক্তৃতা"},
+    {e:"Capture",a:"ক্যাপচার",m:"ধরা"},{e:"Furniture",a:"ফার্নিচার",m:"আসবাবপত্র"},{e:"Temperature",a:"টেম্পারেচার",m:"তাপমাত্রা"},
+    {e:"Literature",a:"লিটারেচার",m:"সাহিত্য"},{e:"Manufacture",a:"ম্যানুফ্যাকচার",m:"উৎপাদন"},{e:"Mixture",a:"মিক্সচার",m:"মিশ্রণ"},
+    {e:"Texture",a:"টেক্সচার",m:"গঠন"},{e:"Fracture",a:"ফ্র্যাকচার",m:"ভাঙন"},{e:"Pasture",a:"পাসচার",m:"চারণভূমি"},
+    {e:"Gesture",a:"জেসচার",m:"ভঙ্গি"},{e:"Vulture",a:"ভালচার",m:"শকুন"}
+  ]},
+  {sym:"ING",as:"ইং",desc:"ING sounds like ইং at end of words",words:[
+    {e:"Running",a:"রানিং",m:"দৌড়ানো"},{e:"Playing",a:"প্লেয়িং",m:"খেলা"},{e:"Reading",a:"রিডিং",m:"পড়া"},
+    {e:"Writing",a:"রাইটিং",m:"লেখা"},{e:"Learning",a:"লার্নিং",m:"শেখা"},{e:"Working",a:"ওয়ার্কিং",m:"কাজ করা"},
+    {e:"Cooking",a:"কুকিং",m:"রান্না"},{e:"Talking",a:"টকিং",m:"কথা বলা"},{e:"Walking",a:"ওয়াকিং",m:"হাঁটা"},
+    {e:"Sleeping",a:"স্লিপিং",m:"ঘুমানো"},{e:"Eating",a:"ইটিং",m:"খাওয়া"},{e:"Drinking",a:"ড্রিংকিং",m:"পান করা"},
+    {e:"Singing",a:"সিংগিং",m:"গান গাওয়া"},{e:"Dancing",a:"ড্যান্সিং",m:"নাচ"},{e:"Swimming",a:"সুইমিং",m:"সাঁতার"},
+    {e:"Thinking",a:"থিংকিং",m:"চিন্তা করা"},{e:"Coming",a:"কামিং",m:"আসা"},{e:"Going",a:"গোয়িং",m:"যাওয়া"},
+    {e:"Helping",a:"হেল্পিং",m:"সাহায্য"},{e:"Watching",a:"ওয়াচিং",m:"দেখা"}
+  ]},
+  {sym:"EA",as:"ই/এ/ইঅ",desc:"EA can sound like ই, এ, or ইঅ",words:[
+    {e:"Eat",a:"ইট",m:"খাওয়া"},{e:"Meat",a:"মিট",m:"মাংস"},{e:"Heat",a:"হিট",m:"তাপ"},
+    {e:"Seat",a:"সিট",m:"আসন"},{e:"Teach",a:"টিচ",m:"শেখানো"},{e:"Reach",a:"রিচ",m:"পৌঁছানো"},
+    {e:"Beach",a:"বিচ",m:"সমুদ্র সৈকত"},{e:"Dream",a:"ড্রিম",m:"স্বপ্ন"},{e:"Steam",a:"স্টিম",m:"বাষ্প"},
+    {e:"Bread",a:"ব্রেড",m:"রুটি"},{e:"Dead",a:"ডেড",m:"মৃত"},{e:"Head",a:"হেড",m:"মাথা"},
+    {e:"Read",a:"রিড/রেড",m:"পড়া"},{e:"Lead",a:"লিড/লেড",m:"নেতৃত্ব"},{e:"Heart",a:"হার্ট",m:"হৃদয়"},
+    {e:"Earth",a:"আর্থ",m:"পৃথিবী"},{e:"Learn",a:"লার্ন",m:"শেখা"},{e:"Pearl",a:"পার্ল",m:"মুক্তা"},
+    {e:"Early",a:"আর্লি",m:"তাড়াতাড়ি"},{e:"Great",a:"গ্রেট",m:"দারুণ"}
+  ]},
+  {sym:"AI",as:"এই",desc:"AI sounds like এই",words:[
+    {e:"Rain",a:"রেইন",m:"বৃষ্টি"},{e:"Train",a:"ট্রেইন",m:"ট্রেন"},{e:"Main",a:"মেইন",m:"প্রধান"},
+    {e:"Pain",a:"পেইন",m:"ব্যথা"},{e:"Wait",a:"ওয়েইট",m:"অপেক্ষা"},{e:"Sail",a:"সেইল",m:"পাল"},
+    {e:"Mail",a:"মেইল",m:"চিঠি"},{e:"Tail",a:"টেইল",m:"লেজ"},{e:"Trail",a:"ট্রেইল",m:"পথ"},
+    {e:"Claim",a:"ক্লেইম",m:"দাবি"},{e:"Brain",a:"ব্রেইন",m:"মস্তিষ্ক"},{e:"Chain",a:"চেইন",m:"শিকল"},
+    {e:"Drain",a:"ড্রেইন",m:"নালা"},{e:"Grain",a:"গ্রেইন",m:"শস্য"},{e:"Plain",a:"প্লেইন",m:"সমতল"},
+    {e:"Stain",a:"স্টেইন",m:"দাগ"},{e:"Waist",a:"ওয়েইস্ট",m:"কোমর"},{e:"Maintain",a:"মেইনটেইন",m:"রক্ষা করা"},
+    {e:"Afraid",a:"আফ্রেইড",m:"ভয় পেয়েছি"},{e:"Again",a:"অ্যাগেইন",m:"আবার"}
+  ]},
+  {sym:"AY",as:"এই",desc:"AY sounds like এই",words:[
+    {e:"Day",a:"ডে",m:"দিন"},{e:"Say",a:"সে",m:"বলা"},{e:"Play",a:"প্লে",m:"খেলা"},
+    {e:"Way",a:"ওয়ে",m:"পথ"},{e:"Stay",a:"স্টে",m:"থাকা"},{e:"Pay",a:"পে",m:"পরিশোধ"},
+    {e:"Ray",a:"রে",m:"রশ্মি"},{e:"Clay",a:"ক্লে",m:"মাটি"},{e:"Gray",a:"গ্রে",m:"ধূসর"},
+    {e:"Pray",a:"প্রে",m:"প্রার্থনা"},{e:"Spray",a:"স্প্রে",m:"স্প্রে"},{e:"Tray",a:"ট্রে",m:"থালা"},
+    {e:"Away",a:"অ্যাওয়ে",m:"দূরে"},{e:"Today",a:"টুডে",m:"আজ"},{e:"Delay",a:"ডিলে",m:"বিলম্ব"},
+    {e:"Display",a:"ডিসপ্লে",m:"প্রদর্শন"},{e:"Relay",a:"রিলে",m:"রিলে"},{e:"Sway",a:"সোয়ে",m:"দুলানো"},
+    {e:"Crayon",a:"ক্রেয়ন",m:"ক্রেয়ন"},{e:"Okay",a:"ওকে",m:"ঠিক আছে"}
+  ]},
+  {sym:"OA",as:"ওঅ",desc:"OA sounds like ওঅ (long O)",words:[
+    {e:"Boat",a:"বোট",m:"নৌকা"},{e:"Coat",a:"কোট",m:"কোট"},{e:"Road",a:"রোড",m:"রাস্তা"},
+    {e:"Load",a:"লোড",m:"বোঝা"},{e:"Toad",a:"টোড",m:"ব্যাঙ"},{e:"Toast",a:"টোস্ট",m:"টোস্ট"},
+    {e:"Roast",a:"রোস্ট",m:"ভাজা"},{e:"Coast",a:"কোস্ট",m:"উপকূল"},{e:"Groan",a:"গ্রোন",m:"কাতরানো"},
+    {e:"Loaf",a:"লোফ",m:"রুটির পিন্ড"},{e:"Moan",a:"মোন",m:"গুঙিয়ে কাঁদা"},{e:"Foam",a:"ফোম",m:"ফেনা"},
+    {e:"Soap",a:"সোপ",m:"সাবান"},{e:"Goat",a:"গোট",m:"ছাগল"},{e:"Float",a:"ফ্লোট",m:"ভাসা"},
+    {e:"Throat",a:"থ্রোট",m:"গলা"},{e:"Approach",a:"অ্যাপ্রোচ",m:"কাছে যাওয়া"},{e:"Broadcast",a:"ব্রডকাস্ট",m:"সম্প্রচার"},
+    {e:"Coach",a:"কোচ",m:"প্রশিক্ষক"},{e:"Poach",a:"পোচ",m:"চুরি করা"}
+  ]},
+  {sym:"OU",as:"আউ/উ",desc:"OU sounds like আউ or উ",words:[
+    {e:"Out",a:"আউট",m:"বাইরে"},{e:"House",a:"হাউস",m:"বাড়ি"},{e:"Mouse",a:"মাউস",m:"ইঁদুর"},
+    {e:"Sound",a:"সাউন্ড",m:"শব্দ"},{e:"Found",a:"ফাউন্ড",m:"পাওয়া"},{e:"Ground",a:"গ্রাউন্ড",m:"মাটি"},
+    {e:"Round",a:"রাউন্ড",m:"গোলাকার"},{e:"Proud",a:"প্রাউড",m:"গর্বিত"},{e:"Cloud",a:"ক্লাউড",m:"মেঘ"},
+    {e:"Loud",a:"লাউড",m:"জোরালো"},{e:"Count",a:"কাউন্ট",m:"গণনা"},{e:"Mountain",a:"মাউন্টেন",m:"পাহাড়"},
+    {e:"Could",a:"কুড",m:"পারতাম"},{e:"Would",a:"উড",m:"করতাম"},{e:"Should",a:"শুড",m:"উচিত"},
+    {e:"You",a:"ইউ",m:"তুমি"},{e:"Group",a:"গ্রুপ",m:"দল"},{e:"Tour",a:"টুর",m:"ভ্রমণ"},
+    {e:"Pour",a:"পোর",m:"ঢালা"},{e:"Four",a:"ফোর",m:"চার"}
+  ]},
+  {sym:"OW",as:"আউ/ও",desc:"OW sounds like আউ or ও",words:[
+    {e:"Cow",a:"কাউ",m:"গরু"},{e:"How",a:"হাউ",m:"কীভাবে"},{e:"Now",a:"নাউ",m:"এখন"},
+    {e:"Wow",a:"ওয়াও",m:"বাহ"},{e:"Owl",a:"আউল",m:"পেঁচা"},{e:"Bowl",a:"বোল",m:"বাটি"},
+    {e:"Grow",a:"গ্রো",m:"বাড়া"},{e:"Show",a:"শো",m:"দেখানো"},{e:"Slow",a:"স্লো",m:"ধীর"},
+    {e:"Flow",a:"ফ্লো",m:"প্রবাহ"},{e:"Snow",a:"স্নো",m:"তুষার"},{e:"Know",a:"নো",m:"জানা"},
+    {e:"Throw",a:"থ্রো",m:"ছোড়া"},{e:"Allow",a:"অ্যালাউ",m:"অনুমতি দেওয়া"},{e:"Power",a:"পাওয়ার",m:"শক্তি"},
+    {e:"Tower",a:"টাওয়ার",m:"মিনার"},{e:"Flower",a:"ফ্লাওয়ার",m:"ফুল"},{e:"Shower",a:"শাওয়ার",m:"ঝরনা"},
+    {e:"Follow",a:"ফলো",m:"অনুসরণ"},{e:"Window",a:"উইন্ডো",m:"জানালা"}
+  ]},
+  {sym:"CK",as:"ক",desc:"CK sounds like ক",words:[
+    {e:"Back",a:"ব্যাক",m:"পেছনে"},{e:"Black",a:"ব্ল্যাক",m:"কালো"},{e:"Brick",a:"ব্রিক",m:"ইট"},
+    {e:"Check",a:"চেক",m:"পরীক্ষা"},{e:"Clock",a:"ক্লক",m:"ঘড়ি"},{e:"Duck",a:"ডাক",m:"হাঁস"},
+    {e:"Kick",a:"কিক",m:"লাথি"},{e:"Lock",a:"লক",m:"তালা"},{e:"Pack",a:"প্যাক",m:"প্যাক"},
+    {e:"Pick",a:"পিক",m:"বাছাই"},{e:"Quick",a:"কুইক",m:"দ্রুত"},{e:"Rock",a:"রক",m:"পাথর"},
+    {e:"Sick",a:"সিক",m:"অসুস্থ"},{e:"Sock",a:"সক",m:"মোজা"},{e:"Stack",a:"স্ট্যাক",m:"স্তূপ"},
+    {e:"Stick",a:"স্টিক",m:"লাঠি"},{e:"Thick",a:"থিক",m:"মোটা"},{e:"Track",a:"ট্র্যাক",m:"পথ"},
+    {e:"Trick",a:"ট্রিক",m:"কৌশল"},{e:"Truck",a:"ট্রাক",m:"ট্রাক"}
+  ]},
+  {sym:"ER",as:"আর/অর",desc:"ER sounds like আর at end of words",words:[
+    {e:"Water",a:"ওয়াটার",m:"পানি"},{e:"Teacher",a:"টিচার",m:"শিক্ষক"},{e:"Doctor",a:"ডক্টর",m:"ডাক্তার"},
+    {e:"Father",a:"ফাদার",m:"বাবা"},{e:"Mother",a:"মাদার",m:"মা"},{e:"Brother",a:"ব্রাদার",m:"ভাই"},
+    {e:"Sister",a:"সিস্টার",m:"বোন"},{e:"Computer",a:"কম্পিউটার",m:"কম্পিউটার"},{e:"Letter",a:"লেটার",m:"চিঠি"},
+    {e:"Better",a:"বেটার",m:"ভালো"},{e:"River",a:"রিভার",m:"নদী"},{e:"Winter",a:"উইন্টার",m:"শীতকাল"},
+    {e:"Summer",a:"সামার",m:"গ্রীষ্মকাল"},{e:"Power",a:"পাওয়ার",m:"শক্তি"},{e:"Tower",a:"টাওয়ার",m:"মিনার"},
+    {e:"Silver",a:"সিলভার",m:"রূপা"},{e:"Number",a:"নাম্বার",m:"সংখ্যা"},{e:"Answer",a:"আন্সার",m:"উত্তর"},
+    {e:"Butter",a:"বাটার",m:"মাখন"},{e:"Danger",a:"ডেঞ্জার",m:"বিপদ"}
+  ]},
+  // Alphabet rules
+  {sym:"A",as:"আ/এ/অ",desc:"A has many sounds: আ (father), এ (cat), অ (about)",words:[
+    {e:"Apple",a:"অ্যাপেল",m:"আপেল"},{e:"Ant",a:"অ্যান্ট",m:"পিঁপড়া"},{e:"Arrow",a:"অ্যারো",m:"তীর"},
+    {e:"Arm",a:"আর্ম",m:"বাহু"},{e:"Art",a:"আর্ট",m:"শিল্প"},{e:"Ask",a:"আস্ক",m:"জিজ্ঞাসা করা"},
+    {e:"Ace",a:"এস",m:"তাস"},{e:"Age",a:"এজ",m:"বয়স"},{e:"Able",a:"এবল",m:"সক্ষম"},
+    {e:"Aid",a:"এইড",m:"সাহায্য"},{e:"Air",a:"এয়ার",m:"বাতাস"},{e:"Back",a:"ব্যাক",m:"পেছন"},
+    {e:"Bad",a:"ব্যাড",m:"খারাপ"},{e:"Bag",a:"ব্যাগ",m:"ব্যাগ"},{e:"Ball",a:"বল",m:"বল"},
+    {e:"Band",a:"ব্যান্ড",m:"দল"},{e:"Bath",a:"বাথ",m:"স্নান"},{e:"Cat",a:"ক্যাট",m:"বিড়াল"},
+    {e:"Call",a:"কল",m:"ডাকা"},{e:"Can",a:"ক্যান",m:"পারা"}
+  ]},
+  {sym:"B",as:"ব",desc:"B sounds like ব",words:[
+    {e:"Ball",a:"বল",m:"বল"},{e:"Bat",a:"ব্যাট",m:"ব্যাট"},{e:"Book",a:"বুক",m:"বই"},
+    {e:"Boy",a:"বয়",m:"ছেলে"},{e:"Bag",a:"ব্যাগ",m:"ব্যাগ"},{e:"Bird",a:"বার্ড",m:"পাখি"},
+    {e:"Blue",a:"ব্লু",m:"নীল"},{e:"Boat",a:"বোট",m:"নৌকা"},{e:"Big",a:"বিগ",m:"বড়"},
+    {e:"Bus",a:"বাস",m:"বাস"},{e:"Bed",a:"বেড",m:"বিছানা"},{e:"Bad",a:"ব্যাড",m:"খারাপ"},
+    {e:"Baby",a:"বেবি",m:"শিশু"},{e:"Back",a:"ব্যাক",m:"পেছন"},{e:"Bake",a:"বেক",m:"বেক করা"},
+    {e:"Bank",a:"ব্যাংক",m:"ব্যাংক"},{e:"Bark",a:"বার্ক",m:"ছাল"},{e:"Base",a:"বেস",m:"ভিত্তি"},
+    {e:"Bear",a:"বেয়ার",m:"ভালুক"},{e:"Beat",a:"বিট",m:"মারা"}
+  ]},
+  {sym:"C",as:"ক/স",desc:"C sounds like ক (cat) or স (cell)",words:[
+    {e:"Cat",a:"ক্যাট",m:"বিড়াল"},{e:"Car",a:"কার",m:"গাড়ি"},{e:"Cup",a:"কাপ",m:"কাপ"},
+    {e:"Coat",a:"কোট",m:"কোট"},{e:"Cow",a:"কাউ",m:"গরু"},{e:"Cold",a:"কোল্ড",m:"ঠান্ডা"},
+    {e:"Come",a:"কাম",m:"আসা"},{e:"Cook",a:"কুক",m:"রাঁধা"},{e:"Cell",a:"সেল",m:"কোষ"},
+    {e:"Cent",a:"সেন্ট",m:"পয়সা"},{e:"City",a:"সিটি",m:"শহর"},{e:"Circle",a:"সার্কেল",m:"বৃত্ত"},
+    {e:"Cute",a:"কিউট",m:"সুন্দর"},{e:"Clip",a:"ক্লিপ",m:"ক্লিপ"},{e:"Clock",a:"ক্লক",m:"ঘড়ি"},
+    {e:"Cloud",a:"ক্লাউড",m:"মেঘ"},{e:"Corn",a:"কর্ন",m:"ভুট্টা"},{e:"Cross",a:"ক্রস",m:"পার হওয়া"},
+    {e:"Cry",a:"ক্রাই",m:"কাঁদা"},{e:"Cut",a:"কাট",m:"কাটা"}
+  ]},
+  {sym:"D",as:"ড/দ",desc:"D sounds like ড or দ",words:[
+    {e:"Dog",a:"ডগ",m:"কুকুর"},{e:"Day",a:"ডে",m:"দিন"},{e:"Door",a:"ডোর",m:"দরজা"},
+    {e:"Desk",a:"ডেস্ক",m:"টেবিল"},{e:"Down",a:"ডাউন",m:"নিচে"},{e:"Draw",a:"ড্র",m:"আঁকা"},
+    {e:"Dream",a:"ড্রিম",m:"স্বপ্ন"},{e:"Dress",a:"ড্রেস",m:"পোশাক"},{e:"Drink",a:"ড্রিংক",m:"পান করা"},
+    {e:"Drive",a:"ড্রাইভ",m:"চালানো"},{e:"Drop",a:"ড্রপ",m:"ফোঁটা"},{e:"Drum",a:"ড্রাম",m:"ড্রাম"},
+    {e:"Dry",a:"ড্রাই",m:"শুকনো"},{e:"Duck",a:"ডাক",m:"হাঁস"},{e:"Dust",a:"ডাস্ট",m:"ধুলো"},
+    {e:"Dark",a:"ডার্ক",m:"অন্ধকার"},{e:"Data",a:"ডেটা",m:"তথ্য"},{e:"Date",a:"ডেট",m:"তারিখ"},
+    {e:"Deep",a:"ডিপ",m:"গভীর"},{e:"Dial",a:"ডায়াল",m:"ডায়াল"}
+  ]},
+  {sym:"E",as:"ই/এ/ঈ",desc:"E sounds like ই (me), এ (bed), or silent",words:[
+    {e:"Egg",a:"এগ",m:"ডিম"},{e:"Ear",a:"ইয়ার",m:"কান"},{e:"Eat",a:"ইট",m:"খাওয়া"},
+    {e:"Eel",a:"ইল",m:"ইল মাছ"},{e:"End",a:"এন্ড",m:"শেষ"},{e:"Enter",a:"এন্টার",m:"প্রবেশ করা"},
+    {e:"Every",a:"এভরি",m:"প্রতিটি"},{e:"Eye",a:"আই",m:"চোখ"},{e:"Bed",a:"বেড",m:"বিছানা"},
+    {e:"Best",a:"বেস্ট",m:"সেরা"},{e:"Bend",a:"বেন্ড",m:"বাঁকানো"},{e:"Belt",a:"বেল্ট",m:"বেল্ট"},
+    {e:"Bell",a:"বেল",m:"ঘণ্টা"},{e:"Between",a:"বিটুইন",m:"মধ্যে"},{e:"Even",a:"ইভেন",m:"এমনকি"},
+    {e:"Event",a:"ইভেন্ট",m:"ঘটনা"},{e:"Ever",a:"এভার",m:"কখনো"},{e:"Evil",a:"ইভিল",m:"মন্দ"},
+    {e:"Each",a:"ইচ",m:"প্রতিটি"},{e:"Edge",a:"এজ",m:"ধার"}
+  ]},
+  {sym:"F",as:"ফ",desc:"F sounds like ফ",words:[
+    {e:"Fish",a:"ফিশ",m:"মাছ"},{e:"Fire",a:"ফায়ার",m:"আগুন"},{e:"Face",a:"ফেস",m:"মুখ"},
+    {e:"Fall",a:"ফল",m:"পড়া"},{e:"Far",a:"ফার",m:"দূরে"},{e:"Fast",a:"ফাস্ট",m:"দ্রুত"},
+    {e:"Fat",a:"ফ্যাট",m:"মোটা"},{e:"Feed",a:"ফিড",m:"খাওয়ানো"},{e:"Feel",a:"ফিল",m:"অনুভব"},
+    {e:"Feet",a:"ফিট",m:"পা"},{e:"Fence",a:"ফেন্স",m:"বেড়া"},{e:"Find",a:"ফাইন্ড",m:"খোঁজা"},
+    {e:"Fine",a:"ফাইন",m:"ঠিক আছে"},{e:"Finger",a:"ফিঙ্গার",m:"আঙ্গুল"},{e:"Fly",a:"ফ্লাই",m:"উড়া"},
+    {e:"Floor",a:"ফ্লোর",m:"মেঝে"},{e:"Flower",a:"ফ্লাওয়ার",m:"ফুল"},{e:"Food",a:"ফুড",m:"খাবার"},
+    {e:"Foot",a:"ফুট",m:"পা"},{e:"Forest",a:"ফরেস্ট",m:"বন"}
+  ]},
+  {sym:"G",as:"গ/জ",desc:"G sounds like গ (go) or জ (gem)",words:[
+    {e:"Go",a:"গো",m:"যাওয়া"},{e:"Good",a:"গুড",m:"ভালো"},{e:"Girl",a:"গার্ল",m:"মেয়ে"},
+    {e:"Give",a:"গিভ",m:"দেওয়া"},{e:"Game",a:"গেম",m:"খেলা"},{e:"Gate",a:"গেট",m:"দরজা"},
+    {e:"Gold",a:"গোল্ড",m:"সোনা"},{e:"Grass",a:"গ্রাস",m:"ঘাস"},{e:"Great",a:"গ্রেট",m:"মহান"},
+    {e:"Green",a:"গ্রিন",m:"সবুজ"},{e:"Grow",a:"গ্রো",m:"বাড়া"},{e:"Gem",a:"জেম",m:"রত্ন"},
+    {e:"Germ",a:"জার্ম",m:"জীবাণু"},{e:"Giant",a:"জায়ান্ট",m:"দৈত্য"},{e:"Ginger",a:"জিঞ্জার",m:"আদা"},
+    {e:"Gentle",a:"জেন্টেল",m:"ভদ্র"},{e:"Geography",a:"জিওগ্রাফি",m:"ভূগোল"},{e:"Glass",a:"গ্লাস",m:"কাচ"},
+    {e:"Glue",a:"গ্লু",m:"আঠা"},{e:"Grab",a:"গ্র্যাব",m:"ধরা"}
+  ]},
+  {sym:"H",as:"হ",desc:"H sounds like হ (sometimes silent)",words:[
+    {e:"House",a:"হাউস",m:"বাড়ি"},{e:"Hand",a:"হ্যান্ড",m:"হাত"},{e:"Head",a:"হেড",m:"মাথা"},
+    {e:"Heart",a:"হার্ট",m:"হৃদয়"},{e:"Help",a:"হেল্প",m:"সাহায্য"},{e:"Here",a:"হিয়ার",m:"এখানে"},
+    {e:"High",a:"হাই",m:"উঁচু"},{e:"Hill",a:"হিল",m:"পাহাড়"},{e:"Hit",a:"হিট",m:"আঘাত"},
+    {e:"Hold",a:"হোল্ড",m:"ধরা"},{e:"Home",a:"হোম",m:"বাড়ি"},{e:"Hope",a:"হোপ",m:"আশা"},
+    {e:"Hot",a:"হট",m:"গরম"},{e:"Hour",a:"আওয়ার",m:"ঘণ্টা (H নীরব)"},{e:"Honest",a:"অনেস্ট",m:"সৎ (H নীরব)"},
+    {e:"Huge",a:"হিউজ",m:"বিশাল"},{e:"Human",a:"হিউম্যান",m:"মানুষ"},{e:"Hurry",a:"হারি",m:"তাড়া"},
+    {e:"Happy",a:"হ্যাপি",m:"খুশি"},{e:"Hard",a:"হার্ড",m:"কঠিন"}
+  ]},
+  {sym:"I",as:"আই/ই/ঈ",desc:"I sounds like আই (like), ই (bit), or ঈ",words:[
+    {e:"Ice",a:"আইস",m:"বরফ"},{e:"Idea",a:"আইডিয়া",m:"ধারণা"},{e:"Ill",a:"ইল",m:"অসুস্থ"},
+    {e:"In",a:"ইন",m:"মধ্যে"},{e:"Into",a:"ইনটু",m:"ভেতরে"},{e:"Iron",a:"আয়রন",m:"লোহা"},
+    {e:"Island",a:"আইল্যান্ড",m:"দ্বীপ (S নীরব)"},{e:"If",a:"ইফ",m:"যদি"},{e:"Image",a:"ইমেজ",m:"ছবি"},
+    {e:"Item",a:"আইটেম",m:"জিনিস"},{e:"Big",a:"বিগ",m:"বড়"},{e:"Bit",a:"বিট",m:"একটু"},
+    {e:"City",a:"সিটি",m:"শহর"},{e:"Fish",a:"ফিশ",m:"মাছ"},{e:"Give",a:"গিভ",m:"দেওয়া"},
+    {e:"Girl",a:"গার্ল",m:"মেয়ে"},{e:"Hide",a:"হাইড",m:"লুকানো"},{e:"Like",a:"লাইক",m:"পছন্দ"},
+    {e:"Mine",a:"মাইন",m:"আমার"},{e:"Side",a:"সাইড",m:"পাশ"}
+  ]},
+  {sym:"J",as:"জ",desc:"J sounds like জ",words:[
+    {e:"Jump",a:"জাম্প",m:"লাফানো"},{e:"Joy",a:"জয়",m:"আনন্দ"},{e:"Jam",a:"জ্যাম",m:"জ্যাম"},
+    {e:"Jet",a:"জেট",m:"জেট"},{e:"Job",a:"জব",m:"কাজ"},{e:"Join",a:"জয়েন",m:"যোগ দেওয়া"},
+    {e:"Joke",a:"জোক",m:"মজার কথা"},{e:"Journey",a:"জার্নি",m:"যাত্রা"},{e:"Judge",a:"জাজ",m:"বিচারক"},
+    {e:"Juice",a:"জুস",m:"রস"},{e:"July",a:"জুলাই",m:"জুলাই"},{e:"June",a:"জুন",m:"জুন"},
+    {e:"Jungle",a:"জাংগল",m:"জঙ্গল"},{e:"Junior",a:"জুনিয়র",m:"জুনিয়র"},{e:"Just",a:"জাস্ট",m:"শুধু"},
+    {e:"Jacket",a:"জ্যাকেট",m:"জ্যাকেট"},{e:"Jar",a:"জার",m:"বোয়াম"},{e:"Jaw",a:"জ",m:"চোয়াল"},
+    {e:"Jewel",a:"জুয়েল",m:"গহনা"},{e:"Journal",a:"জার্নাল",m:"পত্রিকা"}
+  ]},
+  {sym:"K",as:"ক",desc:"K sounds like ক (silent before N)",words:[
+    {e:"Key",a:"কি",m:"চাবি"},{e:"King",a:"কিং",m:"রাজা"},{e:"Kid",a:"কিড",m:"বাচ্চা"},
+    {e:"Kind",a:"কাইন্ড",m:"দয়ালু"},{e:"Kit",a:"কিট",m:"সেট"},{e:"Kite",a:"কাইট",m:"ঘুড়ি"},
+    {e:"Knee",a:"নি",m:"হাঁটু (K নীরব)"},{e:"Knife",a:"নাইফ",m:"ছুরি (K নীরব)"},{e:"Know",a:"নো",m:"জানা (K নীরব)"},
+    {e:"Knowledge",a:"নলেজ",m:"জ্ঞান (K নীরব)"},{e:"Keep",a:"কিপ",m:"রাখা"},{e:"Kick",a:"কিক",m:"লাথি"},
+    {e:"Kill",a:"কিল",m:"হত্যা"},{e:"Kettle",a:"কেটল",m:"কেটলি"},{e:"Kitchen",a:"কিচেন",m:"রান্নাঘর"},
+    {e:"Kitten",a:"কিটেন",m:"বিড়ালছানা"},{e:"Knew",a:"নিউ",m:"জানতাম (K নীরব)"},{e:"Knock",a:"নক",m:"ঠোকা (K নীরব)"},
+    {e:"Knot",a:"নট",m:"গিঁট (K নীরব)"},{e:"Koala",a:"কোয়ালা",m:"কোয়ালা"}
+  ]},
+  {sym:"L",as:"ল",desc:"L sounds like ল (sometimes silent)",words:[
+    {e:"Lion",a:"লায়ন",m:"সিংহ"},{e:"Light",a:"লাইট",m:"আলো"},{e:"Love",a:"লভ",m:"ভালোবাসা"},
+    {e:"Leaf",a:"লিফ",m:"পাতা"},{e:"Learn",a:"লার্ন",m:"শেখা"},{e:"Left",a:"লেফট",m:"বাম"},
+    {e:"Leg",a:"লেগ",m:"পা"},{e:"Life",a:"লাইফ",m:"জীবন"},{e:"Line",a:"লাইন",m:"রেখা"},
+    {e:"Listen",a:"লিসেন",m:"শোনা (T নীরব)"},{e:"Long",a:"লং",m:"দীর্ঘ"},{e:"Look",a:"লুক",m:"দেখা"},
+    {e:"Loud",a:"লাউড",m:"জোরালো"},{e:"Walk",a:"ওয়ক",m:"হাঁটা (L নীরব)"},{e:"Talk",a:"টক",m:"কথা (L নীরব)"},
+    {e:"Half",a:"হাফ",m:"অর্ধেক (L নীরব)"},{e:"Calm",a:"কাম",m:"শান্ত (L নীরব)"},{e:"Palm",a:"পাম",m:"তালু (L নীরব)"},
+    {e:"Could",a:"কুড",m:"পারতাম (L নীরব)"},{e:"Would",a:"উড",m:"করতাম (L নীরব)"}
+  ]},
+  {sym:"M",as:"ম",desc:"M sounds like ম",words:[
+    {e:"Man",a:"ম্যান",m:"মানুষ"},{e:"Moon",a:"মুন",m:"চাঁদ"},{e:"Map",a:"ম্যাপ",m:"মানচিত্র"},
+    {e:"Milk",a:"মিল্ক",m:"দুধ"},{e:"Mind",a:"মাইন্ড",m:"মন"},{e:"Mix",a:"মিক্স",m:"মেশানো"},
+    {e:"Money",a:"মানি",m:"টাকা"},{e:"Month",a:"মান্থ",m:"মাস"},{e:"More",a:"মোর",m:"আরো"},
+    {e:"Mother",a:"মাদার",m:"মা"},{e:"Mountain",a:"মাউন্টেন",m:"পাহাড়"},{e:"Mouse",a:"মাউস",m:"ইঁদুর"},
+    {e:"Move",a:"মুভ",m:"নড়া"},{e:"Much",a:"মাচ",m:"অনেক"},{e:"Music",a:"মিউজিক",m:"সংগীত"},
+    {e:"Make",a:"মেক",m:"বানানো"},{e:"Mark",a:"মার্ক",m:"চিহ্ন"},{e:"Match",a:"ম্যাচ",m:"মিলানো"},
+    {e:"Matter",a:"ম্যাটার",m:"বিষয়"},{e:"Meaning",a:"মিনিং",m:"অর্থ"}
+  ]},
+  {sym:"N",as:"ন",desc:"N sounds like ন",words:[
+    {e:"Name",a:"নেম",m:"নাম"},{e:"Near",a:"নিয়ার",m:"কাছে"},{e:"Night",a:"নাইট",m:"রাত"},
+    {e:"Nine",a:"নাইন",m:"নয়"},{e:"Nose",a:"নোজ",m:"নাক"},{e:"Note",a:"নোট",m:"নোট"},
+    {e:"Now",a:"নাউ",m:"এখন"},{e:"Number",a:"নাম্বার",m:"সংখ্যা"},{e:"Nest",a:"নেস্ট",m:"বাসা"},
+    {e:"Net",a:"নেট",m:"জাল"},{e:"New",a:"নিউ",m:"নতুন"},{e:"Nice",a:"নাইস",m:"সুন্দর"},
+    {e:"Neck",a:"নেক",m:"গলা"},{e:"Need",a:"নিড",m:"দরকার"},{e:"Noise",a:"নয়েজ",m:"শব্দ"},
+    {e:"Noon",a:"নুন",m:"দুপুর"},{e:"North",a:"নর্থ",m:"উত্তর"},{e:"Novel",a:"নভেল",m:"উপন্যাস"},
+    {e:"Nurse",a:"নার্স",m:"নার্স"},{e:"Nation",a:"নেশন",m:"জাতি"}
+  ]},
+  {sym:"O",as:"ও/অ/আ",desc:"O sounds like ও (go), অ (lot), or আ",words:[
+    {e:"Old",a:"ওল্ড",m:"বৃদ্ধ"},{e:"Open",a:"ওপেন",m:"খোলা"},{e:"Over",a:"ওভার",m:"উপরে"},
+    {e:"Own",a:"ওন",m:"নিজের"},{e:"Ocean",a:"ওশান",m:"সমুদ্র"},{e:"Odd",a:"অড",m:"বিজোড়"},
+    {e:"On",a:"অন",m:"উপর"},{e:"Off",a:"অফ",m:"বন্ধ"},{e:"Dog",a:"ডগ",m:"কুকুর"},
+    {e:"Hot",a:"হট",m:"গরম"},{e:"Box",a:"বক্স",m:"বাক্স"},{e:"Top",a:"টপ",m:"উপরে"},
+    {e:"Rock",a:"রক",m:"পাথর"},{e:"Lock",a:"লক",m:"তালা"},{e:"Only",a:"ওনলি",m:"শুধু"},
+    {e:"Order",a:"অর্ডার",m:"আদেশ"},{e:"Other",a:"আদার",m:"অন্য"},{e:"Our",a:"আওয়ার",m:"আমাদের"},
+    {e:"Outside",a:"আউটসাইড",m:"বাইরে"},{e:"Often",a:"অফেন",m:"প্রায়ই"}
+  ]},
+  {sym:"P",as:"প",desc:"P sounds like প",words:[
+    {e:"Pan",a:"প্যান",m:"প্যান"},{e:"Park",a:"পার্ক",m:"পার্ক"},{e:"Part",a:"পার্ট",m:"অংশ"},
+    {e:"Pass",a:"পাস",m:"পাস"},{e:"Path",a:"পাথ",m:"পথ"},{e:"Pen",a:"পেন",m:"কলম"},
+    {e:"Pick",a:"পিক",m:"বাছা"},{e:"Pink",a:"পিংক",m:"গোলাপি"},{e:"Plan",a:"প্ল্যান",m:"পরিকল্পনা"},
+    {e:"Plant",a:"প্ল্যান্ট",m:"গাছ"},{e:"Play",a:"প্লে",m:"খেলা"},{e:"Plus",a:"প্লাস",m:"যোগ"},
+    {e:"Point",a:"পয়েন্ট",m:"বিন্দু"},{e:"Pond",a:"পন্ড",m:"পুকুর"},{e:"Poor",a:"পুয়োর",m:"গরিব"},
+    {e:"Print",a:"প্রিন্ট",m:"ছাপানো"},{e:"Problem",a:"প্রবলেম",m:"সমস্যা"},{e:"Pull",a:"পুল",m:"টানা"},
+    {e:"Push",a:"পুশ",m:"ঠেলা"},{e:"Put",a:"পুট",m:"রাখা"}
+  ]},
+  {sym:"Q",as:"কু",desc:"Q usually sounds like কু (qu = কু)",words:[
+    {e:"Queen",a:"কুইন",m:"রানী"},{e:"Quick",a:"কুইক",m:"দ্রুত"},{e:"Quiet",a:"কোয়ায়েট",m:"শান্ত"},
+    {e:"Quite",a:"কোয়াইট",m:"বেশ"},{e:"Question",a:"কোয়েশ্চন",m:"প্রশ্ন"},{e:"Queue",a:"কিউ",m:"সারি"},
+    {e:"Quiz",a:"কুইজ",m:"পরীক্ষা"},{e:"Quack",a:"কোয়্যাক",m:"হাঁসের ডাক"},{e:"Qualify",a:"কোয়ালিফাই",m:"যোগ্য হওয়া"},
+    {e:"Quality",a:"কোয়ালিটি",m:"গুণ"},{e:"Quantity",a:"কোয়ান্টিটি",m:"পরিমাণ"},{e:"Quarter",a:"কোয়ার্টার",m:"চার ভাগের এক"},
+    {e:"Quill",a:"কুইল",m:"পাখির পালক"},{e:"Quit",a:"কুইট",m:"ছাড়া"},{e:"Quota",a:"কোটা",m:"ভাগ"},
+    {e:"Quote",a:"কোট",m:"উদ্ধৃতি"},{e:"Unique",a:"ইউনিক",m:"অনন্য"},{e:"Liquid",a:"লিকুইড",m:"তরল"},
+    {e:"Frequent",a:"ফ্রিকোয়েন্ট",m:"ঘন ঘন"},{e:"Equal",a:"ইকুয়াল",m:"সমান"}
+  ]},
+  {sym:"R",as:"র",desc:"R sounds like র (different from Bengali র)",words:[
+    {e:"Rain",a:"রেইন",m:"বৃষ্টি"},{e:"Read",a:"রিড",m:"পড়া"},{e:"Red",a:"রেড",m:"লাল"},
+    {e:"Rice",a:"রাইস",m:"ভাত"},{e:"Right",a:"রাইট",m:"ডান"},{e:"Ring",a:"রিং",m:"আংটি"},
+    {e:"River",a:"রিভার",m:"নদী"},{e:"Road",a:"রোড",m:"রাস্তা"},{e:"Rock",a:"রক",m:"পাথর"},
+    {e:"Room",a:"রুম",m:"ঘর"},{e:"Rose",a:"রোজ",m:"গোলাপ"},{e:"Run",a:"রান",m:"দৌড়ানো"},
+    {e:"Rabbit",a:"র‍্যাবিট",m:"খরগোশ"},{e:"Radio",a:"রেডিও",m:"রেডিও"},{e:"Rain",a:"রেইন",m:"বৃষ্টি"},
+    {e:"Rather",a:"র‍্যাদার",m:"বরং"},{e:"Reach",a:"রিচ",m:"পৌঁছানো"},{e:"Reason",a:"রিজন",m:"কারণ"},
+    {e:"Remember",a:"রিমেম্বার",m:"মনে রাখা"},{e:"Respect",a:"রেসপেক্ট",m:"সম্মান"}
+  ]},
+  {sym:"S",as:"স/জ",desc:"S sounds like স (sun) or জ (his)",words:[
+    {e:"Sun",a:"সান",m:"সূর্য"},{e:"Sea",a:"সি",m:"সমুদ্র"},{e:"Sand",a:"স্যান্ড",m:"বালি"},
+    {e:"School",a:"স্কুল",m:"বিদ্যালয়"},{e:"Sky",a:"স্কাই",m:"আকাশ"},{e:"Smile",a:"স্মাইল",m:"হাসি"},
+    {e:"Snow",a:"স্নো",m:"তুষার"},{e:"Soft",a:"সফট",m:"নরম"},{e:"Song",a:"সং",m:"গান"},
+    {e:"Star",a:"স্টার",m:"তারা"},{e:"Stop",a:"স্টপ",m:"থামা"},{e:"Story",a:"স্টোরি",m:"গল্প"},
+    {e:"Study",a:"স্টাডি",m:"পড়াশোনা"},{e:"Sugar",a:"শুগার",m:"চিনি"},{e:"Sure",a:"শিউর",m:"নিশ্চিত"},
+    {e:"His",a:"হিজ",m:"তার (জ)"},{e:"Has",a:"হ্যাজ",m:"আছে (জ)"},{e:"Was",a:"ওয়াজ",m:"ছিল (জ)"},
+    {e:"Rise",a:"রাইজ",m:"উঠা (জ)"},{e:"These",a:"দিজ",m:"এগুলো (জ)"}
+  ]},
+  {sym:"T",as:"ট/ত",desc:"T sounds like ট or ত (sometimes silent)",words:[
+    {e:"Tea",a:"টি",m:"চা"},{e:"Table",a:"টেবিল",m:"টেবিল"},{e:"Take",a:"টেক",m:"নেওয়া"},
+    {e:"Talk",a:"টক",m:"কথা"},{e:"Tall",a:"টল",m:"লম্বা"},{e:"Tell",a:"টেল",m:"বলা"},
+    {e:"Ten",a:"টেন",m:"দশ"},{e:"Time",a:"টাইম",m:"সময়"},{e:"Today",a:"টুডে",m:"আজ"},
+    {e:"Top",a:"টপ",m:"উপর"},{e:"Tree",a:"ট্রি",m:"গাছ"},{e:"True",a:"ট্রু",m:"সত্য"},
+    {e:"Turn",a:"টার্ন",m:"বাঁক"},{e:"Two",a:"টু",m:"দুই"},{e:"Town",a:"টাউন",m:"শহর"},
+    {e:"Listen",a:"লিসেন",m:"শোনা (T নীরব)"},{e:"Often",a:"অফেন",m:"প্রায়ই (T নীরব)"},{e:"Castle",a:"ক্যাসেল",m:"দুর্গ (T নীরব)"},
+    {e:"Whistle",a:"উইসল",m:"বাঁশি (T নীরব)"},{e:"Fasten",a:"ফাসেন",m:"বাঁধা (T নীরব)"}
+  ]},
+  {sym:"U",as:"আ/ইউ/উ",desc:"U sounds like আ (cup), ইউ (use), or উ (full)",words:[
+    {e:"Up",a:"আপ",m:"উপরে"},{e:"Under",a:"আন্ডার",m:"নিচে"},{e:"Use",a:"ইউজ",m:"ব্যবহার"},
+    {e:"Unit",a:"ইউনিট",m:"একক"},{e:"Ugly",a:"আগলি",m:"কুৎসিত"},{e:"Bus",a:"বাস",m:"বাস"},
+    {e:"Cut",a:"কাট",m:"কাটা"},{e:"Fun",a:"ফান",m:"মজা"},{e:"Gun",a:"গান",m:"বন্দুক"},
+    {e:"Hug",a:"হাগ",m:"জড়ানো"},{e:"Jump",a:"জাম্প",m:"লাফানো"},{e:"Lunch",a:"লাঞ্চ",m:"দুপুরের খাবার"},
+    {e:"Mug",a:"মাগ",m:"মগ"},{e:"Nut",a:"নাট",m:"বাদাম"},{e:"Put",a:"পুট",m:"রাখা"},
+    {e:"Rule",a:"রুল",m:"নিয়ম"},{e:"Run",a:"রান",m:"দৌড়ানো"},{e:"Sun",a:"সান",m:"সূর্য"},
+    {e:"Tube",a:"টিউব",m:"নল"},{e:"Turn",a:"টার্ন",m:"বাঁক"}
+  ]},
+  {sym:"V",as:"ভ",desc:"V sounds like ভ",words:[
+    {e:"Van",a:"ভ্যান",m:"ভ্যান"},{e:"Very",a:"ভেরি",m:"খুব"},{e:"Video",a:"ভিডিও",m:"ভিডিও"},
+    {e:"View",a:"ভিউ",m:"দৃশ্য"},{e:"Voice",a:"ভয়েস",m:"কণ্ঠ"},{e:"Vote",a:"ভোট",m:"ভোট"},
+    {e:"Value",a:"ভ্যালু",m:"মূল্য"},{e:"Valley",a:"ভ্যালি",m:"উপত্যকা"},{e:"Valve",a:"ভালভ",m:"ভালভ"},
+    {e:"Vast",a:"ভাস্ট",m:"বিশাল"},{e:"Velvet",a:"ভেলভেট",m:"মখমল"},{e:"Verse",a:"ভার্স",m:"শ্লোক"},
+    {e:"Village",a:"ভিলেজ",m:"গ্রাম"},{e:"Virus",a:"ভাইরাস",m:"ভাইরাস"},{e:"Visit",a:"ভিজিট",m:"পরিদর্শন"},
+    {e:"Vivid",a:"ভিভিড",m:"উজ্জ্বল"},{e:"Vocal",a:"ভোকাল",m:"কণ্ঠস্বর"},{e:"Volume",a:"ভলিউম",m:"মাত্রা"},
+    {e:"Volunteer",a:"ভলান্টিয়ার",m:"স্বেচ্ছাসেবী"},{e:"Voyage",a:"ভয়েজ",m:"সমুদ্রযাত্রা"}
+  ]},
+  {sym:"W",as:"ওয়া",desc:"W sounds like ওয়া (sometimes silent)",words:[
+    {e:"Water",a:"ওয়াটার",m:"পানি"},{e:"Walk",a:"ওয়ক",m:"হাঁটা"},{e:"Wall",a:"ওয়াল",m:"দেওয়াল"},
+    {e:"Want",a:"ওয়ান্ট",m:"চাওয়া"},{e:"War",a:"ওয়ার",m:"যুদ্ধ"},{e:"Watch",a:"ওয়াচ",m:"দেখা"},
+    {e:"Way",a:"ওয়ে",m:"পথ"},{e:"Week",a:"উইক",m:"সপ্তাহ"},{e:"Welcome",a:"ওয়েলকাম",m:"স্বাগতম"},
+    {e:"Well",a:"ওয়েল",m:"ভালো"},{e:"Wind",a:"উইন্ড",m:"বায়ু"},{e:"Winter",a:"উইন্টার",m:"শীত"},
+    {e:"Wise",a:"ওয়াইজ",m:"জ্ঞানী"},{e:"With",a:"উইদ",m:"সাথে"},{e:"Work",a:"ওয়ার্ক",m:"কাজ"},
+    {e:"World",a:"ওয়ার্ল্ড",m:"পৃথিবী"},{e:"Write",a:"রাইট",m:"লেখা (W নীরব)"},{e:"Wrong",a:"রং",m:"ভুল (W নীরব)"},
+    {e:"Wrap",a:"র‍্যাপ",m:"মোড়া (W নীরব)"},{e:"Wrist",a:"রিস্ট",m:"কব্জি (W নীরব)"}
+  ]},
+  {sym:"X",as:"ক্স/জ/জ",desc:"X sounds like ক্স (fox), জ (exact), or জ",words:[
+    {e:"Fox",a:"ফক্স",m:"শেয়াল"},{e:"Box",a:"বক্স",m:"বাক্স"},{e:"Mix",a:"মিক্স",m:"মেশানো"},
+    {e:"Six",a:"সিক্স",m:"ছয়"},{e:"Tax",a:"ট্যাক্স",m:"কর"},{e:"Text",a:"টেক্সট",m:"লেখা"},
+    {e:"Next",a:"নেক্সট",m:"পরবর্তী"},{e:"Exam",a:"ইগ্জ্যাম",m:"পরীক্ষা"},{e:"Exact",a:"ইগ্জ্যাক্ট",m:"সঠিক"},
+    {e:"Example",a:"ইগ্জ্যাম্পেল",m:"উদাহরণ"},{e:"Exist",a:"ইগ্জিস্ট",m:"বিদ্যমান"},{e:"Extra",a:"এক্সট্রা",m:"অতিরিক্ত"},
+    {e:"Excuse",a:"ইক্সকিউজ",m:"মাফ করা"},{e:"Exercise",a:"এক্সারসাইজ",m:"ব্যায়াম"},{e:"Expect",a:"ইক্সপেক্ট",m:"আশা করা"},
+    {e:"Expert",a:"এক্সপার্ট",m:"বিশেষজ্ঞ"},{e:"Explain",a:"ইক্সপ্লেইন",m:"ব্যাখ্যা করা"},{e:"Explore",a:"ইক্সপ্লোর",m:"অন্বেষণ"},
+    {e:"Export",a:"এক্সপোর্ট",m:"রপ্তানি"},{e:"Oxygen",a:"অক্সিজেন",m:"অক্সিজেন"}
+  ]},
+  {sym:"Y",as:"ইয়/এই",desc:"Y sounds like ইয় (yes) or এই (my)",words:[
+    {e:"Yes",a:"ইয়েস",m:"হ্যাঁ"},{e:"You",a:"ইউ",m:"তুমি"},{e:"Your",a:"ইউর",m:"তোমার"},
+    {e:"Year",a:"ইয়ার",m:"বছর"},{e:"Yellow",a:"ইয়েলো",m:"হলুদ"},{e:"Yet",a:"ইয়েট",m:"এখনো"},
+    {e:"Young",a:"ইয়াং",m:"তরুণ"},{e:"Yard",a:"ইয়ার্ড",m:"উঠান"},{e:"Yell",a:"ইয়েল",m:"চিৎকার"},
+    {e:"Yoga",a:"ইয়োগা",m:"যোগব্যায়াম"},{e:"Yolk",a:"ইয়োক",m:"কুসুম"},{e:"My",a:"মাই",m:"আমার (এই)"},
+    {e:"By",a:"বাই",m:"দ্বারা (এই)"},{e:"Fly",a:"ফ্লাই",m:"উড়া (এই)"},{e:"Dry",a:"ড্রাই",m:"শুকনো (এই)"},
+    {e:"Cry",a:"ক্রাই",m:"কাঁদা (এই)"},{e:"Try",a:"ট্রাই",m:"চেষ্টা (এই)"},{e:"Sky",a:"স্কাই",m:"আকাশ (এই)"},
+    {e:"Why",a:"ওয়াই",m:"কেন (এই)"},{e:"Style",a:"স্টাইল",m:"শৈলী (এই)"}
+  ]},
+  {sym:"Z",as:"জ",desc:"Z sounds like জ",words:[
+    {e:"Zoo",a:"জু",m:"চিড়িয়াখানা"},{e:"Zero",a:"জিরো",m:"শূন্য"},{e:"Zone",a:"জোন",m:"অঞ্চল"},
+    {e:"Zip",a:"জিপ",m:"জিপ"},{e:"Zoom",a:"জুম",m:"জুম"},{e:"Zebra",a:"জিব্রা",m:"জেব্রা"},
+    {e:"Zeal",a:"জিল",m:"উৎসাহ"},{e:"Zenith",a:"জেনিথ",m:"শীর্ষ"},{e:"Zigzag",a:"জিগজ্যাগ",m:"আঁকাবাঁকা"},
+    {e:"Zinc",a:"জিংক",m:"জিংক"},{e:"Blaze",a:"ব্লেজ",m:"আগুন"},{e:"Freeze",a:"ফ্রিজ",m:"জমা"},
+    {e:"Breeze",a:"ব্রিজ",m:"মৃদু বায়ু"},{e:"Maze",a:"মেজ",m:"গোলকধাঁধা"},{e:"Prize",a:"প্রাইজ",m:"পুরস্কার"},
+    {e:"Size",a:"সাইজ",m:"আকার"},{e:"Amaze",a:"অ্যামেজ",m:"অবাক করা"},{e:"Organize",a:"অর্গানাইজ",m:"সংগঠিত"},
+    {e:"Realize",a:"রিয়েলাইজ",m:"বুঝতে পারা"},{e:"Recognize",a:"রিকগনাইজ",m:"চেনা"}
+  ]}
+];
+
+const HARD_WORDS = [
+  {e:"Thought",a:"থট",m:"চিন্তা",slow:"Th-ought"},{e:"Caught",a:"কট",m:"ধরা",slow:"C-aught"},
+  {e:"Brought",a:"ব্রট",m:"আনা",slow:"Br-ought"},{e:"Enough",a:"ইনাফ",m:"যথেষ্ট",slow:"En-ough"},
+  {e:"Though",a:"দো",m:"যদিও",slow:"Th-ough"},{e:"Through",a:"থ্রু",m:"মধ্য দিয়ে",slow:"Thr-ough"},
+  {e:"Lie",a:"লাই",m:"মিথ্যা",slow:"L-ie"},{e:"Knife",a:"নাইফ",m:"ছুরি",slow:"K-nife"},
+  {e:"Honest",a:"অনেস্ট",m:"সৎ",slow:"Hon-est"},{e:"Island",a:"আইল্যান্ড",m:"দ্বীপ",slow:"Is-land"},
+  {e:"Queue",a:"কিউ",m:"সারি",slow:"Q-ueue"},{e:"Daughter",a:"ডটার",m:"মেয়ে",slow:"Daugh-ter"},
+  {e:"Psychology",a:"সাইকোলজি",m:"মনোবিজ্ঞান",slow:"Psy-chol-o-gy"},{e:"Wednesday",a:"ওয়েন্জডে",m:"বুধবার",slow:"Wednes-day"},
+  {e:"Receipt",a:"রিসিট",m:"রসিদ",slow:"Re-ceipt"},{e:"Colonel",a:"কার্নেল",m:"কর্নেল",slow:"Colo-nel"},
+  {e:"Debt",a:"ডেট",m:"ঋণ",slow:"D-ebt"},{e:"Salmon",a:"স্যামন",m:"মাছ",slow:"Sal-mon"},
+  {e:"Castle",a:"ক্যাসেল",m:"দুর্গ",slow:"Cas-tle"},{e:"Listen",a:"লিসেন",m:"শোনা",slow:"Lis-ten"},
+  {e:"Walk",a:"ওয়ক",m:"হাঁটা",slow:"W-alk"},{e:"Talk",a:"টক",m:"কথা",slow:"T-alk"},
+  {e:"Could",a:"কুড",m:"পারতাম",slow:"C-ould"},{e:"Would",a:"উড",m:"করতাম",slow:"W-ould"},
+  {e:"Should",a:"শুড",m:"উচিত",slow:"Sh-ould"},{e:"Hour",a:"আওয়ার",m:"ঘণ্টা",slow:"H-our"},
+  {e:"Write",a:"রাইট",m:"লেখা",slow:"W-rite"},{e:"Wrong",a:"রং",m:"ভুল",slow:"W-rong"},
+  {e:"Knowledge",a:"নলেজ",m:"জ্ঞান",slow:"Know-ledge"},{e:"Business",a:"বিজনেস",m:"ব্যবসা",slow:"Bus-i-ness"},
+  {e:"Scissors",a:"সিজার্স",m:"কাঁচি",slow:"Scis-sors"},{e:"Pneumonia",a:"নিউমোনিয়া",m:"নিউমোনিয়া",slow:"Pneu-mo-nia"},
+  {e:"Plumber",a:"প্লামার",m:"পাম্বার",slow:"Plumb-er"},{e:"Answer",a:"আন্সার",m:"উত্তর",slow:"An-swer"}
+];
+
+const SENTENCES = [
+  {e:"I go to school every day.",a:"আই গো টু স্কুল এভরি ডে।",m:"আমি প্রতিদিন স্কুলে যাই।"},
+  {e:"She reads a book at night.",a:"শি রিডস অ্যা বুক অ্যাট নাইট।",m:"সে রাতে বই পড়ে।"},
+  {e:"We play football in the park.",a:"উই প্লে ফুটবল ইন দ্য পার্ক।",m:"আমরা পার্কে ফুটবল খেলি।"},
+  {e:"The cat sat on the mat.",a:"দ্য ক্যাট স্যাট অন দ্য ম্যাট।",m:"বিড়াল মাদুরে বসে ছিল।"},
+  {e:"He drinks water every morning.",a:"হি ড্রিংক্স ওয়াটার এভরি মর্নিং।",m:"সে প্রতি সকালে পানি পান করে।"},
+  {e:"My mother cooks delicious food.",a:"মাই মাদার কুক্স ডিলিশাস ফুড।",m:"আমার মা맛있는 খাবার রান্না করেন।"},
+  {e:"The sun rises in the east.",a:"দ্য সান রাইজেস ইন দ্য ইস্ট।",m:"সূর্য পূর্বে ওঠে।"},
+  {e:"Children love to play games.",a:"চিলড্রেন লভ টু প্লে গেমস।",m:"শিশুরা খেলতে ভালোবাসে।"},
+  {e:"I want to become a doctor.",a:"আই ওয়ান্ট টু বিকাম অ্যা ডক্টর।",m:"আমি ডাক্তার হতে চাই।"},
+  {e:"Learning English opens many doors.",a:"লার্নিং ইংলিশ ওপেন্স মেনি ডোরস।",m:"ইংরেজি শেখা অনেক দরজা খুলে দেয়।"},
+  {e:"The teacher explained the lesson clearly.",a:"দ্য টিচার এক্সপ্লেইন্ড দ্য লেসন ক্লিয়ার্লি।",m:"শিক্ষক পাঠটি স্পষ্টভাবে ব্যাখ্যা করলেন।"},
+  {e:"She has been working hard for months.",a:"শি হ্যাজ বিন ওয়ার্কিং হার্ড ফর মান্থস।",m:"সে মাসের পর মাস কঠোর পরিশ্রম করছে।"}
+];
+
+// ===== STATE =====
+let state = {
+  name:"", xp:0, level:1, hearts:5, streak:0, quizTotal:0, rulesLearned:0, speakSessions:0,
+  quizCorrect:0, readAcc:80, dc:[false,false,false], soundOn:true, theme:"dark",
+  quizIdx:0, quizScore:0, quizHearts:5, quizStreak:0, dailyQuiz:0
+};
+
+function loadState(){
+  const s=localStorage.getItem('aic_hero');
+  if(s){try{Object.assign(state,JSON.parse(s));}catch(e){}}
+}
+function saveState(){localStorage.setItem('aic_hero',JSON.stringify(state));}
+
+// ===== INIT =====
+window.onload=function(){
+  loadState();
+  makeStars();
+  buildRulesGrid();
+  buildHardWords();
+  buildSentences();
+  updateStats();
+  if(state.name){
+    document.getElementById('name-modal').classList.add('hidden');
+    initSpeaking();
+  }
+  document.getElementById('speed-slider').addEventListener('input',function(){
+    document.getElementById('speed-val').textContent=this.value+'x';
+  });
+  updateDailyChallenges();
+  buildLeaderboard();
+};
+
+function saveName(){
+  const n=document.getElementById('player-name-input').value.trim();
+  if(!n){showToast('Please enter your name!');return;}
+  state.name=n;
+  saveState();
+  document.getElementById('name-modal').classList.add('hidden');
+  initSpeaking();
+  addToLeaderboard();
+  showToast('Welcome, '+n+'! 🎉');
+}
+
+// ===== STARS =====
+function makeStars(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*3+1}px;height:${s.style.width};animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s;`;
+    c.appendChild(s);
+  }
+}
+
+// ===== NAVIGATION =====
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const map={'home-screen':'nav-home','rules-screen':'nav-rules','quiz-screen':'nav-quiz','leaderboard-screen':'nav-lb','report-screen':'nav-rep'};
+  if(map[id])document.getElementById(map[id]).classList.add('active');
+  if(id==='leaderboard-screen')buildLeaderboard();
+  if(id==='report-screen')buildReport();
+  window.scrollTo(0,0);
+}
+
+// ===== STATS =====
+function updateStats(){
+  const xpPerLevel=200;
+  state.level=Math.floor(state.xp/xpPerLevel)+1;
+  const pct=Math.round((state.xp%xpPerLevel)/xpPerLevel*100);
+  document.getElementById('stat-xp').textContent=state.xp+' XP';
+  document.getElementById('stat-level').textContent='Lv '+state.level;
+  document.getElementById('stat-hearts').textContent=state.hearts;
+  document.getElementById('stat-streak').textContent=state.streak+'🔥';
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+}
+function addXP(n){
+  state.xp+=n;
+  updateStats();
+  saveState();
+  showToast('+'+n+' XP! ⭐');
+}
+
+// ===== THEME =====
+function toggleTheme(){
+  state.theme=state.theme==='dark'?'light':'dark';
+  document.body.classList.toggle('light-mode');
+  document.querySelector('.theme-btn').textContent=state.theme==='dark'?'🌙':'☀️';
+  saveState();
+}
+function toggleSound(){
+  state.soundOn=!state.soundOn;
+  document.querySelector('.sound-btn').textContent=state.soundOn?'🔊':'🔇';
+  saveState();
+}
+
+// ===== TOAST =====
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ===== TTS =====
+function speak(text,slow){
+  if(!state.soundOn)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US';u.rate=slow?0.5:0.85;u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+
+// ===== RULES =====
+function buildRulesGrid(){
+  const grid=document.getElementById('rules-grid');
+  grid.innerHTML='';
+  RULES.forEach((r,i)=>{
+    const div=document.createElement('div');
+    div.className='rule-tile';
+    div.innerHTML=`<div class="rule-sym">${r.sym}</div><div class="rule-as">${r.as}</div>`;
+    div.onclick=()=>openRule(i);
+    grid.appendChild(div);
+  });
+}
+
+function openRule(i){
+  const r=RULES[i];
+  state.rulesLearned=Math.max(state.rulesLearned,i+1);
+  saveState();
+  addXP(2);
+  const html=`
+    <div class="modal-rule-head">${r.sym}</div>
+    <div class="modal-rule-as">Assamese: ${r.as}</div>
+    <div class="modal-rule-desc">${r.desc}</div>
+    <button class="audio-btn" onclick="speak('${r.sym}',false)" style="margin:0 auto 16px;display:block">🔊 Hear Sound</button>
+    <div class="word-list">${r.words.map(w=>`
+      <div class="word-item">
+        <div class="wi-left">
+          <div class="wi-eng">${w.e}</div>
+          <div class="wi-as">🗣️ ${w.a}</div>
+          <div class="wi-mean">📖 ${w.m}</div>
+        </div>
+        <button class="audio-btn" onclick="speak('${w.e}',false)">🔊</button>
+      </div>`).join('')}
+    </div>`;
+  document.getElementById('modal-content').innerHTML=html;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modal-overlay')||e.target===document.getElementById('modal-close'))
+    document.getElementById('modal-overlay').classList.add('hidden');
+}
+
+// ===== QUIZ =====
+let quizQuestions=[];
+let qIdx=0,qHearts=5,qStreak=0,qScore=0,qTotal=0;
+
+function startQuiz(){
+  goTo('quiz-screen');
+  quizQuestions=generateQuizQuestions(10);
+  qIdx=0;qHearts=5;qStreak=0;qScore=0;qTotal=0;
+  showQuestion();
+}
+
+function generateQuizQuestions(n){
+  const qs=[];
+  const pool=[...RULES].sort(()=>Math.random()-0.5).slice(0,n);
+  pool.forEach(r=>{
+    // wrong options from other rules
+    const others=RULES.filter(x=>x.sym!==r.sym).map(x=>x.as.split('/')[0]).filter((v,i,a)=>a.indexOf(v)===i);
+    const wrongs=others.sort(()=>Math.random()-0.5).slice(0,3);
+    const correct=r.as.split('/')[0];
+    const opts=[correct,...wrongs].sort(()=>Math.random()-0.5);
+    qs.push({q:r.sym,correct,opts,desc:'Which Assamese sound is '+r.sym+'?'});
+  });
+  return qs;
+}
+
+function showQuestion(){
+  if(qIdx>=quizQuestions.length||qHearts<=0){endQuiz();return;}
+  const q=quizQuestions[qIdx];
+  document.getElementById('q-question').textContent=q.q;
+  document.getElementById('q-subtitle').textContent=q.desc;
+  document.getElementById('q-count').textContent=(qIdx+1);
+  document.getElementById('q-prog-fill').style.width=((qIdx/quizQuestions.length)*100)+'%';
+  // hearts
+  document.getElementById('quiz-hearts').innerHTML='❤️'.repeat(qHearts)+'🖤'.repeat(5-qHearts);
+  // options
+  const opts=document.getElementById('q-options');
+  opts.innerHTML='';
+  q.opts.forEach(o=>{
+    const btn=document.createElement('button');
+    btn.className='q-opt';btn.textContent=o;
+    btn.onclick=()=>answerQuiz(o,q.correct,btn);
+    opts.appendChild(btn);
+  });
+  document.getElementById('streak-display').textContent=qStreak>1?'🔥 '+qStreak+' streak!':'';
+}
+
+function answerQuiz(chosen,correct,btn){
+  document.querySelectorAll('.q-opt').forEach(b=>b.onclick=null);
+  if(chosen===correct){
+    btn.classList.add('correct');
+    qStreak++;qScore+=10;qTotal++;state.quizCorrect++;
+    confetti();
+    showToast('Correct! +10 XP 🎉');
+    state.xp+=10;updateStats();saveState();
+  } else {
+    btn.classList.add('wrong');
+    qHearts--;qStreak=0;qTotal++;
+    document.querySelectorAll('.q-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});
+    showToast('Wrong! ❤️ -1');
+  }
+  setTimeout(()=>{qIdx++;showQuestion();},1000);
+}
+
+function endQuiz(){
+  state.quizTotal+=qScore;state.dailyQuiz++;
+  if(state.dailyQuiz>=10&&!state.dc[0]){state.dc[0]=true;state.xp+=50;}
+  saveState();updateStats();updateDailyChallenges();
+  goTo('home-screen');
+  showToast(`Quiz done! Score: ${qScore} XP 🏆`);
+}
+
+// ===== CONFETTI =====
+function confetti(){
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    const colors=['#f59e0b','#ec4899','#06b6d4','#10b981','#a855f7','#ef4444'];
+    p.style.cssText=`left:${10+Math.random()*80}%;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${0.8+Math.random()*0.8}s;animation-delay:${Math.random()*0.3}s;`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1500);
+  }
+}
+
+// ===== HARD WORDS =====
+function buildHardWords(){
+  const list=document.getElementById('hard-words-list');
+  list.innerHTML='';
+  HARD_WORDS.forEach(w=>{
+    const div=document.createElement('div');
+    div.className='hw-item';
+    div.innerHTML=`
+      <div class="hw-eng">${w.e}</div>
+      <div class="hw-as">🗣️ উচ্চারণ: ${w.a}</div>
+      <div class="hw-mean">📖 অর্থ: ${w.m}</div>
+      <div class="hw-actions">
+        <button class="btn-sm btn-cyan" onclick="speak('${w.e}',false)">🔊 Normal</button>
+        <button class="btn-sm btn-blue" onclick="speak('${w.slow}',true)">🐢 Slow</button>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+// ===== SENTENCES =====
+function buildSentences(){
+  const list=document.getElementById('sentences-list');
+  list.innerHTML='';
+  SENTENCES.forEach((s,si)=>{
+    const words=s.e.split(' ');
+    const wordHtml=words.map((w,wi)=>`<span class="s-word" onclick="speakWord('${w.replace(/[.,!?]/g,'')}',${si},${wi})">${w}</span>`).join(' ');
+    const div=document.createElement('div');
+    div.className='sent-item';
+    div.id='sent-'+si;
+    div.innerHTML=`
+      <div class="sent-eng">${wordHtml}</div>
+      <div class="sent-as">🗣️ ${s.a}</div>
+      <div style="font-size:0.78rem;color:var(--text2);margin-bottom:8px">📖 ${s.m}</div>
+      <div class="sent-actions">
+        <button class="btn-sm btn-cyan" onclick="playSentence(${si})">🔊 Play</button>
+        <button class="btn-sm btn-green" onclick="playSentence(${si})">🔄 Repeat</button>
+        <button class="btn-sm btn-blue" onclick="playSentenceSlow(${si})">🐢 Slow</button>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function speakWord(word,si,wi){
+  document.querySelectorAll('#sent-'+si+' .s-word').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('#sent-'+si+' .s-word')[wi].classList.add('active');
+  speak(word,false);
+  setTimeout(()=>document.querySelectorAll('#sent-'+si+' .s-word')[wi].classList.remove('active'),600);
+}
+
+function playSentence(si){
+  const s=SENTENCES[si];
+  const speed=parseFloat(document.getElementById('speed-slider').value);
+  if(!state.soundOn)return;
+  window.speechSynthesis.cancel();
+  const words=s.e.split(' ');
+  let wi=0;
+  function nextWord(){
+    if(wi>=words.length)return;
+    const el=document.querySelectorAll('#sent-'+si+' .s-word')[wi];
+    document.querySelectorAll('#sent-'+si+' .s-word').forEach(x=>x.classList.remove('hl'));
+    if(el)el.classList.add('hl');
+    const u=new SpeechSynthesisUtterance(words[wi].replace(/[.,!?]/g,''));
+    u.lang='en-US';u.rate=speed;
+    u.onend=()=>{wi++;nextWord();};
+    window.speechSynthesis.speak(u);
+  }
+  nextWord();
+}
+
+function playSentenceSlow(si){
+  const s=SENTENCES[si];
+  if(!state.soundOn)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(s.e);
+  u.lang='en-US';u.rate=0.5;
+  window.speechSynthesis.speak(u);
+}
+
+// ===== SPEAKING PRACTICE =====
+let recognition=null,isRecording=false,speakIdx=0;
+
+function initSpeaking(){
+  const s=SENTENCES[speakIdx];
+  document.getElementById('speak-sentence').textContent=s.e;
+  document.getElementById('speak-assamese').textContent='🗣️ '+s.a;
+  document.getElementById('speak-result').classList.add('hidden');
+  document.getElementById('speak-heard').textContent='';
+}
+
+function nextSpeakSent(){
+  speakIdx=(speakIdx+1)%SENTENCES.length;
+  initSpeaking();
+  state.speakSessions++;
+  if(state.speakSessions>=3&&!state.dc[2]){state.dc[2]=true;state.xp+=20;}
+  updateDailyChallenges();saveState();
+}
+
+function toggleRecording(){
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
+    showToast('Speech recognition not supported in your browser!');return;
+  }
+  if(isRecording){stopRecording();return;}
+  startRecording();
+}
+
+function startRecording(){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition=new SpeechRecognition();
+  recognition.lang='en-US';recognition.continuous=false;recognition.interimResults=false;
+  recognition.onresult=function(e){
+    const heard=e.results[0][0].transcript;
+    analyzeSpoken(heard);
+  };
+  recognition.onerror=function(){showToast('Could not hear you. Try again!');stopRecording();};
+  recognition.onend=stopRecording;
+  recognition.start();
+  isRecording=true;
+  document.getElementById('mic-btn').classList.add('recording');
+  document.getElementById('rec-status').textContent='🎤 Listening... Speak now!';
+}
+
+function stopRecording(){
+  if(recognition)recognition.stop();
+  isRecording=false;
+  document.getElementById('mic-btn').classList.remove('recording');
+  document.getElementById('rec-status').textContent='Press mic to start';
+}
+
+function analyzeSpoken(heard){
+  const target=SENTENCES[speakIdx].e.toLowerCase().replace(/[.,!?]/g,'');
+  const heardClean=heard.toLowerCase().replace(/[.,!?]/g,'');
+  const targetWords=target.split(' ');
+  const heardWords=heardClean.split(' ');
+  let correct=0;
+  const missed=[];
+  targetWords.forEach(w=>{
+    if(heardWords.includes(w))correct++;
+    else missed.push(w);
+  });
+  const acc=Math.round((correct/targetWords.length)*100);
+  const pron=Math.round(acc*0.9+Math.random()*10);
+  document.getElementById('acc-score').textContent=acc+'%';
+  document.getElementById('pron-score').textContent=pron+'%';
+  document.getElementById('missed-words').textContent=missed.length>0?'Missed: '+missed.join(', '):'Perfect! All words correct! 🎉';
+  document.getElementById('speak-heard').textContent='You said: "'+heard+'"';
+  document.getElementById('speak-result').classList.remove('hidden');
+  state.readAcc=Math.round((state.readAcc+acc)/2);
+  addXP(Math.round(acc/10));
+  if(acc>=70)confetti();
+}
+
+// ===== DAILY CHALLENGES =====
+function updateDailyChallenges(){
+  ['dc1','dc2','dc3'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el){el.classList.toggle('done',!!state.dc[i]);}
+  });
+}
+
+// ===== LEADERBOARD =====
+function addToLeaderboard(){
+  if(!state.name)return;
+  const lb=JSON.parse(localStorage.getItem('aic_lb')||'[]');
+  const idx=lb.findIndex(x=>x.name===state.name);
+  const entry={name:state.name,xp:state.xp,level:state.level,score:state.quizTotal};
+  if(idx>=0)lb[idx]=entry;else lb.push(entry);
+  lb.sort((a,b)=>b.xp-a.xp);
+  localStorage.setItem('aic_lb',JSON.stringify(lb.slice(0,20)));
+}
+function buildLeaderboard(){
+  addToLeaderboard();
+  const lb=JSON.parse(localStorage.getItem('aic_lb')||'[]');
+  const emojis=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+  const list=document.getElementById('lb-list');
+  if(!lb.length){list.innerHTML='<div class="card" style="text-align:center;color:var(--text2)">No players yet! Complete quizzes to appear here.</div>';return;}
+  list.innerHTML=lb.map((p,i)=>`
+    <div class="lb-item" style="${p.name===state.name?'border-color:var(--gold);':'' }">
+      <div class="lb-rank">${emojis[i]||'⭐'}</div>
+      <div class="lb-info"><div class="lb-name">${p.name}${p.name===state.name?' 👤':''}</div><div class="lb-xp">Level ${p.level} • ${p.xp} XP</div></div>
+      <div class="lb-score">${p.score}</div>
+    </div>`).join('');
+}
+function clearLB(){localStorage.removeItem('aic_lb');buildLeaderboard();}
+
+// ===== REPORT =====
+function openReport(){buildReport();goTo('report-screen');}
+function buildReport(){
+  document.getElementById('r-name').textContent=state.name||'Student';
+  document.getElementById('r-level').textContent='Level '+state.level;
+  document.getElementById('r-xp').textContent=state.xp+' XP';
+  document.getElementById('r-streak').textContent=state.streak+'🔥';
+  document.getElementById('r-quiz').textContent=state.quizTotal+' pts';
+  document.getElementById('r-rules').textContent=state.rulesLearned+'/'+RULES.length;
+  document.getElementById('r-speak').textContent=state.speakSessions+' sessions';
+  document.getElementById('r-readacc').textContent=state.readAcc+'%';
+  let comment='Keep up the great work! ';
+  if(state.xp<100)comment='Just starting out! Practice daily to improve fast.';
+  else if(state.xp<500)comment='Good progress! Focus on hard words and speaking practice.';
+  else if(state.xp<1000)comment='Excellent! You are becoming an English Reading Hero!';
+  else comment='Outstanding! You are a true English Reading Hero! 🏆';
+  document.getElementById('r-comment').textContent=comment;
+}
+
+function downloadReport(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  doc.setFillColor(13,13,43);doc.rect(0,0,210,297,'F');
+  doc.setTextColor(168,85,247);doc.setFontSize(18);doc.setFont('helvetica','bold');
+  doc.text('Alien Institute of Computer',105,20,{align:'center'});
+  doc.setTextColor(245,158,11);doc.setFontSize(14);
+  doc.text('English Reading Hero - Progress Report',105,30,{align:'center'});
+  doc.setTextColor(200,200,255);doc.setFontSize(11);doc.setFont('helvetica','normal');
+  const rows=[
+    ['Student Name',state.name||'Student'],
+    ['Level','Level '+state.level],
+    ['Total XP',state.xp+' XP'],
+    ['Streak',state.streak+' days'],
+    ['Quiz Score',state.quizTotal+' pts'],
+    ['Rules Learned',state.rulesLearned+'/'+RULES.length],
+    ['Speaking Sessions',state.speakSessions],
+    ['Reading Accuracy',state.readAcc+'%'],
+    ['Date',new Date().toLocaleDateString()]
+  ];
+  let y=50;
+  rows.forEach(([k,v])=>{
+    doc.setTextColor(160,160,200);doc.text(k+':',20,y);
+    doc.setTextColor(255,255,255);doc.text(String(v),100,y);
+    y+=12;
+  });
+  doc.setTextColor(16,185,129);doc.setFont('helvetica','bold');
+  doc.text('Teacher Comment:',20,y+8);
+  doc.setTextColor(200,200,255);doc.setFont('helvetica','normal');
+  let comment='Keep up the great work!';
+  if(state.xp>=1000)comment='Outstanding! You are a true English Reading Hero!';
+  else if(state.xp>=500)comment='Excellent! You are becoming an English Reading Hero!';
+  else if(state.xp>=100)comment='Good progress! Focus on hard words and speaking.';
+  else comment='Just starting! Practice daily to improve fast.';
+  doc.text(comment,20,y+18,{maxWidth:170});
+  doc.setTextColor(124,58,237);doc.setFontSize(9);
+  doc.text('Generated by English Reading Hero | Alien Institute of Computer',105,285,{align:'center'});
+  doc.save('english-reading-hero-report.pdf');
+  showToast('PDF downloaded! 📥');
+}
+</script>
+</body>
+</html>
