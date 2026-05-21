@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Alien Institute of Computer - English Reading Practice</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=sans-serif:wght@400;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap');
+
+:root{
+  --bg:#0a0e1a; --bg2:#0f1629; --card:#141c35; --card2:#1a2444;
+  --border:#2a3a6e; --accent1:#00d4ff; --accent2:#7c3aed;
+  --accent3:#f59e0b; --accent4:#10b981; --accent5:#ef4444;
+  --text:#e8f0fe; --text2:#94a3b8; --text3:#64748b;
+  --glow1:rgba(0,212,255,0.3); --glow2:rgba(124,58,237,0.3);
+  --font-head:'Orbitron',sans-serif; --font-body:'Exo 2',sans-serif;
+  --radius:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--accent2);border-radius:2px;}
+
+/* STARS */
+#stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle linear infinite;}
+@keyframes twinkle{0%,100%{opacity:.2;}50%{opacity:1;}}
+
+/* LAYOUT */
+.container{max-width:1000px;margin:0 auto;padding:0 12px;position:relative;z-index:1;}
+
+/* HEADER */
+header{background:rgba(10,14,26,0.97);border-bottom:2px solid var(--border);padding:10px 0 8px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);}
+.header-inner{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.header-institute{font-family:var(--font-head);font-size:clamp(10px,2.8vw,16px);color:var(--accent1);letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 12px var(--glow1);}
+.header-title{font-family:var(--font-head);font-size:clamp(13px,5vw,26px);font-weight:900;background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;line-height:1.2;}
+.header-sub{color:var(--text2);font-size:clamp(9px,2vw,12px);letter-spacing:.5px;}
+.header-stats{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;justify-content:center;}
+.stat-badge{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:3px 9px;font-size:10px;display:flex;align-items:center;gap:3px;color:var(--text2);}
+.stat-badge span{font-weight:700;}
+.stat-badge.sc span{color:var(--accent3);}
+.stat-badge.st span{color:var(--accent5);}
+.stat-badge.lv span{color:var(--accent1);}
+
+/* NAV */
+.nav-tabs{display:flex;gap:5px;padding:8px 0;overflow-x:auto;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{flex-shrink:0;padding:8px 12px;border-radius:16px;border:2px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font-body);font-size:11px;font-weight:600;cursor:pointer;transition:all .25s;white-space:nowrap;touch-action:manipulation;min-height:38px;}
+.nav-tab.active{background:linear-gradient(135deg,var(--accent2),var(--accent1));border-color:transparent;color:#fff;box-shadow:0 3px 12px var(--glow1);}
+
+/* SECTIONS */
+.section{display:none;padding:10px 0 70px;}
+.section.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* SECTION TITLE */
+.section-title{font-family:var(--font-head);font-size:clamp(13px,4vw,18px);margin-bottom:14px;color:var(--accent1);display:flex;align-items:center;gap:7px;}
+.section-title::before{content:'';display:block;width:4px;height:22px;background:linear-gradient(var(--accent1),var(--accent2));border-radius:2px;flex-shrink:0;}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;transition:all .3s;}
+
+/* PROG BAR */
+.prog-bar-wrap{background:var(--bg2);border-radius:6px;height:7px;overflow:hidden;margin:5px 0;}
+.prog-bar{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent1),var(--accent2));transition:width .5s ease;}
+
+/* CHAPTER GRID */
+.chapter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+@media(max-width:460px){.chapter-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:320px){.chapter-grid{grid-template-columns:1fr;}}
+.chapter-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:14px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;touch-action:manipulation;}
+.chapter-card.locked{opacity:.4;cursor:not-allowed;}
+.chapter-card.completed{border-color:var(--accent4);}
+.chapter-card.unlocked:active{transform:scale(.97);}
+.chapter-num{font-family:var(--font-head);font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.chapter-name{font-size:12px;font-weight:700;margin:4px 0 3px;color:var(--text);}
+.chapter-desc{font-size:10px;color:var(--text2);line-height:1.5;}
+.chapter-meta{display:flex;gap:5px;margin-top:8px;align-items:center;flex-wrap:wrap;}
+.ch-badge{font-size:10px;padding:2px 7px;border-radius:7px;font-weight:600;}
+.bl{background:rgba(100,116,139,.2);color:var(--text3);}
+.bu{background:rgba(0,212,255,.15);color:var(--accent1);}
+.bd{background:rgba(16,185,129,.2);color:var(--accent4);}
+.ch-prog-text{font-size:9px;color:var(--text2);margin-bottom:2px;margin-top:8px;}
+.ch-time{font-size:9px;color:var(--accent3);margin-top:3px;}
+
+/* LESSON */
+.lesson-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.btn-back{padding:9px 14px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:all .25s;touch-action:manipulation;min-height:44px;flex-shrink:0;}
+.btn-back:active{border-color:var(--accent1);color:var(--accent1);}
+.lesson-timer{font-size:12px;color:var(--accent3);background:rgba(245,158,11,.1);padding:5px 10px;border-radius:8px;border:1px solid rgba(245,158,11,.3);white-space:nowrap;}
+
+/* SENTENCE CARDS */
+.sentence-list{display:flex;flex-direction:column;gap:10px;}
+.sentence-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:14px;transition:all .25s;}
+.sentence-card.done{border-color:var(--accent4);}
+.sentence-text{font-size:clamp(16px,5vw,22px);font-weight:600;line-height:1.65;color:var(--text);margin-bottom:8px;}
+.sentence-text.big-word{font-size:clamp(24px,8vw,40px);}
+.sentence-text.para-text{font-size:clamp(13px,3.5vw,16px);font-weight:400;line-height:1.9;}
+.sentence-help{font-size:11px;color:var(--accent3);margin-bottom:9px;background:rgba(245,158,11,.08);padding:7px 10px;border-radius:6px;border-left:3px solid var(--accent3);line-height:1.7;}
+.sentence-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
+.btn-read{padding:11px 18px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--accent4),#059669);color:#fff;font-family:var(--font-body);font-size:12px;font-weight:700;cursor:pointer;transition:all .25s;touch-action:manipulation;min-height:44px;}
+.btn-read:active:not(:disabled){transform:scale(.96);}
+.btn-read:disabled{opacity:.5;cursor:not-allowed;}
+.btn-speak{padding:10px 13px;border-radius:9px;border:2px solid var(--accent1);background:transparent;color:var(--accent1);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:all .25s;touch-action:manipulation;min-height:44px;}
+.btn-speak:active{background:rgba(0,212,255,.1);}
+.done-badge{color:var(--accent4);font-size:11px;font-weight:700;}
+.score-pop{display:inline-block;color:var(--accent3);font-size:12px;font-weight:800;animation:spop .9s ease forwards;opacity:0;}
+@keyframes spop{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-20px);}}
+
+/* SCORE BAR IN LESSON */
+.score-bar-row{display:flex;align-items:center;gap:7px;margin-bottom:11px;flex-wrap:wrap;}
+.score-lbl{font-size:11px;color:var(--text2);}
+.score-val{font-size:14px;font-weight:800;color:var(--accent3);font-family:var(--font-head);}
+.unlock-hint{font-size:10px;color:var(--accent4);background:rgba(16,185,129,.1);padding:3px 9px;border-radius:6px;}
+
+/* COMPLETE BANNER */
+.ch-complete{background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(0,212,255,.1));border:2px solid var(--accent4);border-radius:var(--radius);padding:18px;text-align:center;margin-top:14px;display:none;}
+.ch-complete.show{display:block;}
+.ch-complete h3{font-family:var(--font-head);font-size:15px;color:var(--accent4);margin-bottom:5px;}
+.score-result{font-size:17px;font-weight:700;color:var(--accent3);margin:7px 0;}
+
+/* ALPHABET */
+.alpha-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;}
+@media(max-width:540px){.alpha-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:340px){.alpha-grid{grid-template-columns:1fr;}}
+.alpha-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:12px;transition:all .25s;}
+.alpha-card.done{border-color:var(--accent4);}
+.alpha-letter{font-family:var(--font-head);font-size:34px;font-weight:900;background:linear-gradient(135deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.alpha-assamese{font-size:15px;color:var(--accent3);margin:3px 0 6px;font-weight:600;}
+.alpha-examples{font-size:10px;color:var(--text2);line-height:1.8;margin-bottom:8px;}
+.alpha-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.btn-sm-green{padding:8px 12px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--accent4),#059669);color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-body);touch-action:manipulation;min-height:40px;}
+.btn-sm-green:disabled{opacity:.5;cursor:not-allowed;}
+.btn-sm-purple{padding:8px 12px;border-radius:8px;border:2px solid var(--accent2);background:transparent;color:var(--accent2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-body);touch-action:manipulation;min-height:40px;}
+.btn-sm-purple:active{background:rgba(124,58,237,.15);}
+.btn-sm-cyan{padding:8px 12px;border-radius:8px;border:2px solid var(--accent1);background:transparent;color:var(--accent1);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-body);touch-action:manipulation;min-height:40px;}
+.btn-sm-cyan:active{background:rgba(0,212,255,.1);}
+
+/* COMBOS */
+.combo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+@media(max-width:480px){.combo-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:340px){.combo-grid{grid-template-columns:1fr;}}
+.combo-card{background:var(--card2);border:2px solid var(--border);border-radius:var(--radius);padding:12px;transition:all .25s;}
+.combo-done{border-color:var(--accent4)!important;}
+.combo-letters{font-family:var(--font-head);font-size:22px;font-weight:900;color:var(--accent2);margin-bottom:3px;}
+.combo-assamese{font-size:14px;color:var(--accent3);margin-bottom:5px;font-weight:600;}
+.combo-exlist{font-size:10px;color:var(--text2);line-height:1.8;margin-bottom:8px;}
+.combo-actions{display:flex;gap:6px;flex-wrap:wrap;}
+
+/* POPUP */
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:flex-end;justify-content:center;padding:0;}
+.popup-overlay.open{display:flex;}
+.popup-box{background:var(--card);border-top:3px solid var(--accent1);border-radius:20px 20px 0 0;padding:16px 14px 30px;width:100%;max-width:540px;max-height:88vh;overflow-y:auto;position:relative;}
+.popup-title{font-family:var(--font-head);font-size:16px;color:var(--accent1);margin-bottom:2px;padding-right:44px;}
+.popup-sub{font-size:11px;color:var(--text2);margin-bottom:14px;}
+.popup-words{display:flex;flex-direction:column;gap:8px;}
+.popup-word-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card2);border-radius:10px;padding:12px 14px;border:2px solid transparent;cursor:pointer;transition:all .2s;}
+.popup-word-row:active{border-color:var(--accent1);}
+.popup-word-text{font-size:clamp(24px,7vw,38px);font-weight:700;color:var(--text);font-family:var(--font-head);}
+.popup-speak-btn{background:linear-gradient(135deg,var(--accent2),var(--accent1));border:none;color:#fff;padding:9px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:var(--font-body);flex-shrink:0;min-height:42px;touch-action:manipulation;}
+.popup-close{position:absolute;top:12px;right:12px;background:var(--card2);border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px;font-family:var(--font-body);touch-action:manipulation;min-height:36px;}
+
+/* PRONUN */
+.pronun-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;}
+@media(max-width:380px){.pronun-grid{grid-template-columns:1fr 1fr;}}
+.pronun-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:12px;transition:all .25s;}
+.pronun-done{border-color:var(--accent4)!important;}
+.pronun-word{font-size:18px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.pronun-help{font-size:11px;color:var(--accent3);margin-bottom:8px;font-weight:500;line-height:1.5;}
+.btn-pronun{padding:8px 12px;border-radius:8px;border:2px solid var(--accent2);background:transparent;color:var(--accent2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-body);min-height:38px;touch-action:manipulation;width:100%;display:flex;align-items:center;justify-content:center;gap:4px;}
+.btn-pronun:active{background:rgba(124,58,237,.1);}
+
+/* PROGRESS */
+.progress-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+@media(max-width:500px){.progress-grid{grid-template-columns:repeat(2,1fr);}}
+.progress-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center;}
+.progress-icon{font-size:22px;margin-bottom:4px;}
+.progress-num{font-family:var(--font-head);font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.progress-label{font-size:9px;color:var(--text2);margin-top:2px;line-height:1.4;}
+.level-display{background:linear-gradient(135deg,var(--card),var(--card2));border:2px solid var(--accent2);border-radius:var(--radius);padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.level-badge-big{width:54px;height:54px;background:linear-gradient(135deg,var(--accent2),var(--accent1));border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:18px;font-weight:900;color:#fff;box-shadow:0 0 20px var(--glow2);flex-shrink:0;}
+.level-info h3{font-family:var(--font-head);font-size:13px;color:var(--accent1);margin-bottom:2px;}
+.level-info p{font-size:11px;color:var(--text2);}
+
+/* BUTTONS */
+.btn-primary{padding:11px 22px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--accent2),var(--accent1));color:#fff;font-family:var(--font-body);font-size:13px;font-weight:700;cursor:pointer;transition:all .25s;min-height:44px;touch-action:manipulation;}
+.btn-primary:active{transform:scale(.97);}
+.btn-danger{padding:11px 20px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--accent5),#dc2626);color:#fff;font-family:var(--font-body);font-size:12px;font-weight:700;cursor:pointer;min-height:44px;touch-action:manipulation;}
+
+/* DOWNLOAD */
+.download-area{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:18px;}
+.field-label{display:block;font-size:11px;color:var(--text2);margin-bottom:4px;margin-top:12px;}
+.field-label:first-child{margin-top:0;}
+.txt-input{width:100%;padding:10px 12px;border-radius:8px;border:2px solid var(--border);background:var(--bg2);color:var(--text);font-family:var(--font-body);font-size:13px;transition:border-color .3s;-webkit-appearance:none;}
+.txt-input:focus{outline:none;border-color:var(--accent1);}
+.txt-input::placeholder{color:var(--text3);}
+
+/* TOAST */
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card2);border:1px solid var(--accent4);border-radius:12px;padding:10px 16px;color:var(--text);font-size:12px;font-weight:600;z-index:999;opacity:0;transition:all .3s;max-width:90vw;text-align:center;box-shadow:0 5px 20px rgba(0,0,0,.5);}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* DIVIDER */
+.glowing-divider{height:1px;background:linear-gradient(90deg,transparent,var(--accent1),transparent);margin:18px 0;opacity:.3;}
+
+/* SPEED CHAPTER */
+.speed-wrapper{background:var(--card);border:2px solid var(--accent3);border-radius:var(--radius);padding:16px;}
+.speed-title{font-family:var(--font-head);font-size:13px;color:var(--accent3);margin-bottom:10px;}
+.speed-word-display{font-size:clamp(34px,11vw,68px);font-family:var(--font-head);font-weight:900;color:var(--text);min-height:88px;display:flex;align-items:center;justify-content:center;background:var(--bg2);border-radius:10px;margin:10px 0;padding:8px;text-align:center;word-break:break-word;line-height:1.1;}
+.speed-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:10px;flex-wrap:wrap;gap:4px;}
+.speed-passage-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.speed-passage-btn{padding:9px 12px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-body);touch-action:manipulation;min-height:40px;transition:all .2s;}
+.speed-passage-btn.active{border-color:var(--accent3);color:var(--accent3);}
+.speed-passage-btn.done-p{border-color:var(--accent4);color:var(--accent4);}
+.speed-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+.speed-controls .btn-primary{font-size:12px;padding:10px 8px;}
+.slider-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.slider-row label{font-size:10px;color:var(--text2);flex-shrink:0;}
+.speed-slider{flex:1;min-width:80px;accent-color:var(--accent3);}
+.speed-score-ok{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);border-radius:8px;padding:7px 12px;font-size:12px;color:var(--accent4);margin-top:8px;display:none;}
+
+/* TIME LOG TABLE */
+.tl-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px;}
+.tl-table th{background:var(--card2);color:var(--accent1);padding:7px 8px;text-align:left;font-family:var(--font-head);font-size:9px;}
+.tl-table td{padding:7px 8px;border-bottom:1px solid var(--border);color:var(--text2);}
+.tl-table tr:last-child td{border-bottom:none;}
+.tl-table .val{color:var(--text);font-weight:600;}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div id="toast"></div>
+
+<!-- POPUP WORD READER (bottom sheet style) -->
+<div class="popup-overlay" id="popup-overlay" onclick="closePopupBg(event)">
+  <div class="popup-box" id="popup-box">
+    <button class="popup-close" onclick="closePopup()">✕ Close</button>
+    <div class="popup-title" id="popup-title"></div>
+    <div class="popup-sub" id="popup-sub"></div>
+    <div class="popup-words" id="popup-words"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="header-institute">👽 Alien Institute of Computer</div>
+      <div class="header-title">English Reading Practice</div>
+      <div class="header-sub">Learn to Read English Step by Step</div>
+      <div class="header-stats">
+        <div class="stat-badge sc">⭐ Score: <span id="hdr-score">0</span></div>
+        <div class="stat-badge st">🔥 Streak: <span id="hdr-streak">0</span>d</div>
+        <div class="stat-badge lv">🌟 Level: <span id="hdr-level">1</span></div>
+        <div class="stat-badge">📖 <span id="hdr-sentences">0</span> read</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<div class="container">
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('chapters')">📚 Chapters</button>
+    <button class="nav-tab" onclick="showSection('alphabet')">🔤 A–Z</button>
+    <button class="nav-tab" onclick="showSection('combos')">🔠 Sounds</button>
+    <button class="nav-tab" onclick="showSection('pronun')">🗣️ Hard Words</button>
+    <button class="nav-tab" onclick="showSection('progress')">📊 Progress</button>
+    <button class="nav-tab" onclick="showSection('report')">📥 Report</button>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- CHAPTERS -->
+<div id="sec-chapters" class="section active">
+  <div class="section-title">📚 Reading Chapters</div>
+  <div id="chapter-grid" class="chapter-grid"></div>
+  <div id="lesson-view" style="display:none;">
+    <div class="lesson-header">
+      <button class="btn-back" onclick="closeLesson()">← Back</button>
+      <div style="flex:1;min-width:0;">
+        <div id="lesson-title" style="font-family:var(--font-head);font-size:13px;color:var(--accent1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+        <div id="lesson-progress" style="font-size:10px;color:var(--text2);margin-top:1px;"></div>
+      </div>
+      <div class="lesson-timer" id="lesson-timer">⏱ 0:00</div>
+    </div>
+    <div class="score-bar-row">
+      <span class="score-lbl">Score:</span>
+      <span class="score-val" id="ch-score-val">0</span>
+      <span class="score-lbl">/</span>
+      <span class="score-val" id="ch-score-max">0</span>
+      <span class="unlock-hint" id="ch-unlock-hint"></span>
+    </div>
+    <div class="prog-bar-wrap" style="margin-bottom:12px;height:9px;">
+      <div class="prog-bar" id="lesson-prog-bar" style="width:0%"></div>
+    </div>
+    <div id="lesson-content" class="sentence-list"></div>
+    <div id="ch-complete-banner" class="ch-complete">
+      <div style="font-size:34px;margin-bottom:5px;">🎉</div>
+      <h3>Chapter Complete!</h3>
+      <div class="score-result" id="complete-score-line"></div>
+      <p id="complete-msg" style="font-size:12px;color:var(--text2);line-height:1.6;"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ALPHABET -->
+<div id="sec-alphabet" class="section">
+  <div class="section-title">🔤 English A to Z Guide</div>
+  <p style="color:var(--text2);font-size:11px;margin-bottom:12px;">Tap <b style="color:var(--accent2)">📖 Read Examples</b> to see each word in large size and hear them!</p>
+  <div id="alpha-grid" class="alpha-grid"></div>
+</div>
+
+<!-- SOUND RULES -->
+<div id="sec-combos" class="section">
+  <div class="section-title">🔠 Sound Combination Rules</div>
+  <p style="color:var(--text2);font-size:11px;margin-bottom:12px;">Listen to the sound → Tap <b style="color:var(--accent2)">📖 Read Examples</b> to see words big → Click <b style="color:var(--accent4)">✅ Mark Done</b> to earn +2 Score! No microphone needed.</p>
+  <div id="combo-grid" class="combo-grid"></div>
+</div>
+
+<!-- PRONUNCIATION -->
+<div id="sec-pronun" class="section">
+  <div class="section-title">🗣️ Difficult Pronunciation Words</div>
+  <p style="color:var(--text2);font-size:11px;margin-bottom:12px;">🔊 Listen to each word → Read it aloud → Click <b style="color:var(--accent4)">✅ I Practiced This</b> to earn Score! No microphone needed.</p>
+  <div id="pronun-grid" class="pronun-grid"></div>
+</div>
+
+<!-- PROGRESS -->
+<div id="sec-progress" class="section">
+  <div class="section-title">📊 My Reading Progress</div>
+  <div class="level-display">
+    <div class="level-badge-big" id="prog-level-badge">1</div>
+    <div class="level-info" style="flex:1;min-width:0;">
+      <h3 id="prog-level-name">Beginner Reader</h3>
+      <p id="prog-level-desc">Keep reading to level up!</p>
+      <div style="margin-top:6px;">
+        <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">Score to next level</div>
+        <div class="prog-bar-wrap" style="max-width:220px;">
+          <div class="prog-bar" id="prog-score-bar" style="width:0%"></div>
+        </div>
+        <div style="font-size:9px;color:var(--text3);margin-top:1px;" id="prog-score-detail"></div>
+      </div>
+    </div>
+  </div>
+  <div class="progress-grid" id="progress-grid"></div>
+  <div class="glowing-divider"></div>
+  <div class="section-title" style="margin-bottom:10px;font-size:13px;">📅 Chapter Details</div>
+  <div id="chapter-status-list" style="display:flex;flex-direction:column;gap:7px;"></div>
+  <div class="glowing-divider"></div>
+  <div class="section-title" style="margin-bottom:10px;font-size:13px;">⏱ Attempt Log</div>
+  <div id="time-log-wrap"></div>
+  <div class="glowing-divider"></div>
+  <button class="btn-danger" onclick="confirmReset()">🔄 Reset All Progress</button>
+</div>
+
+<!-- REPORT -->
+<div id="sec-report" class="section">
+  <div class="section-title">📥 Download Progress Report</div>
+  <div class="download-area">
+    <label class="field-label">Student Name</label>
+    <input type="text" class="txt-input" id="report-name" placeholder="Enter your name...">
+    <label class="field-label">Teacher Name (optional)</label>
+    <input type="text" class="txt-input" id="report-teacher" placeholder="Teacher's name...">
+    <label class="field-label">Teacher Comment (optional)</label>
+    <textarea class="txt-input" id="report-comment" rows="3" placeholder="Teacher comment..." style="resize:vertical;"></textarea>
+    <div style="margin-top:16px;">
+      <button class="btn-primary" onclick="generateReport()">📄 Generate & Download PDF</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ============================================================
+   ALIEN INSTITUTE OF COMPUTER — English Reading Practice v2
+   Fixes: Ch.8 speed bug | Popup word reader | Score system
+   Time tracking per attempt | 100% mobile friendly
+   ============================================================ */
+
+// ============================================================
+// DATA
+// ============================================================
+const ALPHABET=[
+  {letter:'A',assamese:'অ / আ / এ  ',examples:['Apple','Ant','Air','Age','Arm','Axe','Ape','Art','Add','Ash']},
+  {letter:'B',assamese:'ব',examples:['Ball','Bird','Book','Blue','Box','Boat','Bug','Bell','Bee','Bus']},
+  {letter:'C',assamese:'ক / চ',examples:['Cat','Car','Cup','Cow','Cake','Cave','Cute','City','Cent','Coat']},
+  {letter:'D',assamese:'দ / ড',examples:['Dog','Door','Day','Drum','Desk','Dig','Dive','Dot','Dark','Dew']},
+  {letter:'E',assamese:'ই / এ /  ে /  ি',examples:['Egg','Ear','Eye','Eat','End','Elm','Eel','Echo','Edge','Each',]},
+  {letter:'F',assamese:'ফ',examples:['Fish','Fan','Fire','Fly','Fog','Fox','Far','Fun','Fit','Fig']},
+  {letter:'G',assamese:'গ / জ',examples:['Goat','Go','Gun','Gel','Gem','Gap','Gig','Gym','Got','Gas']},
+  {letter:'H',assamese:'হ',examples:['Hat','Hen','Hot','Hub','Hit','Hug','Hum','Hip','Hem','Hall']},
+  {letter:'I',assamese:'ই / আই/  ি',examples:['Ice','Ink','In','It','If','Ill','Inn','Ivy','Itch','Iron']},
+  {letter:'J',assamese:'জ',examples:['Jar','Jet','Job','Joy','Jug','Jam','Jog','Jab','Jaw','Jay']},
+  {letter:'K',assamese:'ক',examples:['King','Key','Kit','Kid','Ken','Keen','Kick','Kill','Kin','Knit']},
+  {letter:'L',assamese:'ল',examples:['Lion','Leg','Lip','Log','Lid','Let','Lap','Lit','Law','Lad']},
+  {letter:'M',assamese:'ম',examples:['Man','Map','Mud','Mob','Mix','Mop','Mid','Mad','Mug','Met']},
+  {letter:'N',assamese:'ন',examples:['Net','Nap','Nod','Nut','Nun','Nip','New','Nab','Now','Nor']},
+  {letter:'O',assamese:'ও / অ / ো',examples:['Ox','Old','Oak','Oil','Oar','Odd','Owe','Own','Orb','Opt']},
+  {letter:'P',assamese:'প',examples:['Pan','Pig','Pot','Pen','Paw','Pit','Pop','Pin','Pod','Pub']},
+  {letter:'Q',assamese:' ক',examples:['Queen','Quiz','Quick','Quit','Quip','Quack','Quest','Quote','Quad','Quilt']},
+  {letter:'R',assamese:'ৰ ',examples:['Rat','Run','Rag','Rub','Rim','Rod','Raw','Rug','Row','Rid']},
+  {letter:'S',assamese:'ছ / শ',examples:['Sun','Sat','Sip','Sob','Sub','Set','Saw','Sag','Sit','Sum']},
+  {letter:'T',assamese:'ট / ত',examples:['Top','Tin','Tap','Tab','Tub','Tag','Ten','Tip','Ton','Tad']},
+  {letter:'U',assamese:'উ /  ু / ইউ',examples:['Up','Us','Urn','Use','Ugh','Unit','Ugly','Urge','Upon','Under']},
+  {letter:'V',assamese:'ভ / ব',examples:['Van','Vet','Vow','Via','Vim','Vex','Vie','Vol','Vat','Void']},
+  {letter:'W',assamese:'ৱ',examples:['Web','Win','Wet','Wag','Wit','Wax','War','Woe','Wad','Wed']},
+  {letter:'X',assamese:'ক্স / জ',examples:['X-ray','Xerox','Xmas','Xylem','Xylophone','Xenon','Xeric','Xebec','Xanax','Xeno']},
+  {letter:'Y',assamese:'য় /ী',examples:['Yes','Yak','Yam','Yap','Yet','Yew','Yell','Yawn','Yore','Yoga']},
+  {letter:'Z',assamese:'জ / য',examples:['Zoo','Zip','Zap','Zen','Zeal','Zero','Zone','Zest','Zinc','Zoom']},
+];
+
+const COMBOS=[
+  {combo:'CH',assamese:'চ',examples:['Chair','Child','Church','Cheese','Chain','Check','Chop','Chest','Charm','Chin']},
+  {combo:'SH',assamese:'শ',examples:['Ship','Shop','Shoe','Fish','Wash','Sharp','Shell','Shine','Shut','Rush']},
+  {combo:'TH',assamese:'থ / দ (জিহ্বা দাঁতে)',examples:['This','That','The','Then','Think','Thing','Three','Throw','Thank','Them']},
+  {combo:'PH',assamese:'ফ',examples:['Phone','Photo','Phrase','Physics','Phantom','Phobia','Phase','Phew','Phi','Phonic']},
+  {combo:'OO',assamese:'উ / ূ',examples:['Boot','Moon','Food','Zoo','Cool','Fool','Tool','Roof','Mood','Book']},
+  {combo:'EE',assamese:'ঈ / ী',examples:['Bee','See','Tree','Free','Green','Meet','Feet','Sleep','Week','Keep']},
+  {combo:'TION',assamese:'শন',examples:['Nation','Station','Education','Motion','Action','Mention','Relation','Emotion','Question','Option']},
+  {combo:'NG',assamese:'ং',examples:['Running','Walking','Talking','Singing','Playing','Reading','Writing','Going','Coming','Eating']},
+  {combo:'AU',assamese:'অ / অঃ / ও',examples:['Author','August','Audio','Automatic','Autumn','Cause','Caught','Daughter','Fault','Launch']},
+  {combo:'SION',assamese:'শন / ঝন',examples:['Television','Decision','Discussion','Revision','Explosion','Permission','Confusion','Division','Suspension','Conclusion']},
+  {combo:'OW',assamese:'ও / আউ',examples:['Cow','How','Now','Know','Show','Grow','Flow','Bowl','Town','Crown']},
+  {combo:'AI',assamese:'ঐ / এই',examples:['Rain','Train','Mail','Tail','Sail','Paid','Wait','Main','Pain','Rail']},
+  {combo:'WH',assamese:'হ / ও',examples:['What','Where','When','Why','Which','While','White','Wheel','Wheat','Whale']},
+  {combo:'TURE',assamese:'ছাৰ / চাৰ',examples:['Picture','Nature','Future','Culture','Adventure','Furniture','Structure','Creature','Signature','Literature']},
+  {combo:'KN',assamese:'ন (K নীৰৱ)',examples:['Know','Knee','Knife','Knight','Knot','Knack','Knit','Knock','Knob','Knowledge']},
+  {combo:'SURE',assamese:'শাৰ / ঝাৰ',examples:['Measure','Pleasure','Treasure','Pressure','Disclosure','Closure','Exposure','Leisure','Erasure','Composure']},
+];
+
+const PRONUN_WORDS=[
+  {word:'Thought',help:'থট'},
+  {word:'Through',help:'থ্ৰু'},
+  {word:'Though',help:'দো'},
+  {word:'Enough',help:'এনাফ'},
+  {word:'Brought',help:'ব্ৰট'},
+  {word:'Caught',help:'কট'},
+  {word:'Knowledge',help:'নলেজ (K silent)'},
+  {word:'Psychology',help:'চাইকলজি (P silent)'},
+  {word:'Wednesday',help:'ৱেনজডে (d silent)'},
+  {word:'Business',help:'বিজনেছ (ui=i)'},
+  {word:'Colonel',help:'কাৰ্নেল'},
+  {word:'Receipt',help:'ৰিচিট (p silent)'},
+  {word:'Honest',help:'অনেষ্ট (H silent)'},
+  {word:'Island',help:'আইলেণ্ড (s silent)'},
+  {word:'Debt',help:'ডেট (b silent)'},
+  {word:'Salmon',help:'চামন (l silent)'},
+  {word:'Sword',help:'চ\'ড (w silent)'},
+  {word:'Castle',help:'কাছল (t silent)'},
+  {word:'Listen',help:'লিচন (t silent)'},
+  {word:'Could',help:'কুড (l silent)'},
+  {word:'Would',help:'উড (l silent)'},
+  {word:'Should',help:'শুড (l silent)'},
+  {word:'Pneumonia',help:'নিউমোনিয়া (P silent)'},
+  {word:'Chaos',help:'কেওছ (ch=k)'},
+];
+
+// scoreToUnlock = how many items student must mark to unlock next chapter
+const CHAPTERS=[
+  {id:1,name:'Very Easy Words',desc:'Single easy words. Perfect for beginners.',color:'#00d4ff',scoreToUnlock:6,
+    items:[
+      {type:'word',text:'Cat',help:'ক-আ-ট = "কাট"'},
+      {type:'word',text:'Dog',help:'ড-অ-গ = "ডগ"'},
+      {type:'word',text:'Sun',help:'চ-আ-ন = "চান"'},
+      {type:'word',text:'Cup',help:'ক-আ-প = "কাপ"'},
+      {type:'word',text:'Red',help:'ৰ-এ-ড = "ৰেড"'},
+      {type:'word',text:'Big',help:'ব-ই-গ = "বিগ"'},
+      {type:'word',text:'Run',help:'ৰ-আ-ন = "ৰান"'},
+      {type:'word',text:'Pen',help:'প-এ-ন = "পেন"'},
+      {type:'word',text:'Man',help:'ম-আ-ন = "মান"'},
+      {type:'word',text:'Yes',help:'ই-এ-চ = "ইয়েছ"'},
+      {type:'word',text:'Go',help:'গ-ও = "গো"'},
+      {type:'word',text:'Fly',help:'ফ-ল-আই = "ফ্লাই"'},
+    ]},
+  {id:2,name:'Short Sentences',desc:'2–5 word sentences. Read slowly.',color:'#7c3aed',scoreToUnlock:6,
+    items:[
+      {type:'sentence',text:'I am happy.',help:'আই এম হেপি'},
+      {type:'sentence',text:'He is good.',help:'হি ইজ গুড'},
+      {type:'sentence',text:'The cat sits.',help:'দ কাট চিটছ'},
+      {type:'sentence',text:'I like milk.',help:'আই লাইক মিল্ক'},
+      {type:'sentence',text:'Run fast now.',help:'ৰান ফাষ্ট নাও'},
+      {type:'sentence',text:'My name is Ram.',help:'মাই নেম ইজ ৰাম'},
+      {type:'sentence',text:'This is my book.',help:'দিছ ইজ মাই বুক'},
+      {type:'sentence',text:'I go to school.',help:'আই গো টু স্কুল'},
+      {type:'sentence',text:'The sun is hot.',help:'দ চান ইজ হট'},
+      {type:'sentence',text:'She has a dog.',help:'শি হেজ এ ডগ'},
+    ]},
+  {id:3,name:'Medium Sentences',desc:'Complete daily-life sentences.',color:'#f59e0b',scoreToUnlock:7,
+    items:[
+      {type:'sentence',text:'My father is a teacher at school.'},
+      {type:'sentence',text:'The boy is playing football in the field.'},
+      {type:'sentence',text:'I drink a glass of water every morning.'},
+      {type:'sentence',text:'She reads books in the library after school.'},
+      {type:'sentence',text:'The children are playing outside the house.'},
+      {type:'sentence',text:'My mother cooks delicious food every evening.'},
+      {type:'sentence',text:'He goes to the market to buy vegetables.'},
+      {type:'sentence',text:'We study English every day at school.'},
+      {type:'sentence',text:'The flowers in the garden are very beautiful.'},
+      {type:'sentence',text:'Birds sing sweetly in the morning.'},
+    ]},
+  {id:4,name:'Long Sentences',desc:'Complex sentences with multiple ideas.',color:'#10b981',scoreToUnlock:7,
+    items:[
+      {type:'sentence',text:'The students are preparing for their final examination next month.'},
+      {type:'sentence',text:'My younger brother enjoys reading story books during the evening.'},
+      {type:'sentence',text:'The teacher asked the students to complete their homework before tomorrow.'},
+      {type:'sentence',text:'Every morning, I wake up early and go for a walk in the park.'},
+      {type:'sentence',text:'The farmer works very hard in the field to grow vegetables and fruits.'},
+      {type:'sentence',text:'During the summer vacation, our family visited a beautiful hill station.'},
+      {type:'sentence',text:'The doctor advised the patient to take rest and drink plenty of water.'},
+      {type:'sentence',text:'We need to protect our environment to save the future of our planet.'},
+      {type:'sentence',text:'My grandfather told me many interesting stories about his childhood memories.'},
+      {type:'sentence',text:'The principal announced the school annual function will be held next week.'},
+    ]},
+  {id:5,name:'Difficult Words',desc:'Sentences with challenging vocabulary.',color:'#ef4444',scoreToUnlock:7,
+    items:[
+      {type:'sentence',text:'Although the weather was extremely bad, the players continued the match.'},
+      {type:'sentence',text:'The scientist explained how technological advancements are changing the world.'},
+      {type:'sentence',text:'She demonstrated extraordinary courage during the competition.'},
+      {type:'sentence',text:'The government announced several new environmental protection policies.'},
+      {type:'sentence',text:'Communication between different cultures requires patience and understanding.'},
+      {type:'sentence',text:'The archaeologist discovered an ancient civilization beneath the desert sand.'},
+      {type:'sentence',text:'Modern transportation has significantly reduced travel time globally.'},
+      {type:'sentence',text:'The student received a scholarship for her outstanding academic achievement.'},
+      {type:'sentence',text:'Scientists are developing sustainable energy solutions for the future.'},
+      {type:'sentence',text:'The professor emphasized the importance of critical thinking skills.'},
+    ]},
+  {id:6,name:'Paragraph Reading',desc:'Short paragraphs for continuous reading.',color:'#06b6d4',scoreToUnlock:2,
+    items:[
+      {type:'para',text:'India is a vast and diverse country. It has many languages, cultures, and traditions. People from different religions live together in peace and harmony. The country is known for its rich history and beautiful monuments. Every year, millions of tourists visit India to see its wonderful places.'},
+      {type:'para',text:'The sun is the most important star in our solar system. It provides light and heat to all living things on Earth. Without the sun, there would be no life on our planet. Plants use sunlight to make their food through a process called photosynthesis. The sun is approximately 150 million kilometres away from the Earth.'},
+      {type:'para',text:'Reading is one of the most important habits a student can develop. When we read regularly, we improve our vocabulary and knowledge. Books take us to new worlds and teach us valuable lessons. Good readers become good writers and speakers over time. Start reading at least one book every month to improve your English.'},
+    ]},
+  {id:7,name:'Advanced Passages',desc:'Long complex passages for advanced reading.',color:'#8b5cf6',scoreToUnlock:2,
+    items:[
+      {type:'para',text:'The rapid development of technology in the twenty-first century has fundamentally transformed the way human beings communicate, work, and live their daily lives. Digital devices such as smartphones and computers have become essential tools in modern society. Social media platforms connect millions of people across the globe in real time, enabling the instant exchange of information, ideas, and experiences. However, excessive dependence on technology has also raised serious concerns about privacy, mental health, and human relationships.'},
+      {type:'para',text:'Environmental conservation is one of the most pressing challenges facing humanity today. Climate change, deforestation, and pollution are threatening biodiversity and disrupting natural ecosystems across the planet. Scientists warn that without immediate and collective action, the consequences could be catastrophic for future generations. Education and awareness are powerful tools that can inspire communities to adopt more sustainable lifestyles and contribute to the protection of our natural world.'},
+    ]},
+  // Ch.8 — Speed Reading (FIXED: 3 independent passages, each marks its own score)
+  {id:8,name:'Speed Reading',desc:'Words flash one at a time. Read aloud! Complete all 3 passages.',color:'#f97316',scoreToUnlock:1,special:'speed',
+    items:[
+      {type:'speed',label:'Passage 1 – Daily',words:['The','quick','brown','fox','jumps','over','the','lazy','dog','near','the','river','every','morning','without','fail']},
+      {type:'speed',label:'Passage 2 – School',words:['Reading','English','fluently','requires','regular','daily','practice','and','a','strong','vocabulary','every','single','day']},
+      {type:'speed',label:'Passage 3 – Science',words:['Science','technology','engineering','mathematics','literature','history','geography','economics','biology','chemistry','physics','arts']},
+    ]},
+];
+
+// ============================================================
+// LEVELS (score-based)
+// ============================================================
+const LEVELS=[
+  {min:0,  name:'Beginner Reader',  desc:'Just starting your journey!'},
+  {min:20, name:'Curious Explorer', desc:'Building reading confidence!'},
+  {min:50, name:'Word Warrior',     desc:'Great progress! Keep going!'},
+  {min:100,name:'Sentence Builder', desc:'Reading feels natural now!'},
+  {min:160,name:'Fluency Seeker',   desc:'Complex sentences are easier!'},
+  {min:240,name:'English Reader',   desc:'You read with confidence!'},
+  {min:340,name:'Advanced Reader',  desc:'Truly becoming fluent!'},
+  {min:460,name:'Master Reader',    desc:'Outstanding! You are a Master!'},
+];
+function getLevel(sc){let lv=1;LEVELS.forEach((l,i)=>{if(sc>=l.min)lv=i+1;});return Math.min(lv,LEVELS.length);}
+function getLevelInfo(sc){return{level:getLevel(sc),...LEVELS[getLevel(sc)-1]};}
+function scoreToNext(sc){
+  const lv=getLevel(sc);
+  if(lv>=LEVELS.length) return{pct:100,needed:0};
+  const cur=LEVELS[lv-1].min, nxt=LEVELS[lv].min;
+  return{pct:Math.min(100,Math.round(((sc-cur)/(nxt-cur))*100)),needed:nxt-sc};
+}
+
+// ============================================================
+// STATE
+// ============================================================
+let state={
+  score:0, streak:0, lastDate:'', level:1,
+  totalSentences:0, completedChapters:[],
+  sentenceDone:{}, alphaDone:{}, comboDone:{}, pronunDone:{},
+  practiceDays:0,
+  chAttempts:{}, // {chIdx:[{sec,score,completed,date}]}
+  studentName:'',
+};
+let timerInterval=null, timerSec=0, currentCh=-1;
+// speed state (isolated, no globals leaking across chapters)
+let sp={running:false,idx:0,pIdx:-1,delay:700,iv:null,chIdx:-1};
+
+function loadState(){
+  try{const s=localStorage.getItem('aic_v3');if(s){const p=JSON.parse(s);state={...state,...p};}}catch(e){}
+  if(!state.comboDone) state.comboDone={};
+  if(!state.pronunDone) state.pronunDone={};
+  if(!state.chAttempts) state.chAttempts={};
+  if(!state.alphaDone) state.alphaDone={};
+  if(!state.sentenceDone) state.sentenceDone={};
+  if(!state.completedChapters) state.completedChapters=[];
+  checkStreak();
+}
+function saveState(){localStorage.setItem('aic_v3',JSON.stringify(state));updateHeader();}
+function checkStreak(){
+  const today=new Date().toDateString();
+  if(state.lastDate!==today){
+    if(state.lastDate){const d=(new Date()-new Date(state.lastDate))/864e5;state.streak=d>1.5?1:(state.streak||0)+1;}
+    else state.streak=1;
+    state.lastDate=today;state.practiceDays=(state.practiceDays||0)+1;saveState();
+  }
+}
+function updateHeader(){
+  document.getElementById('hdr-score').textContent=state.score||0;
+  document.getElementById('hdr-streak').textContent=state.streak||0;
+  document.getElementById('hdr-level').textContent=getLevel(state.score||0);
+  document.getElementById('hdr-sentences').textContent=state.totalSentences||0;
+}
+
+// ============================================================
+// STARS
+// ============================================================
+function buildStars(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<55;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2+.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${Math.random()*4+2}s;animation-delay:${Math.random()*4}s;`;
+    c.appendChild(s);
+  }
+}
+
+// ============================================================
+// NAV
+// ============================================================
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{
+    t.classList.toggle('active',(t.getAttribute('onclick')||'').includes("'"+id+"'"));
+  });
+  if(id==='progress') renderProgress();
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTmr;
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTmr);toastTmr=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ============================================================
+// SPEECH
+// ============================================================
+function speak(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US';u.rate=0.82;u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+
+// ============================================================
+// POPUP WORD READER (large words, bottom sheet)
+// ============================================================
+function openPopup(title,sub,wordsJSON){
+  const words=typeof wordsJSON==='string'?JSON.parse(wordsJSON):wordsJSON;
+  document.getElementById('popup-title').textContent=title;
+  document.getElementById('popup-sub').textContent=sub;
+  const wrap=document.getElementById('popup-words');
+  wrap.innerHTML='';
+  words.forEach(w=>{
+    const row=document.createElement('div');
+    row.className='popup-word-row';
+    row.innerHTML=`<div class="popup-word-text">${w}</div><button class="popup-speak-btn" onclick="event.stopPropagation();speak('${w.replace(/'/g,"\\'")}')" >🔊</button>`;
+    row.addEventListener('click',()=>speak(w));
+    wrap.appendChild(row);
+  });
+  document.getElementById('popup-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closePopup(){document.getElementById('popup-overlay').classList.remove('open');document.body.style.overflow='';}
+function closePopupBg(e){if(e.target===document.getElementById('popup-overlay'))closePopup();}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function fmtTime(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+(s%60);}
+function getChScore(ci){return CHAPTERS[ci].items.filter((_,si)=>state.sentenceDone[ci+'-'+si]).length;}
+function getChPct(ci){const ch=CHAPTERS[ci];return ch.items.length?Math.round(getChScore(ci)/ch.items.length*100):0;}
+function getBestTime(ci){
+  const arr=(state.chAttempts[ci]||[]).filter(a=>a.completed);
+  return arr.length?fmtTime(Math.min(...arr.map(a=>a.sec))):'—';
+}
+function isUnlocked(i){
+  if(i===0)return true;
+  return getChScore(i-1)>=CHAPTERS[i-1].scoreToUnlock||state.completedChapters.includes(i-1);
+}
+
+// ============================================================
+// CHAPTER GRID
+// ============================================================
+function buildChapterGrid(){
+  const grid=document.getElementById('chapter-grid');
+  grid.innerHTML='';
+  CHAPTERS.forEach((ch,i)=>{
+    const unlocked=isUnlocked(i);
+    const done=state.completedChapters.includes(i);
+    const pct=getChPct(i);
+    const chSc=getChScore(i);
+    const tries=((state.chAttempts||{})[i]||[]).length;
+    const best=getBestTime(i);
+    const card=document.createElement('div');
+    card.className='chapter-card '+(done?'completed ':'')+(!unlocked&&i>0?'locked':'unlocked');
+    card.innerHTML=`
+      <div class="chapter-num">Ch.${ch.id}</div>
+      <div class="chapter-name">${ch.name}</div>
+      <div class="chapter-desc">${ch.desc}</div>
+      <div class="chapter-meta">
+        <span class="ch-badge ${done?'bd':(!unlocked&&i>0?'bl':'bu')}">${done?'✅ Done':(!unlocked&&i>0?'🔒 Locked':'▶ Start')}</span>
+        <span style="font-size:9px;color:var(--text2);">${ch.items.length} items</span>
+      </div>
+      <div class="ch-prog-text">Score: ${chSc}/${ch.items.length} — need ${ch.scoreToUnlock} to unlock next</div>
+      <div class="prog-bar-wrap"><div class="prog-bar" style="width:${pct}%;background:linear-gradient(90deg,${ch.color||'var(--accent1)'},var(--accent2))"></div></div>
+      ${tries>0?`<div class="ch-time">⏱ Tries: ${tries} | Best: ${best}</div>`:''}
+    `;
+    if(unlocked||i===0) card.addEventListener('click',()=>openLesson(i));
+    grid.appendChild(card);
+  });
+}
+
+// ============================================================
+// LESSON
+// ============================================================
+function openLesson(ci){
+  currentCh=ci;
+  const ch=CHAPTERS[ci];
+  document.getElementById('chapter-grid').style.display='none';
+  document.getElementById('lesson-view').style.display='block';
+  document.getElementById('ch-complete-banner').classList.remove('show');
+  document.getElementById('lesson-title').textContent='Ch.'+ch.id+': '+ch.name;
+
+  if(!state.chAttempts) state.chAttempts={};
+  if(!state.chAttempts[ci]) state.chAttempts[ci]=[];
+
+  // Start timer
+  timerSec=0;clearInterval(timerInterval);
+  document.getElementById('lesson-timer').textContent='⏱ 0:00';
+  timerInterval=setInterval(()=>{timerSec++;document.getElementById('lesson-timer').textContent='⏱ '+fmtTime(timerSec);},1000);
+
+  if(ch.special==='speed'){renderSpeed(ci);return;}
+  renderLessonItems(ci);
+  updateScoreUI(ci);
+}
+
+function closeLesson(){
+  clearInterval(timerInterval);timerInterval=null;
+  // Kill speed interval if active
+  if(sp.iv){clearInterval(sp.iv);sp.iv=null;}sp.running=false;
+  if(currentCh>=0 && timerSec>3){
+    const done=getChScore(currentCh);
+    if(!state.chAttempts[currentCh]) state.chAttempts[currentCh]=[];
+    state.chAttempts[currentCh].push({sec:timerSec,score:done,completed:false,date:new Date().toLocaleDateString()});
+    saveState();
+  }
+  currentCh=-1;
+  document.getElementById('chapter-grid').style.display='grid';
+  document.getElementById('lesson-view').style.display='none';
+  buildChapterGrid();
+}
+
+function renderLessonItems(ci){
+  const ch=CHAPTERS[ci];
+  const cont=document.getElementById('lesson-content');
+  cont.innerHTML='';
+  ch.items.forEach((item,si)=>{
+    const key=ci+'-'+si;
+    const done=!!state.sentenceDone[key];
+    const div=document.createElement('div');
+    div.className='sentence-card'+(done?' done':'');
+    div.id='sc-'+key;
+    const isWord=item.type==='word';
+    const isPara=item.type==='para';
+    div.innerHTML=`
+      <div class="sentence-text${isWord?' big-word':isPara?' para-text':''}">${item.text}</div>
+      ${item.help?`<div class="sentence-help">📌 ${item.help}</div>`:''}
+      <div class="sentence-actions">
+        <button class="btn-speak" onclick="speak(this.closest('.sentence-card').querySelector('.sentence-text').textContent.trim())">🔊</button>
+        <button class="btn-read" id="btn-${key}" ${done?'disabled':''} onclick="markDone(${ci},${si})">
+          ${done?'✅ Done':'✅ I Read This'}
+        </button>
+        ${done?'<span class="done-badge">+1 ✨</span>':''}
+      </div>
+    `;
+    cont.appendChild(div);
+  });
+}
+
+function updateScoreUI(ci){
+  const ch=CHAPTERS[ci];
+  const sc=getChScore(ci);
+  document.getElementById('ch-score-val').textContent=sc;
+  document.getElementById('ch-score-max').textContent=ch.items.length;
+  document.getElementById('lesson-progress').textContent=getChPct(ci)+'% complete';
+  document.getElementById('lesson-prog-bar').style.width=getChPct(ci)+'%';
+  const hint=document.getElementById('ch-unlock-hint');
+  hint.textContent=sc>=ch.scoreToUnlock?'🔓 Next unlocked!':'Need '+(ch.scoreToUnlock-sc)+' more to unlock next';
+}
+
+function markDone(ci,si){
+  const key=ci+'-'+si;
+  if(state.sentenceDone[key]) return;
+  state.sentenceDone[key]=true;
+  state.totalSentences=(state.totalSentences||0)+1;
+  state.score=(state.score||0)+1;
+  const newLv=getLevel(state.score);
+  if(newLv>state.level){state.level=newLv;showToast('🌟 Level Up! Now Level '+newLv+': '+LEVELS[newLv-1].name);}
+  saveState();
+  const card=document.getElementById('sc-'+key);
+  if(card){
+    card.classList.add('done');
+    const btn=document.getElementById('btn-'+key);
+    if(btn){btn.disabled=true;btn.textContent='✅ Done';}
+    const sp2=document.createElement('span');sp2.className='score-pop';sp2.textContent='+1';
+    card.querySelector('.sentence-actions').appendChild(sp2);
+  }
+  updateScoreUI(ci);
+  checkComplete(ci);
+}
+
+function checkComplete(ci){
+  const ch=CHAPTERS[ci];
+  const sc=getChScore(ci);
+  if(sc>=ch.items.length && !state.completedChapters.includes(ci)){
+    state.completedChapters.push(ci);
+    state.score=(state.score||0)+10;
+    if(!state.chAttempts[ci]) state.chAttempts[ci]=[];
+    const arr=state.chAttempts[ci];
+    if(arr.length && !arr[arr.length-1].completed){arr[arr.length-1].completed=true;arr[arr.length-1].sec=timerSec;arr[arr.length-1].score=sc;}
+    else arr.push({sec:timerSec,score:sc,completed:true,date:new Date().toLocaleDateString()});
+    saveState();
+    document.getElementById('ch-complete-banner').classList.add('show');
+    document.getElementById('complete-score-line').textContent='Score: '+sc+'/'+ch.items.length+' +10 Bonus ⭐';
+    document.getElementById('complete-msg').textContent=ci<CHAPTERS.length-1?'Next chapter unlocked! Time: '+fmtTime(timerSec):'You finished ALL chapters! 🏆 Master Reader!';
+    showToast('🎉 Complete! +10 Bonus Score!');
+    clearInterval(timerInterval);timerInterval=null;
+  } else if(sc>=ch.scoreToUnlock && !state.completedChapters.includes(ci)){
+    showToast('🔓 Next chapter unlocked! Keep going!');
+  }
+}
+
+// ============================================================
+// SPEED CHAPTER (Ch.8) — FULLY FIXED
+// ============================================================
+function renderSpeed(ci){
+  const ch=CHAPTERS[ci];
+  // Reset speed state completely
+  if(sp.iv){clearInterval(sp.iv);sp.iv=null;}
+  sp={running:false,idx:0,pIdx:-1,delay:700,iv:null,chIdx:ci};
+
+  const cont=document.getElementById('lesson-content');
+  cont.innerHTML='';
+  updateScoreUI(ci);
+
+  const wrap=document.createElement('div');
+  wrap.className='speed-wrapper';
+
+  const passageHtml=ch.items.map((it,i)=>{
+    const done=!!state.sentenceDone[ci+'-'+i];
+    return `<button class="speed-passage-btn${done?' done-p':''}" id="spb-${i}" onclick="spSelectPassage(${i})">${it.label} ${done?'✅':''}</button>`;
+  }).join('');
+
+  wrap.innerHTML=`
+    <div class="speed-title">🚀 Speed Reading Challenge — Complete all 3 passages!</div>
+    <div class="speed-passage-btns">${passageHtml}</div>
+    <div class="speed-word-display" id="sp-word">Select a passage ↑</div>
+    <div class="speed-meta">
+      <span id="sp-progress">—</span>
+      <span id="sp-score-disp">Score: ${getChScore(ci)}/${ch.items.length}</span>
+    </div>
+    <div class="slider-row">
+      <label>Speed:</label>
+      <input type="range" class="speed-slider" id="sp-slider" min="250" max="1500" step="50" value="700" oninput="spChangeDelay(this.value)">
+      <span id="sp-delay-lbl" style="font-size:11px;color:var(--accent3);min-width:44px;">0.7s</span>
+    </div>
+    <div class="speed-controls">
+      <button class="btn-primary" id="sp-start" onclick="spToggle()" disabled>▶ Start</button>
+      <button class="btn-back" onclick="spReset()">↺ Reset</button>
+    </div>
+    <div class="speed-score-ok" id="sp-ok"></div>
+  `;
+  cont.appendChild(wrap);
+}
+
+function spSelectPassage(idx){
+  // Stop any running
+  if(sp.iv){clearInterval(sp.iv);sp.iv=null;}
+  sp.running=false;sp.idx=0;sp.pIdx=idx;
+  const ch=CHAPTERS[sp.chIdx];
+  const words=ch.items[idx].words;
+  document.getElementById('sp-word').textContent='Ready!';
+  document.getElementById('sp-progress').textContent='0/'+words.length+' words';
+  const btn=document.getElementById('sp-start');
+  if(btn){btn.disabled=false;btn.textContent='▶ Start';}
+  document.getElementById('sp-ok').style.display='none';
+  // highlight
+  ch.items.forEach((_,i)=>{const b=document.getElementById('spb-'+i);if(b)b.classList.remove('active');});
+  const ab=document.getElementById('spb-'+idx);if(ab)ab.classList.add('active');
+}
+
+function spToggle(){
+  const btn=document.getElementById('sp-start');
+  if(sp.running){
+    clearInterval(sp.iv);sp.iv=null;sp.running=false;
+    if(btn) btn.textContent='▶ Resume';
+    return;
+  }
+  if(sp.pIdx<0) return; // no passage selected
+  sp.running=true;
+  if(btn) btn.textContent='⏸ Pause';
+  const ci=sp.chIdx;
+  const words=CHAPTERS[ci].items[sp.pIdx].words;
+  sp.iv=setInterval(()=>{
+    if(sp.idx>=words.length){
+      // Passage finished
+      clearInterval(sp.iv);sp.iv=null;sp.running=false;
+      if(btn) btn.textContent='✅ Done!';
+      const dEl=document.getElementById('sp-word');if(dEl) dEl.textContent='✅ Done!';
+      // Mark this passage as done
+      markDone(ci, sp.pIdx);
+      // Update passage button
+      const pb=document.getElementById('spb-'+sp.pIdx);
+      if(pb){pb.textContent=CHAPTERS[ci].items[sp.pIdx].label+' ✅';pb.classList.add('done-p');}
+      // Update score display
+      const sd=document.getElementById('sp-score-disp');if(sd) sd.textContent='Score: '+getChScore(ci)+'/'+CHAPTERS[ci].items.length;
+      const ok=document.getElementById('sp-ok');if(ok){ok.style.display='block';ok.textContent='✅ Passage '+(sp.pIdx+1)+' complete! +1 Score. Select next passage.';}
+      return;
+    }
+    const wd=document.getElementById('sp-word');if(wd) wd.textContent=words[sp.idx];
+    const pr=document.getElementById('sp-progress');if(pr) pr.textContent=(sp.idx+1)+'/'+words.length+' words';
+    sp.idx++;
+  },sp.delay);
+}
+
+function spReset(){
+  if(sp.iv){clearInterval(sp.iv);sp.iv=null;}
+  sp.running=false;sp.idx=0;
+  const wd=document.getElementById('sp-word');if(wd) wd.textContent='Select a passage ↑';
+  const pr=document.getElementById('sp-progress');if(pr) pr.textContent='—';
+  const btn=document.getElementById('sp-start');if(btn){btn.textContent='▶ Start';btn.disabled=sp.pIdx<0;}
+  const ok=document.getElementById('sp-ok');if(ok) ok.style.display='none';
+}
+
+function spChangeDelay(val){
+  sp.delay=parseInt(val);
+  const lbl=document.getElementById('sp-delay-lbl');if(lbl) lbl.textContent=(val/1000).toFixed(1)+'s';
+  if(sp.running){clearInterval(sp.iv);sp.iv=null;sp.running=false;spToggle();}
+}
+
+// ============================================================
+// ALPHABET
+// ============================================================
+function buildAlphabet(){
+  const grid=document.getElementById('alpha-grid');
+  grid.innerHTML='';
+  ALPHABET.forEach((a,i)=>{
+    const done=!!state.alphaDone['a'+i];
+    const card=document.createElement('div');
+    card.className='alpha-card'+(done?' done':'');
+    card.id='ac-'+i;
+    card.innerHTML=`
+      <div class="alpha-letter">${a.letter}</div>
+      <div class="alpha-assamese">উচ্চাৰণ: ${a.assamese}</div>
+      <div class="alpha-examples"><b>Examples:</b> ${a.examples.map(e=>`<b style="color:var(--accent1)">${e[0]}</b>${e.slice(1)}`).join(' • ')}</div>
+      <div class="alpha-actions">
+        <button class="btn-sm-cyan" onclick="speak('${a.letter}')">🔊</button>
+        <button class="btn-sm-purple" onclick='openPopup("Letter ${a.letter}","উচ্চাৰণ: ${a.assamese} — Tap a word to hear it!",${JSON.stringify(a.examples)})'>📖 Read Examples</button>
+        <button class="btn-sm-green" id="ab-${i}" ${done?'disabled':''} onclick="markAlpha(${i})">${done?'✅':'📌 Mark Read'}</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+function markAlpha(i){
+  if(state.alphaDone['a'+i]) return;
+  state.alphaDone['a'+i]=true;
+  state.score=(state.score||0)+1;
+  saveState();
+  const card=document.getElementById('ac-'+i);if(card) card.classList.add('done');
+  const btn=document.getElementById('ab-'+i);if(btn){btn.disabled=true;btn.textContent='✅';}
+  showToast('✅ '+ALPHABET[i].letter+' learned! +1 Score');
+}
+
+// ============================================================
+// COMBOS
+// ============================================================
+function buildCombos(){
+  const grid=document.getElementById('combo-grid');
+  grid.innerHTML='';
+  COMBOS.forEach((c,i)=>{
+    const done=!!state.comboDone['c'+i];
+    const card=document.createElement('div');
+    card.className='combo-card'+(done?' combo-done':'');
+    card.id='cc-'+i;
+    const exArr=c.examples; // now always an array
+    card.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;">
+        <div>
+          <div class="combo-letters">${c.combo} ${done?'<span style="font-size:14px;color:var(--accent4)">✅</span>':''}</div>
+          <div class="combo-assamese">উচ্চাৰণ: ${c.assamese}</div>
+        </div>
+        <div style="font-size:10px;color:var(--accent3);background:rgba(245,158,11,.1);padding:3px 8px;border-radius:6px;white-space:nowrap;margin-top:4px;">${done?'+2 Score':'2 pts'}</div>
+      </div>
+      <div class="combo-exlist">${exArr.join(' • ')}</div>
+      <div class="combo-actions">
+        <button class="btn-sm-cyan" onclick="speak('${c.combo}')">🔊</button>
+        <button class="btn-sm-purple" onclick='openPopup("${c.combo} Sound","উচ্চাৰণ: ${c.assamese} — Tap each word to hear it!",${JSON.stringify(exArr)})'>📖 Read Examples</button>
+        <button class="btn-sm-green" id="cb-${i}" ${done?'disabled':''} onclick="markCombo(${i})">${done?'✅ Done':'✅ Mark Done'}</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+function markCombo(i){
+  if(state.comboDone['c'+i]) return;
+  state.comboDone['c'+i]=true;
+  state.score=(state.score||0)+2;
+  saveState();
+  const card=document.getElementById('cc-'+i);if(card) card.classList.add('combo-done');
+  const btn=document.getElementById('cb-'+i);if(btn){btn.disabled=true;btn.textContent='✅ Done';}
+  const newLv=getLevel(state.score);
+  if(newLv>state.level){state.level=newLv;showToast('🌟 Level Up! Now Level '+newLv+'!');}
+  else showToast('✅ Sound "'+COMBOS[i].combo+'" learned! +2 Score');
+}
+
+// ============================================================
+// PRONUNCIATION
+// ============================================================
+function buildPronun(){
+  const grid=document.getElementById('pronun-grid');
+  grid.innerHTML='';
+  // Progress header
+  const done_count=Object.keys(state.pronunDone||{}).length;
+  const total=PRONUN_WORDS.length;
+  const pct=Math.round(done_count/total*100);
+  const hdr=document.createElement('div');
+  hdr.id='pronun-hdr';
+  hdr.style.cssText='background:var(--card2);border:2px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;';
+  hdr.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);">📊 Hard Words Progress: <span style="color:var(--accent3);">${done_count}/${total}</span></div>
+      <div style="font-size:11px;color:var(--accent4);">+1 Score each</div>
+    </div>
+    <div class="prog-bar-wrap" style="height:8px;"><div class="prog-bar" style="width:${pct}%"></div></div>
+    <div style="font-size:10px;color:var(--text2);margin-top:4px;">1. Listen to the word 🔊  2. Read it aloud  3. Click <b style="color:var(--accent4)">✅ I Practiced</b></div>
+  `;
+  grid.parentElement.insertBefore(hdr, grid);
+  PRONUN_WORDS.forEach((p,i)=>{
+    const done=!!((state.pronunDone||{})['p'+i]);
+    const card=document.createElement('div');
+    card.className='pronun-card'+(done?' pronun-done':'');
+    card.id='pc-'+i;
+    card.innerHTML=`
+      <div class="pronun-word" style="${done?'opacity:.6':''};">${p.word} ${done?'<span style="font-size:13px">✅</span>':''}</div>
+      <div class="pronun-help">📌 ${p.help}</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <button class="btn-pronun" onclick="speak('${p.word.replace(/'/g,"\'")}')">🔊 Listen &amp; Practice</button>
+        <button class="btn-pronun-done" id="pb-${i}" ${done?'disabled':''} onclick="markPronun(${i})" style="padding:8px 12px;border-radius:8px;border:none;background:${done?'rgba(16,185,129,.2)':'linear-gradient(135deg,var(--accent4),#059669)'};color:${done?'var(--accent4)':'#fff'};font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-body);min-height:38px;touch-action:manipulation;width:100%;">
+          ${done?'✅ Practiced':'✅ I Practiced This'}
+        </button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+function markPronun(i){
+  if(!state.pronunDone) state.pronunDone={};
+  if(state.pronunDone['p'+i]) return;
+  state.pronunDone['p'+i]=true;
+  state.score=(state.score||0)+1;
+  saveState();
+  const card=document.getElementById('pc-'+i);if(card) card.classList.add('pronun-done');
+  const btn=document.getElementById('pb-'+i);
+  if(btn){btn.disabled=true;btn.textContent='✅ Practiced';btn.style.background='rgba(16,185,129,.2)';btn.style.color='var(--accent4)';}
+  // Refresh header
+  const hdr=document.getElementById('pronun-hdr');
+  if(hdr){
+    const dc=Object.keys(state.pronunDone).length;
+    const pct2=Math.round(dc/PRONUN_WORDS.length*100);
+    hdr.querySelector('.prog-bar').style.width=pct2+'%';
+    hdr.querySelector('span').textContent=dc+'/'+PRONUN_WORDS.length;
+  }
+  const newLv=getLevel(state.score);
+  if(newLv>state.level){state.level=newLv;showToast('🌟 Level Up! Now Level '+newLv+'!');}
+  else showToast('✅ "'+PRONUN_WORDS[i].word+'" practiced! +1 Score');
+}
+
+// ============================================================
+// PROGRESS
+// ============================================================
+function renderProgress(){
+  const sc=state.score||0;
+  const li=getLevelInfo(sc);
+  const nxt=scoreToNext(sc);
+  document.getElementById('prog-level-badge').textContent=li.level;
+  document.getElementById('prog-level-name').textContent=li.name;
+  document.getElementById('prog-level-desc').textContent=li.desc;
+  document.getElementById('prog-score-bar').style.width=nxt.pct+'%';
+  document.getElementById('prog-score-detail').textContent=nxt.needed>0?'Need '+nxt.needed+' more for Level '+(li.level+1):'Max Level! 🏆';
+  const alpha=Object.keys(state.alphaDone||{}).length;
+  const combosDone=Object.keys(state.comboDone||{}).length;
+  const pronunDoneCount=Object.keys(state.pronunDone||{}).length;
+  document.getElementById('progress-grid').innerHTML=`
+    <div class="progress-card"><div class="progress-icon">📖</div><div class="progress-num">${state.totalSentences||0}</div><div class="progress-label">Sentences Read</div></div>
+    <div class="progress-card"><div class="progress-icon">🏆</div><div class="progress-num">${state.completedChapters.length}</div><div class="progress-label">Chapters Done</div></div>
+    <div class="progress-card"><div class="progress-icon">⭐</div><div class="progress-num">${sc}</div><div class="progress-label">Total Score</div></div>
+    <div class="progress-card"><div class="progress-icon">🔥</div><div class="progress-num">${state.streak||0}</div><div class="progress-label">Day Streak</div></div>
+    <div class="progress-card"><div class="progress-icon">🔤</div><div class="progress-num">${alpha}</div><div class="progress-label">A–Z Letters</div></div>
+    <div class="progress-card"><div class="progress-icon">🔠</div><div class="progress-num">${combosDone}/${COMBOS.length}</div><div class="progress-label">Sounds Done</div></div>
+    <div class="progress-card"><div class="progress-icon">🗣️</div><div class="progress-num">${pronunDoneCount}/${PRONUN_WORDS.length}</div><div class="progress-label">Hard Words</div></div>
+    <div class="progress-card"><div class="progress-icon">📅</div><div class="progress-num">${state.practiceDays||0}</div><div class="progress-label">Practice Days</div></div>
+  `;
+  const list=document.getElementById('chapter-status-list');
+  list.innerHTML='';
+  CHAPTERS.forEach((ch,i)=>{
+    const pct=getChPct(i);const csc=getChScore(i);const done=state.completedChapters.includes(i);
+    const tries=((state.chAttempts||{})[i]||[]).length;const best=getBestTime(i);
+    const row=document.createElement('div');row.className='card';row.style.padding='10px 12px';
+    row.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-wrap:wrap;gap:4px;">
+        <div style="font-weight:700;font-size:12px;">Ch.${ch.id}: ${ch.name}</div>
+        <div style="font-size:10px;color:${done?'var(--accent4)':'var(--text2)'};">${done?'✅ Complete':csc+'/'+ch.items.length}</div>
+      </div>
+      <div style="font-size:9px;color:var(--text3);margin-bottom:4px;">Need ${ch.scoreToUnlock} to unlock next | Tries: ${tries} | Best: ${best}</div>
+      <div class="prog-bar-wrap"><div class="prog-bar" style="width:${pct}%;background:linear-gradient(90deg,${ch.color||'var(--accent1)'},var(--accent2))"></div></div>
+    `;
+    list.appendChild(row);
+  });
+  renderTimeLog();
+}
+
+function renderTimeLog(){
+  const wrap=document.getElementById('time-log-wrap');
+  const all=[];
+  Object.entries(state.chAttempts||{}).forEach(([ci,arr])=>{
+    arr.forEach(a=>all.push({ch:'Ch.'+(parseInt(ci)+1),sec:a.sec,score:a.score,ok:a.completed,date:a.date||'—'}));
+  });
+  if(!all.length){wrap.innerHTML='<p style="color:var(--text3);font-size:11px;">No attempts yet. Start reading!</p>';return;}
+  const recent=all.slice(-12).reverse();
+  const t=document.createElement('table');t.className='tl-table';
+  t.innerHTML='<thead><tr><th>Chapter</th><th>Time</th><th>Score</th><th>Status</th><th>Date</th></tr></thead>';
+  const tb=document.createElement('tbody');
+  recent.forEach(a=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="val">${a.ch}</td><td class="val">${fmtTime(a.sec)}</td><td class="val">${a.score}</td><td style="color:${a.ok?'var(--accent4)':'var(--accent3)'}">${a.ok?'✅':'⏳'}</td><td>${a.date}</td>`;
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);wrap.innerHTML='';wrap.appendChild(t);
+}
+
+// ============================================================
+// REPORT
+// ============================================================
+function generateReport(){
+  const name=document.getElementById('report-name').value.trim()||'Student';
+  const teacher=document.getElementById('report-teacher').value.trim()||'—';
+  const comment=document.getElementById('report-comment').value.trim()||'Keep practising English reading every day!';
+  const sc=state.score||0;const li=getLevelInfo(sc);
+  const today=new Date().toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'});
+  const pct=Math.round(state.completedChapters.length/CHAPTERS.length*100);
+  if(typeof window.jspdf==='undefined'&&typeof jspdf==='undefined'){alert('PDF library loading... try again!');return;}
+  const {jsPDF}=window.jspdf||jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  doc.setFillColor(10,14,26);doc.rect(0,0,210,297,'F');
+  doc.setFillColor(20,28,53);doc.rect(0,0,210,36,'F');
+  doc.setTextColor(0,212,255);doc.setFontSize(14);doc.setFont('helvetica','bold');
+  doc.text('ALIEN INSTITUTE OF COMPUTER',105,12,{align:'center'});
+  doc.setFontSize(10);doc.setTextColor(200,200,255);
+  doc.text('English Reading Practice — Progress Report',105,20,{align:'center'});
+  doc.setFontSize(8);doc.setTextColor(100,116,139);doc.text('Date: '+today,105,27,{align:'center'});
+  doc.setFillColor(20,36,80);doc.roundedRect(14,42,182,26,4,4,'F');
+  doc.setTextColor(0,212,255);doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('Student:',18,51);
+  doc.setTextColor(232,240,254);doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text(name,40,51);
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(148,163,184);
+  doc.text('Teacher: '+teacher,18,60);doc.text('Level '+li.level+': '+li.name,110,60);
+  const stats=[['Chapters Done',state.completedChapters.length+'/'+CHAPTERS.length],['Sentences Read',state.totalSentences||0],['Total Score',sc],['Level','Lv.'+li.level+' '+li.name],['Streak',state.streak+'d'],['Practice Days',state.practiceDays||0],['Letters Learned',Object.keys(state.alphaDone).length+'/26'],['Completion',pct+'%']];
+  doc.setFontSize(10);doc.setTextColor(0,212,255);doc.setFont('helvetica','bold');doc.text('Performance Summary',14,78);
+  doc.setDrawColor(0,212,255);doc.setLineWidth(0.3);doc.line(14,80,196,80);
+  stats.forEach((s,i)=>{const x=i%2===0?14:110;const y=86+Math.floor(i/2)*15;doc.setFillColor(26,36,68);doc.roundedRect(x,y-4,88,12,3,3,'F');doc.setTextColor(148,163,184);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.text(s[0],x+3,y+1);doc.setTextColor(0,212,255);doc.setFont('helvetica','bold');doc.setFontSize(10);doc.text(String(s[1]),x+3,y+7);});
+  const yb=150;doc.setFontSize(8);doc.setTextColor(148,163,184);doc.setFont('helvetica','normal');doc.text('Overall Completion:',14,yb);doc.setFillColor(26,36,68);doc.roundedRect(14,yb+3,182,7,3,3,'F');doc.setFillColor(0,180,220);doc.roundedRect(14,yb+3,Math.max(3,182*(pct/100)),7,3,3,'F');doc.setTextColor(232,240,254);doc.setFontSize(7);doc.text(pct+'%',105,yb+7.5,{align:'center'});
+  doc.setFillColor(26,36,68);doc.roundedRect(14,166,182,24,4,4,'F');doc.setTextColor(0,212,255);doc.setFontSize(8);doc.setFont('helvetica','bold');doc.text("Teacher's Comment:",18,174);doc.setTextColor(200,200,200);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text(doc.splitTextToSize(comment,170),18,180);
+  doc.setFillColor(15,22,41);doc.rect(0,272,210,25,'F');doc.setTextColor(100,116,139);doc.setFontSize(7);doc.text('Alien Institute of Computer — English Reading Practice',105,280,{align:'center'});doc.text('Keep reading every day! 🚀',105,286,{align:'center'});
+  doc.save('AIC_Report_'+name.replace(/\s/g,'_')+'.pdf');
+  showToast('📄 Report downloaded!');
+}
+
+// ============================================================
+// RESET
+// ============================================================
+function confirmReset(){
+  if(confirm('Reset ALL progress? Cannot be undone!')){
+    localStorage.removeItem('aic_v3');
+    state={score:0,streak:0,lastDate:'',level:1,totalSentences:0,completedChapters:[],sentenceDone:{},alphaDone:{},comboDone:{},pronunDone:{},practiceDays:0,chAttempts:{},studentName:''};
+    saveState();buildChapterGrid();buildAlphabet();renderProgress();
+    showToast('🔄 Progress reset!');
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function submitName(){
+  const inp=document.getElementById('name-input');
+  const name=(inp?inp.value.trim():'');
+  if(!name){
+    if(inp){inp.style.borderColor='var(--accent5)';inp.placeholder='Please enter your name!';}
+    return;
+  }
+  state.studentName=name;
+  saveState();
+  // Pre-fill report name
+  const rn=document.getElementById('report-name');if(rn) rn.value=name;
+  document.getElementById('name-screen').style.display='none';
+  showToast('Welcome, '+name+'! 🎉 Let\'s start reading!');
+}
+
+function init(){
+  buildStars();loadState();
+  buildChapterGrid();buildAlphabet();buildCombos();buildPronun();
+  updateHeader();
+  // Show name screen if no name saved
+  if(!state.studentName){
+    document.getElementById('name-screen').style.display='flex';
+    setTimeout(()=>{const inp=document.getElementById('name-input');if(inp)inp.focus();},300);
+  } else {
+    document.getElementById('name-screen').style.display='none';
+    const rn=document.getElementById('report-name');if(rn) rn.value=state.studentName;
+  }
+}
+init();
+</script>
+
+<!-- NAME SCREEN MODAL -->
+<div id="name-screen" style="position:fixed;inset:0;background:rgba(10,14,26,0.98);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--card);border:2px solid var(--accent1);border-radius:20px;padding:28px 22px;width:100%;max-width:420px;text-align:center;box-shadow:0 0 60px var(--glow1);">
+    <div style="font-size:48px;margin-bottom:10px;">👽</div>
+    <div style="font-family:var(--font-head);font-size:clamp(12px,4vw,18px);color:var(--accent1);letter-spacing:2px;margin-bottom:4px;">ALIEN INSTITUTE OF COMPUTER</div>
+    <div style="font-family:var(--font-head);font-size:clamp(15px,5vw,24px);font-weight:900;background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">English Reading Practice</div>
+    <div style="color:var(--text2);font-size:12px;margin-bottom:24px;">Learn to Read English Step by Step 🚀</div>
+    <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-bottom:20px;">
+      <label style="display:block;font-size:12px;color:var(--accent3);margin-bottom:8px;font-weight:700;">👤 Enter Your Name to Begin</label>
+      <input type="text" id="name-input" placeholder="Type your name here..." maxlength="40"
+        style="width:100%;padding:12px 14px;border-radius:10px;border:2px solid var(--accent1);background:var(--card);color:var(--text);font-family:var(--font-body);font-size:15px;text-align:center;-webkit-appearance:none;outline:none;"
+        onkeydown="if(event.key==='Enter')submitName()">
+    </div>
+    <button onclick="submitName()" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent2),var(--accent1));color:#fff;font-family:var(--font-head);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;min-height:50px;touch-action:manipulation;">
+      🚀 START LEARNING
+    </button>
+    <div style="color:var(--text3);font-size:10px;margin-top:12px;">No microphone needed • Click to read • Track your progress</div>
+  </div>
+</div>
+
+</body>
+</html>
