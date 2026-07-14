@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Alien Institute of Computer — Shortcut Signal Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#070a16;
+  --bg-1:#0d1330;
+  --surface:#121a3a;
+  --surface-2:#171f45;
+  --line:#2a3568;
+  --teal:#00e5a0;
+  --teal-dim:#0a5c47;
+  --violet:#7c5cff;
+  --amber:#ffb454;
+  --red:#ff5c7a;
+  --text:#e8ecf7;
+  --text-dim:#93a0c9;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-as:'Noto Sans Bengali',sans-serif;
+  --radius:18px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(60% 50% at 15% 0%, rgba(124,92,255,0.20), transparent 60%),
+    radial-gradient(50% 45% at 100% 15%, rgba(0,229,160,0.14), transparent 60%),
+    radial-gradient(80% 60% at 50% 100%, rgba(0,229,160,0.08), transparent 60%),
+    var(--bg-0);
+  color:var(--text);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;}
+.wrap{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:clamp(14px,4vw,32px);
+}
+.brand{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  margin-bottom:clamp(14px,3vw,22px);
+}
+.brand .mark{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-display);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-size:clamp(11px,2.6vw,13px);
+  color:var(--teal);
+  border:1px solid var(--teal-dim);
+  background:rgba(0,229,160,0.06);
+  padding:6px 14px;border-radius:100px;
+  margin-bottom:12px;
+}
+.brand .mark .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px 2px var(--teal);animation:pulse 1.6s infinite;}
+.brand h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(24px,5.4vw,42px);
+  margin:0;line-height:1.05;
+  letter-spacing:-0.01em;
+}
+.brand h1 span{color:var(--teal);}
+.brand p{
+  margin:8px 0 0;color:var(--text-dim);
+  font-size:clamp(13px,3vw,15px);
+}
+.brand p.as{font-family:var(--font-as);font-size:clamp(13px,3vw,15px);margin-top:4px;}
+
+.card{
+  width:100%;max-width:640px;
+  background:linear-gradient(180deg, var(--surface), var(--surface-2));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:clamp(18px,4.5vw,32px);
+  box-shadow:0 20px 60px -20px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.03);
+  position:relative;
+}
+
+/* ---------- Screens ---------- */
+.screen{display:none;animation:fade .35s ease;}
+.screen.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* Name entry */
+.field-label{font-size:13px;color:var(--text-dim);margin-bottom:8px;display:block;font-weight:600;letter-spacing:.02em;}
+.name-input{
+  width:100%;padding:14px 16px;border-radius:12px;
+  background:var(--bg-1);border:1px solid var(--line);
+  color:var(--text);font-family:var(--font-body);font-size:16px;
+  outline:none;transition:border-color .2s, box-shadow .2s;
+}
+.name-input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,229,160,.15);}
+.rules{
+  margin:18px 0;padding:14px 16px;border-radius:12px;
+  background:rgba(124,92,255,.08);border:1px solid rgba(124,92,255,.25);
+  font-size:13.5px;color:var(--text-dim);line-height:1.6;
+}
+.rules b{color:var(--text);}
+.btn{
+  appearance:none;border:none;cursor:pointer;
+  font-family:var(--font-display);font-weight:600;letter-spacing:.02em;
+  font-size:15px;padding:14px 22px;border-radius:12px;
+  background:var(--teal);color:#04231a;
+  width:100%;
+  transition:transform .12s ease, box-shadow .2s ease, opacity .2s;
+  box-shadow:0 8px 20px -6px rgba(0,229,160,.5);
+}
+.btn:hover{transform:translateY(-2px);}
+.btn:active{transform:translateY(0);}
+.btn.secondary{
+  background:transparent;color:var(--text);
+  border:1px solid var(--line);box-shadow:none;
+}
+.btn.ghost{background:transparent;color:var(--teal);box-shadow:none;border:1px dashed var(--teal-dim);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+/* Orbit / level path — signature element */
+.orbit{
+  display:flex;align-items:center;justify-content:center;
+  gap:0;margin-bottom:20px;overflow-x:auto;padding:6px 2px 14px;
+}
+.orbit .seg{display:flex;align-items:center;flex-shrink:0;}
+.node{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:12px;font-weight:700;
+  background:var(--bg-1);border:2px solid var(--line);color:var(--text-dim);
+  flex-shrink:0;transition:all .3s ease;
+}
+.node.done{background:var(--teal);border-color:var(--teal);color:#04231a;}
+.node.current{
+  border-color:var(--teal);color:var(--teal);
+  box-shadow:0 0 0 4px rgba(0,229,160,.15);
+  animation:nodepulse 1.6s infinite;
+}
+.link{width:clamp(14px,4vw,26px);height:2px;background:var(--line);flex-shrink:0;}
+.link.done{background:var(--teal);}
+@keyframes nodepulse{0%,100%{box-shadow:0 0 0 4px rgba(0,229,160,.15);}50%{box-shadow:0 0 0 8px rgba(0,229,160,.05);}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+/* Quiz top bar */
+.quiz-top{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:6px;font-family:var(--font-display);font-size:13px;color:var(--text-dim);
+}
+.quiz-top .lvl{color:var(--teal);font-weight:700;}
+.streak{display:inline-flex;align-items:center;gap:4px;color:var(--amber);font-weight:700;}
+.progress-bar{height:6px;border-radius:100px;background:var(--bg-1);overflow:hidden;margin:10px 0 20px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--teal));border-radius:100px;transition:width .35s ease;}
+
+.timer-ring{
+  position:absolute;top:clamp(18px,4.5vw,32px);right:clamp(18px,4.5vw,32px);
+  width:44px;height:44px;
+}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:4;}
+.timer-ring .bg{stroke:var(--line);}
+.timer-ring .fg{stroke:var(--teal);stroke-linecap:round;transition:stroke-dashoffset 1s linear, stroke .3s;}
+.timer-ring .num{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:14px;font-weight:700;
+}
+
+.q-count{font-size:12px;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;}
+.q-text{
+  font-family:var(--font-display);font-size:clamp(18px,4.6vw,23px);font-weight:600;
+  line-height:1.35;margin:0 0 6px;
+}
+.q-text .hl{color:var(--teal);}
+.q-as{
+  font-family:var(--font-as);color:var(--text-dim);font-size:clamp(14px,3.6vw,16px);
+  margin:0 0 20px;line-height:1.6;
+}
+
+.options{display:grid;grid-template-columns:1fr;gap:10px;}
+@media(min-width:520px){.options{grid-template-columns:1fr 1fr;}}
+.opt{
+  position:relative;
+  font-family:var(--font-display);
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  border-bottom:3px solid var(--line);
+  border-radius:10px;
+  padding:14px 14px;
+  color:var(--text);
+  font-size:clamp(14px,3.6vw,16px);font-weight:600;
+  cursor:pointer;text-align:left;
+  transition:all .15s ease;
+  letter-spacing:.02em;
+}
+.opt:hover:not(.disabled){border-color:var(--teal);transform:translateY(-2px);}
+.opt.correct{background:rgba(0,229,160,.14);border-color:var(--teal);color:var(--teal);}
+.opt.wrong{background:rgba(255,92,122,.14);border-color:var(--red);color:var(--red);}
+.opt.disabled{cursor:default;opacity:.85;}
+.opt.disabled:hover{transform:none;}
+.opt .tag{float:right;font-size:11px;opacity:.8;}
+
+.feedback{
+  margin-top:16px;min-height:22px;font-size:14px;font-weight:600;
+}
+.feedback.ok{color:var(--teal);}
+.feedback.bad{color:var(--red);}
+
+.next-row{margin-top:18px;}
+
+/* Result screen */
+.result-badge{
+  width:84px;height:84px;border-radius:50%;margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-weight:700;font-size:26px;
+  background:radial-gradient(circle at 30% 30%, rgba(0,229,160,.35), rgba(0,229,160,.05));
+  border:2px solid var(--teal);color:var(--teal);
+}
+.result-badge.fail{border-color:var(--red);color:var(--red);background:radial-gradient(circle at 30% 30%, rgba(255,92,122,.3), rgba(255,92,122,.05));}
+.result-title{font-family:var(--font-display);text-align:center;font-size:clamp(19px,4.6vw,24px);font-weight:700;margin:0 0 4px;}
+.result-sub{text-align:center;color:var(--text-dim);font-size:14px;margin:0 0 20px;}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.stat{
+  background:var(--bg-1);border:1px solid var(--line);border-radius:12px;
+  padding:14px 8px;text-align:center;
+}
+.stat .n{font-family:var(--font-display);font-size:clamp(18px,4.6vw,24px);font-weight:700;}
+.stat .l{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+.stat.g .n{color:var(--teal);}
+.stat.b .n{color:var(--red);}
+.stat.p .n{color:var(--violet);}
+.speech{
+  background:linear-gradient(180deg, rgba(124,92,255,.10), rgba(124,92,255,.03));
+  border:1px solid rgba(124,92,255,.3);
+  border-radius:14px;padding:16px 18px;margin-bottom:22px;
+  font-size:14.5px;line-height:1.65;color:var(--text);
+}
+.speech b{color:var(--violet);}
+.speech .as{font-family:var(--font-as);display:block;margin-top:8px;color:var(--text-dim);font-size:14px;}
+
+.btn-row{display:flex;gap:10px;}
+.btn-row .btn{flex:1;}
+
+footer.foot{margin-top:22px;color:var(--text-dim);font-size:11.5px;text-align:center;opacity:.7;}
+
+.confetti{position:fixed;top:-10px;pointer-events:none;border-radius:2px;z-index:5;}
+
+@media (max-width:400px){
+  .stat-grid{gap:6px;}
+  .stat{padding:10px 4px;}
+}
+</style>
+</head>
+<body>
+<canvas class="stars" id="stars"></canvas>
+
+<div class="wrap">
+  <div class="brand">
+    <span class="mark"><span class="dot"></span> Alien Institute of Computer</span>
+    <h1>Shortcut <span>Signal</span> Test</h1>
+    <p>Windows Keyboard Shortcut Challenge — earn your rank across the signal levels.</p>
+    <p class="as">উইণ্ডোজ কীবোৰ্ড শ্বৰ্টকাট প্ৰতিযোগিতা — প্ৰতিটো স্তৰত আপোনাৰ স্থান অৰ্জন কৰক।</p>
+  </div>
+
+  <div class="card">
+
+    <!-- SCREEN 0: name entry -->
+    <section class="screen active" id="screen-start">
+      <label class="field-label">Enter your name to begin · আপোনাৰ নাম লিখক</label>
+      <input class="name-input" id="nameInput" maxlength="30" placeholder="e.g. Priyanka Deka" autocomplete="off">
+      <div class="rules">
+        <b>How it works:</b> Level 1 has 5 questions — score <b>80%+</b> to advance.
+        From Level 2 onward, each round has 10 questions — score <b>above 70%</b> to move to the next signal,
+        otherwise you retry the round with fresh questions. Every question appears in English and Assamese.
+      </div>
+      <button class="btn" id="startBtn">Begin Transmission →</button>
+    </section>
+
+    <!-- SCREEN 1: quiz -->
+    <section class="screen" id="screen-quiz">
+      <div class="timer-ring" id="timerRing">
+        <svg width="44" height="44"><circle class="bg" cx="22" cy="22" r="18"></circle><circle class="fg" id="timerCircle" cx="22" cy="22" r="18"></circle></svg>
+        <div class="num" id="timerNum">15</div>
+      </div>
+
+      <div class="orbit" id="orbit"></div>
+
+      <div class="quiz-top">
+        <span>Level <span class="lvl" id="lvlNum">1</span></span>
+        <span class="streak" id="streakBox" style="display:none">🔥 <span id="streakNum">0</span></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+      <div class="q-count" id="qCount">Question 1 of 5</div>
+      <h2 class="q-text" id="qText">—</h2>
+      <p class="q-as" id="qAs">—</p>
+
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="next-row" id="nextRow" style="display:none">
+        <button class="btn" id="nextBtn">Next Signal →</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: level result -->
+    <section class="screen" id="screen-result">
+      <div class="result-badge" id="resultBadge">✓</div>
+      <h2 class="result-title" id="resultTitle">Level Cleared</h2>
+      <p class="result-sub" id="resultSub">Signal decoded</p>
+      <div class="stat-grid">
+        <div class="stat g"><div class="n" id="statCorrect">0</div><div class="l">Correct</div></div>
+        <div class="stat b"><div class="n" id="statWrong">0</div><div class="l">Incorrect</div></div>
+        <div class="stat p"><div class="n" id="statPct">0%</div><div class="l">Score</div></div>
+      </div>
+      <div class="speech" id="speechBox"></div>
+      <div class="btn-row">
+        <button class="btn secondary" id="retryBtn" style="display:none">Retry Level</button>
+        <button class="btn" id="continueBtn">Continue →</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: finale -->
+    <section class="screen" id="screen-finale">
+      <div class="result-badge">🛸</div>
+      <h2 class="result-title">Institute Champion</h2>
+      <p class="result-sub" id="finaleSub">You decoded every signal, Alien Cadet.</p>
+      <div class="stat-grid">
+        <div class="stat g"><div class="n" id="finalCorrect">0</div><div class="l">Total Correct</div></div>
+        <div class="stat b"><div class="n" id="finalWrong">0</div><div class="l">Total Incorrect</div></div>
+        <div class="stat p"><div class="n" id="finalLevels">0</div><div class="l">Levels Cleared</div></div>
+      </div>
+      <div class="speech" id="finaleSpeech"></div>
+      <button class="btn" id="restartBtn">Start New Transmission</button>
+    </section>
+
+  </div>
+
+  <footer class="foot">Alien Institute of Computer · 100 Windows Shortcuts Signal Bank</footer>
+</div>
+
+<script>
+/* ============ DATA: 100 Windows shortcuts, English + Assamese ============ */
+const SHORTCUTS = [
+{k:"Win",f:"Open Start",a:"ষ্টাৰ্ট খোলক"},
+{k:"Win+A",f:"Quick Settings",a:"ক্ষিপ্ৰ ছেটিংছ"},
+{k:"Win+B",f:"Focus system tray",a:"ছিষ্টেম ট্ৰেত ফকাচ কৰক"},
+{k:"Win+C",f:"Copilot/Chat",a:"কোপাইলট/চেট"},
+{k:"Win+D",f:"Show desktop",a:"ডেস্কটপ দেখুৱাওক"},
+{k:"Win+E",f:"Open File Explorer",a:"ফাইল এক্সপ্লোৰাৰ খোলক"},
+{k:"Win+F",f:"Open Feedback/Search",a:"মতামত/সন্ধান খোলক"},
+{k:"Win+G",f:"Game Bar",a:"গেম বাৰ"},
+{k:"Win+H",f:"Voice typing",a:"কণ্ঠস্বৰেৰে টাইপিং"},
+{k:"Win+I",f:"Settings",a:"ছেটিংছ"},
+{k:"Win+K",f:"Cast",a:"কাষ্ট"},
+{k:"Win+L",f:"Lock PC",a:"পিচি লক কৰক"},
+{k:"Win+M",f:"Minimize all",a:"সকলো মিনিমাইজ কৰক"},
+{k:"Win+Shift+M",f:"Restore minimized",a:"মিনিমাইজ কৰা পুনৰুদ্ধাৰ কৰক"},
+{k:"Win+N",f:"Notification center",a:"জাননী কেন্দ্ৰ"},
+{k:"Win+O",f:"Lock orientation",a:"অৰিয়েণ্টেচন লক কৰক"},
+{k:"Win+P",f:"Project display",a:"প্ৰজেক্ট ডিছপ্লে"},
+{k:"Win+R",f:"Run",a:"ৰান কৰক"},
+{k:"Win+S",f:"Search",a:"সন্ধান কৰক"},
+{k:"Win+T",f:"Taskbar apps",a:"টাস্কবাৰ এপ"},
+{k:"Win+U",f:"Accessibility",a:"এক্সেছিবিলিটি"},
+{k:"Win+V",f:"Clipboard history",a:"ক্লিপবোৰ্ড ইতিহাস"},
+{k:"Win+W",f:"Widgets",a:"ৱিজেট"},
+{k:"Win+X",f:"Power User menu",a:"পাৱাৰ ইউজাৰ মেনু"},
+{k:"Win+Z",f:"Snap layouts",a:"স্নেপ লেআউট"},
+{k:"Win+,",f:"Peek desktop",a:"ডেস্কটপ চাওক"},
+{k:"Win+.",f:"Emoji panel",a:"ইমোজি পেনেল"},
+{k:"Win+Pause",f:"System info",a:"ছিষ্টেম তথ্য"},
+{k:"Win+Tab",f:"Task view",a:"টাস্ক ভিউ"},
+{k:"Alt+Tab",f:"Switch apps",a:"এপ সলনি কৰক"},
+{k:"Alt+Esc",f:"Cycle apps",a:"এপ চক্ৰাকাৰে সলনি কৰক"},
+{k:"Alt+F4",f:"Close app",a:"এপ বন্ধ কৰক"},
+{k:"Alt+Space",f:"Window menu",a:"ৱিণ্ডো মেনু"},
+{k:"Alt+Enter",f:"Properties",a:"বৈশিষ্ট্য"},
+{k:"Ctrl+A",f:"Select all",a:"সকলো বাছক"},
+{k:"Ctrl+C",f:"Copy",a:"কপি কৰক"},
+{k:"Ctrl+X",f:"Cut",a:"কাট কৰক"},
+{k:"Ctrl+V",f:"Paste",a:"পেষ্ট কৰক"},
+{k:"Ctrl+Z",f:"Undo",a:"পূৰ্বাবস্থালৈ যাওক"},
+{k:"Ctrl+Y",f:"Redo",a:"পুনৰ কৰক"},
+{k:"Ctrl+S",f:"Save",a:"ছেভ কৰক"},
+{k:"Ctrl+P",f:"Print",a:"প্ৰিণ্ট কৰক"},
+{k:"Ctrl+N",f:"New",a:"নতুন"},
+{k:"Ctrl+O",f:"Open",a:"খোলক"},
+{k:"Ctrl+F",f:"Find",a:"বিচাৰক"},
+{k:"Ctrl+H",f:"Replace",a:"প্ৰতিস্থাপন কৰক"},
+{k:"Ctrl+W",f:"Close tab",a:"টেব বন্ধ কৰক"},
+{k:"Ctrl+T",f:"New tab",a:"নতুন টেব"},
+{k:"Ctrl+Shift+T",f:"Reopen tab",a:"টেব পুনৰ খোলক"},
+{k:"Ctrl+Tab",f:"Next tab",a:"পৰৱৰ্তী টেব"},
+{k:"Ctrl+Shift+Tab",f:"Previous tab",a:"পূৰ্বৱৰ্তী টেব"},
+{k:"Ctrl+L",f:"Address bar",a:"এড্ৰেছ বাৰ"},
+{k:"Ctrl+R",f:"Refresh",a:"ৰিফ্ৰেছ কৰক"},
+{k:"F1",f:"Help",a:"সহায়"},
+{k:"F2",f:"Rename",a:"নাম সলনি কৰক"},
+{k:"F3",f:"Search",a:"সন্ধান কৰক"},
+{k:"F4",f:"Address bar list",a:"এড্ৰেছ বাৰ তালিকা"},
+{k:"F5",f:"Refresh",a:"ৰিফ্ৰেছ কৰক"},
+{k:"F6",f:"Cycle elements",a:"উপাদান চক্ৰাকাৰে সলনি"},
+{k:"F10",f:"Menu bar",a:"মেনু বাৰ"},
+{k:"F11",f:"Fullscreen",a:"পূৰ্ণ স্ক্ৰীণ"},
+{k:"PrtScn",f:"Screenshot to clipboard",a:"ক্লিপবোৰ্ডলৈ স্ক্ৰীণশ্বট"},
+{k:"Win+PrtScn",f:"Save screenshot",a:"স্ক্ৰীণশ্বট ছেভ কৰক"},
+{k:"Alt+PrtScn",f:"Capture active window",a:"সক্ৰিয় ৱিণ্ডো কেপচাৰ কৰক"},
+{k:"Ctrl+Shift+Esc",f:"Task Manager",a:"টাস্ক মেনেজাৰ"},
+{k:"Ctrl+Alt+Del",f:"Security screen",a:"সুৰক্ষা স্ক্ৰীণ"},
+{k:"Shift+Delete",f:"Permanent delete",a:"স্থায়ীভাৱে মচক"},
+{k:"Shift+F10",f:"Context menu",a:"প্ৰসংগ মেনু"},
+{k:"Win+Left",f:"Snap left",a:"বাওঁফালে স্নেপ কৰক"},
+{k:"Win+Right",f:"Snap right",a:"সোঁফালে স্নেপ কৰক"},
+{k:"Win+Up",f:"Maximize",a:"মেক্সিমাইজ কৰক"},
+{k:"Win+Down",f:"Minimize/Restore",a:"মিনিমাইজ/পুনৰুদ্ধাৰ"},
+{k:"Win+Shift+Left",f:"Move to left monitor",a:"বাওঁফালৰ মনিটৰলৈ নিয়ক"},
+{k:"Win+Shift+Right",f:"Move to right monitor",a:"সোঁফালৰ মনিটৰলৈ নিয়ক"},
+{k:"Win+Ctrl+D",f:"New virtual desktop",a:"নতুন ভাৰ্চুৱেল ডেস্কটপ"},
+{k:"Win+Ctrl+Left",f:"Previous desktop",a:"পূৰ্বৱৰ্তী ডেস্কটপ"},
+{k:"Win+Ctrl+Right",f:"Next desktop",a:"পৰৱৰ্তী ডেস্কটপ"},
+{k:"Win+Ctrl+F4",f:"Close desktop",a:"ডেস্কটপ বন্ধ কৰক"},
+{k:"Ctrl+Esc",f:"Open Start",a:"ষ্টাৰ্ট খোলক"},
+{k:"Ctrl+Shift+N",f:"New folder",a:"নতুন ফোল্ডাৰ"},
+{k:"Backspace",f:"Back",a:"পিছলৈ যাওক"},
+{k:"Alt+Left",f:"Back",a:"পিছলৈ যাওক"},
+{k:"Alt+Right",f:"Forward",a:"আগলৈ যাওক"},
+{k:"Alt+Up",f:"Parent folder",a:"অভিভাৱক ফোল্ডাৰ"},
+{k:"Ctrl+Mouse Wheel",f:"Zoom",a:"জুম কৰক"},
+{k:"Win+1",f:"Open taskbar app 1",a:"টাস্কবাৰ এপ ১ খোলক"},
+{k:"Win+2",f:"Open taskbar app 2",a:"টাস্কবাৰ এপ ২ খোলক"},
+{k:"Win+3",f:"Open taskbar app 3",a:"টাস্কবাৰ এপ ৩ খোলক"},
+{k:"Win+4",f:"Open taskbar app 4",a:"টাস্কবাৰ এপ ৪ খোলক"},
+{k:"Win+5",f:"Open taskbar app 5",a:"টাস্কবাৰ এপ ৫ খোলক"},
+{k:"Win+6",f:"Open taskbar app 6",a:"টাস্কবাৰ এপ ৬ খোলক"},
+{k:"Win+7",f:"Open taskbar app 7",a:"টাস্কবাৰ এপ ৭ খোলক"},
+{k:"Win+8",f:"Open taskbar app 8",a:"টাস্কবাৰ এপ ৮ খোলক"},
+{k:"Win+9",f:"Open taskbar app 9",a:"টাস্কবাৰ এপ ৯ খোলক"},
+{k:"Esc",f:"Cancel",a:"বাতিল কৰক"},
+{k:"Tab",f:"Next field",a:"পৰৱৰ্তী ফিল্ড"},
+{k:"Shift+Tab",f:"Previous field",a:"পূৰ্বৱৰ্তী ফিল্ড"},
+{k:"Home",f:"Start of line",a:"শাৰীৰ আৰম্ভণি"},
+{k:"End",f:"End of line",a:"শাৰীৰ শেষ"},
+{k:"Page Up",f:"Scroll up",a:"ওপৰলৈ স্ক্ৰল কৰক"}
+];
+
+/* ============ Motivational speech pools ============ */
+const SPEECH = {
+  excellent:[
+    n=>({en:`${n}, that was a masterclass. Your fingers already speak the machine's language — keep pushing, the next signal won't know what hit it.`,as:"আপুনি ইতিমধ্যে যন্ত্ৰৰ ভাষা কথা কৈছে — আগবাঢ়ি যাওক, পৰৱৰ্তী সংকেততো আপোনাৰ পৰা সাৱধান হ'ব লাগিব।"}),
+    n=>({en:`Sharp, fast, and accurate, ${n}. This is what mastery looks like in progress. Onward, cadet.`,as:"তীক্ষ্ণ, দ্ৰুত আৰু নিখুঁত। এইটোৱেই দক্ষতাৰ প্ৰকৃত ৰূপ। আগবাঢ়ক, শিক্ষাৰ্থী।"}),
+    n=>({en:`${n}, the Institute is taking notes on you. Outstanding round — carry that momentum into the next level.`,as:"ইনষ্টিটিউটে আপোনাৰ প্ৰতি লক্ষ্য ৰাখিছে। এই গতি পৰৱৰ্তী স্তৰলৈ লৈ যাওক।"})
+  ],
+  great:[
+    n=>({en:`Strong round, ${n}. A couple of signals slipped by, but your instincts are clearly trained. Keep going.`,as:"শক্তিশালী ৰাউণ্ড। কেইটামান সংকেত পলাল, কিন্তু আপোনাৰ দক্ষতা স্পষ্ট। আগবাঢ়ি থাকক।"}),
+    n=>({en:`${n}, you're operating above the noise floor already. Tighten up the misses and you'll be unstoppable.`,as:"আপুনি ইতিমধ্যে ভাল স্তৰত আছে। ভুলবোৰ শুধৰাই ল'লে আপোনাক ৰোধ কৰাই টান হ'ব।"}),
+    n=>({en:`Solid work, ${n}. This is exactly the kind of consistency that turns a cadet into a champion.`,as:"ভাল কাম। এইটোৱেই ধাৰাবাহিকতা যিয়ে এজন শিক্ষাৰ্থীক চেম্পিয়নলৈ ৰূপান্তৰিত কৰে।"})
+  ],
+  good:[
+    n=>({en:`${n}, you cleared it — not every signal was clean, but you found the pattern. Review the misses and go again.`,as:"আপুনি সফল হ'ল — সকলো সংকেত নিখুঁত নাছিল, কিন্তু আপুনি ধৰণটো বুজি পালে। ভুলবোৰ পুনৰ চাই আগবাঢ়ক।"}),
+    n=>({en:`Good grit, ${n}. Progress isn't always pretty, but you're moving forward — that's what counts.`,as:"ভাল প্ৰচেষ্টা। উন্নতি সদায় নিখুঁত নহয়, কিন্তু আপুনি আগবাঢ়ি আছে — সেয়াই গুৰুত্বপূৰ্ণ।"}),
+    n=>({en:`${n}, a passing signal is still a signal. Keep your focus sharp for the next round.`,as:"এটা উত্তীৰ্ণ সংকেতও এটা সংকেত। পৰৱৰ্তী ৰাউণ্ডৰ বাবে মনোযোগ ধৰি ৰাখক।"})
+  ],
+  retry:[
+    n=>({en:`${n}, the signal got scrambled this time — that's fine, even the best cadets recalibrate. Try the round again, you've got this.`,as:"এইবাৰ সংকেতটো গোলমাল হৈ গৈছিল — কোনো কথা নাই, শ্ৰেষ্ঠ শিক্ষাৰ্থীসকলেও পুনৰ চেষ্টা কৰে। আকৌ চেষ্টা কৰক।"}),
+    n=>({en:`Not this round, ${n}, but every retry is data. Look closely at what tripped you up and come back stronger.`,as:"এইবাৰ নহ'ল, কিন্তু প্ৰতিটো পুনৰ প্ৰচেষ্টাই আপোনাক শিকায়। কি ভুল হৈছিল বুজি লৈ আকৌ ফিৰি আহক।"}),
+    n=>({en:`${n}, decoding these signals takes practice. Reset, breathe, and take another pass — you're closer than you think.`,as:"সংকেত পঢ়িবলৈ অনুশীলন লাগে। শান্ত হৈ আকৌ চেষ্টা কৰক — আপুনি ভবাতকৈ ওচৰতে আছে।"})
+  ],
+  finale:[
+    n=>({en:`${n}, you've decoded the entire shortcut network of the Alien Institute. That's not luck — that's mastery, earned one keystroke at a time.`,as:"আপুনি এলিয়েন ইনষ্টিটিউটৰ সম্পূৰ্ণ শ্বৰ্টকাট নেটৱৰ্ক ডিকোড কৰিলে। এইটো ভাগ্য নহয় — প্ৰতিটো কীষ্ট্ৰোকৰ পৰা অৰ্জিত দক্ষতা।"}),
+    n=>({en:`Champion status achieved, ${n}. Every level, every signal, every retry — it all led here. Take this confidence to your keyboard, every single day.`,as:"চেম্পিয়ন মৰ্যাদা অৰ্জন কৰিলে। প্ৰতিটো স্তৰ, প্ৰতিটো সংকেত — সকলোৱে ইয়ালৈ লৈ আহিল। এই আত্মবিশ্বাস প্ৰতিদিনৰ কামত লৈ যাওক।"})
+  ]
+};
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function speechFor(tier,name){return pick(SPEECH[tier])(name);}
+
+/* ============ Game state ============ */
+let state = {
+  name:"",
+  level:1,
+  questions:[],
+  qi:0,
+  correct:0,
+  wrong:0,
+  streak:0,
+  bestStreak:0,
+  totalCorrect:0,
+  totalWrong:0,
+  timer:null,
+  timeLeft:15,
+  answered:false
+};
+const MAX_LEVEL = 8;
+
+function levelSize(lvl){ return lvl===1 ? 5 : 10; }
+function passRatio(lvl){ return lvl===1 ? 0.8 : 0.7001; } // "above 70%" -> strictly greater than 0.7
+
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function buildQuestions(n){
+  const picks = shuffle(SHORTCUTS).slice(0,n);
+  return picks.map(target=>{
+    const distractPool = SHORTCUTS.filter(s=>s.f!==target.f && s.k!==target.k);
+    const distractors = shuffle(distractPool).slice(0,3).map(s=>s.k);
+    const opts = shuffle([target.k, ...distractors]);
+    return {target, opts};
+  });
+}
+
+/* ============ Screen helpers ============ */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ============ Orbit render ============ */
+function renderOrbit(){
+  const orbit = document.getElementById('orbit');
+  orbit.innerHTML='';
+  for(let i=1;i<=MAX_LEVEL;i++){
+    const seg = document.createElement('div'); seg.className='seg';
+    const node = document.createElement('div'); node.className='node';
+    node.textContent = i;
+    if(i < state.level) node.classList.add('done'), node.textContent='✓';
+    else if(i === state.level) node.classList.add('current');
+    seg.appendChild(node);
+    if(i<MAX_LEVEL){
+      const link = document.createElement('div'); link.className='link';
+      if(i<state.level) link.classList.add('done');
+      seg.appendChild(link);
+    }
+    orbit.appendChild(seg);
+  }
+}
+
+/* ============ Timer ============ */
+const TIME_PER_Q = 15;
+const CIRC = 2*Math.PI*18;
+function startTimer(){
+  clearInterval(state.timer);
+  state.timeLeft = TIME_PER_Q;
+  const fg = document.getElementById('timerCircle');
+  const num = document.getElementById('timerNum');
+  fg.style.strokeDasharray = CIRC;
+  fg.style.strokeDashoffset = 0;
+  fg.style.stroke = 'var(--teal)';
+  num.textContent = state.timeLeft;
+  state.timer = setInterval(()=>{
+    state.timeLeft--;
+    num.textContent = Math.max(state.timeLeft,0);
+    const pct = state.timeLeft/TIME_PER_Q;
+    fg.style.strokeDashoffset = CIRC*(1-pct);
+    if(state.timeLeft<=5) fg.style.stroke='var(--red)';
+    if(state.timeLeft<=0){
+      clearInterval(state.timer);
+      if(!state.answered) lockAnswer(null);
+    }
+  },1000);
+}
+
+/* ============ Sound (WebAudio, no assets) ============ */
+let actx;
+function beep(freq,dur,type='sine'){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const o=actx.createOscillator(), g=actx.createGain();
+    o.type=type;o.frequency.value=freq;
+    o.connect(g);g.connect(actx.destination);
+    g.gain.setValueAtTime(0.09,actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime+dur);
+    o.start();o.stop(actx.currentTime+dur);
+  }catch(e){}
+}
+
+/* ============ Quiz flow ============ */
+function startLevel(){
+  state.questions = buildQuestions(levelSize(state.level));
+  state.qi=0; state.correct=0; state.wrong=0; state.streak=0;
+  renderOrbit();
+  document.getElementById('lvlNum').textContent = state.level;
+  show('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  state.answered=false;
+  const total = state.questions.length;
+  const q = state.questions[state.qi];
+  document.getElementById('qCount').textContent = `Question ${state.qi+1} of ${total}`;
+  document.getElementById('progressFill').style.width = `${(state.qi/total)*100}%`;
+  document.getElementById('qText').innerHTML = `Which shortcut performs: <span class="hl">${q.target.f}</span>?`;
+  document.getElementById('qAs').textContent = `কোনটো শ্বৰ্টকাটে এই কাম কৰে: ${q.target.a}?`;
+  document.getElementById('feedback').textContent='';
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('nextRow').style.display='none';
+
+  const streakBox = document.getElementById('streakBox');
+  if(state.streak>=3){streakBox.style.display='inline-flex';document.getElementById('streakNum').textContent=state.streak;}
+  else streakBox.style.display='none';
+
+  const optsWrap = document.getElementById('options');
+  optsWrap.innerHTML='';
+  q.opts.forEach(optKey=>{
+    const btn = document.createElement('button');
+    btn.className='opt';
+    btn.textContent = optKey;
+    btn.onclick=()=>lockAnswer(optKey);
+    optsWrap.appendChild(btn);
+  });
+  startTimer();
+}
+
+function lockAnswer(chosenKey){
+  if(state.answered) return;
+  state.answered = true;
+  clearInterval(state.timer);
+  const q = state.questions[state.qi];
+  const correctKey = q.target.k;
+  const isCorrect = chosenKey === correctKey;
+
+  document.querySelectorAll('.opt').forEach(btn=>{
+    btn.classList.add('disabled');
+    if(btn.textContent===correctKey) btn.classList.add('correct');
+    else if(btn.textContent===chosenKey) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  if(isCorrect){
+    state.correct++; state.totalCorrect++; state.streak++; state.bestStreak=Math.max(state.bestStreak,state.streak);
+    fb.textContent = `Correct — ${correctKey} does it. / সঠিক!`;
+    fb.className='feedback ok';
+    beep(880,0.15,'triangle');
+  } else {
+    state.wrong++; state.totalWrong++; state.streak=0;
+    fb.textContent = chosenKey ? `Not quite — correct answer is ${correctKey}.` : `Time's up — correct answer is ${correctKey}.`;
+    fb.className='feedback bad';
+    beep(180,0.25,'sawtooth');
+  }
+  document.getElementById('progressFill').style.width = `${((state.qi+1)/state.questions.length)*100}%`;
+  document.getElementById('nextRow').style.display='block';
+  document.getElementById('nextBtn').textContent = (state.qi+1<state.questions.length) ? 'Next Signal →' : 'See Results →';
+}
+
+document.getElementById('nextBtn').onclick=()=>{
+  state.qi++;
+  if(state.qi < state.questions.length){
+    renderQuestion();
+  } else {
+    finishLevel();
+  }
+};
+
+function finishLevel(){
+  const total = state.questions.length;
+  const ratio = state.correct/total;
+  const passed = ratio >= passRatio(state.level);
+  const pct = Math.round(ratio*100);
+
+  document.getElementById('statCorrect').textContent = state.correct;
+  document.getElementById('statWrong').textContent = state.wrong;
+  document.getElementById('statPct').textContent = pct+'%';
+
+  const badge = document.getElementById('resultBadge');
+  const title = document.getElementById('resultTitle');
+  const sub = document.getElementById('resultSub');
+  const retryBtn = document.getElementById('retryBtn');
+  const continueBtn = document.getElementById('continueBtn');
+
+  let tier;
+  if(!passed){ tier='retry'; }
+  else if(pct>=90){ tier='excellent'; }
+  else if(pct>=80){ tier='great'; }
+  else { tier='good'; }
+
+  const sp = speechFor(tier, state.name);
+  document.getElementById('speechBox').innerHTML = `<b>Transmission from HQ:</b> ${sp.en}<span class="as">${sp.as}</span>`;
+
+  if(passed){
+    badge.className='result-badge'; badge.textContent='✓';
+    title.textContent = state.level===MAX_LEVEL ? 'Final Signal Cleared!' : 'Level Cleared';
+    sub.textContent = `${state.correct}/${total} correct — ${pct}% · threshold met`;
+    retryBtn.style.display='none';
+    continueBtn.textContent = state.level===MAX_LEVEL ? 'Claim Champion Status →' : 'Continue →';
+    launchConfetti();
+    beep(660,0.15);setTimeout(()=>beep(990,0.2),150);
+  } else {
+    badge.className='result-badge fail'; badge.textContent='↻';
+    title.textContent = 'Signal Lost — Retry Round';
+    sub.textContent = `${state.correct}/${total} correct — ${pct}% · needed ${Math.round(passRatio(state.level)*100)}%+`;
+    retryBtn.style.display='block';
+    continueBtn.style.display='none';
+  }
+  if(passed) continueBtn.style.display='block';
+
+  show('screen-result');
+}
+
+document.getElementById('retryBtn').onclick=()=>{ startLevel(); };
+document.getElementById('continueBtn').onclick=()=>{
+  if(state.level===MAX_LEVEL){ finale(); }
+  else { state.level++; startLevel(); }
+};
+
+function finale(){
+  document.getElementById('finalCorrect').textContent = state.totalCorrect;
+  document.getElementById('finalWrong').textContent = state.totalWrong;
+  document.getElementById('finalLevels').textContent = MAX_LEVEL;
+  const sp = speechFor('finale', state.name);
+  document.getElementById('finaleSpeech').innerHTML = `<b>Final Transmission:</b> ${sp.en}<span class="as">${sp.as}</span>`;
+  document.getElementById('finaleSub').textContent = `${state.name}, you cleared all ${MAX_LEVEL} signal levels.`;
+  launchConfetti(60);
+  show('screen-finale');
+}
+
+document.getElementById('restartBtn').onclick=()=>{
+  state = {name:state.name,level:1,questions:[],qi:0,correct:0,wrong:0,streak:0,bestStreak:0,totalCorrect:0,totalWrong:0,timer:null,timeLeft:15,answered:false};
+  show('screen-start');
+  document.getElementById('nameInput').value = state.name;
+};
+
+/* ============ Start screen ============ */
+document.getElementById('startBtn').onclick=()=>{
+  const val = document.getElementById('nameInput').value.trim();
+  if(!val){ document.getElementById('nameInput').focus(); document.getElementById('nameInput').style.borderColor='var(--red)'; return; }
+  state.name = val;
+  startLevel();
+};
+document.getElementById('nameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('startBtn').click(); });
+
+/* ============ Confetti ============ */
+function launchConfetti(n=36){
+  const colors=['#00e5a0','#7c5cff','#ffb454','#ff5c7a','#e8ecf7'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');
+    el.className='confetti';
+    const size=6+Math.random()*6;
+    el.style.width=size+'px';el.style.height=size*0.5+'px';
+    el.style.left=Math.random()*100+'vw';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.transform=`rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(el);
+    const duration=2200+Math.random()*1400;
+    const drift=(Math.random()-0.5)*200;
+    el.animate([
+      {transform:`translate(0,0) rotate(0deg)`,opacity:1},
+      {transform:`translate(${drift}px, 100vh) rotate(${360+Math.random()*360}deg)`,opacity:0.9}
+    ],{duration,easing:'cubic-bezier(.2,.6,.4,1)'});
+    setTimeout(()=>el.remove(),duration+50);
+  }
+}
+
+/* ============ Ambient starfield background ============ */
+(function stars(){
+  const c=document.getElementById('stars');
+  const ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  const pts=Array.from({length:110},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.4+0.2,s:Math.random()*0.015+0.002,p:Math.random()*Math.PI*2}));
+  function frame(){
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle='#ffffff';
+    pts.forEach(p=>{
+      p.p+=p.s;
+      const alpha=0.25+0.5*Math.abs(Math.sin(p.p));
+      ctx.globalAlpha=alpha;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();
+    });
+    ctx.globalAlpha=1;
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>
