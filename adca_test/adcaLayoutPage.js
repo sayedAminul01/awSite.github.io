@@ -52,11 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 'test5',
-            title: 'Coming Soon',
+            title: 'Shortcut Test',
             icon: 'fa-solid fa-globe',
-            postCount: 0,
+            postCount: 50,
             description: 'Web development skills test',
-            url: './tests/web-dev.html'
+            url: '../adcaCourseTestContent/Alien_Institute_Shortcut_Test'
         },
         {
             id: 'test6',
