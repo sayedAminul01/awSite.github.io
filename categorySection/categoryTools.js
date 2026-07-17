@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-list-check',
             postCount: "A smart to-do list tool designed to simplify your life. Plan tasks, set priorities, and achieve more every day.",
             description: 'Loan_Tools',
-            url: 'https://todo.servics.xyz/'
+            url: 'https://todo.alienweb.in/'
         },
         {
             id: 'online-resources',
