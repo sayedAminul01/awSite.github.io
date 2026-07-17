@@ -351,12 +351,43 @@
     <button class="backup-btn" onclick="document.getElementById('importFile').click()">⬆ Backup Load Karo</button>
     <input type="file" id="importFile" accept=".json" onchange="importData(event)">
   </div>
-  <div class="note">Data sirf is browser tab ki memory mein hai — page refresh ya band karne se mit jayega. Isliye kaam khatam karne se pehle "Backup Download" zaroor daba lo, aur agli baar "Backup Load" se wapas la sakte ho.</div>
+  <div class="note">Data is browser ke localStorage mein save hota hai (isi device, isi browser mein hamesha rahega). Phir bhi, kabhi kabhar "Backup Download" karke JSON file save kar lena achha rahega — agar browser data clear ho jaye to bhi tumhara data safe rahega.</div>
 
 </div>
 
 <script>
-  let entries = [];
+  const STORAGE_KEY = 'sochbox_entries_v1';
+  let storageAvailable = true;
+  try{
+    const t = '__sochbox_test__';
+    localStorage.setItem(t, '1');
+    localStorage.removeItem(t);
+  }catch(e){
+    storageAvailable = false;
+  }
+
+  function loadFromStorage(){
+    if(!storageAvailable) return [];
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return [];
+      const data = JSON.parse(raw);
+      return Array.isArray(data) ? data.map(d => ({...d, time: new Date(d.time)})) : [];
+    }catch(e){
+      return [];
+    }
+  }
+
+  function saveToStorage(){
+    if(!storageAvailable) return;
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }catch(e){
+      // storage full or blocked — silently ignore, in-memory copy still works
+    }
+  }
+
+  let entries = loadFromStorage();
   let selectedTag = 'neutral';
   let currentFilter = 'all';
 
@@ -379,11 +410,13 @@
       time: new Date()
     });
     input.value = '';
+    saveToStorage();
     render();
   }
 
   function deleteEntry(id){
     entries = entries.filter(e => e.id !== id);
+    saveToStorage();
     render();
   }
 
@@ -479,6 +512,7 @@
         const data = JSON.parse(e.target.result);
         if(Array.isArray(data)){
           entries = data.map(d => ({...d, time: new Date(d.time)}));
+          saveToStorage();
           render();
         }
       }catch(err){
