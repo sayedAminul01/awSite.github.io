@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 {
             id: 'css',
             title: 'Cyber Security',
-            icon: 'fa-solid fa-shield-virus',
+            icon: 'fa-solid fa-comment-dots',
             postCount: 1,
             description: 'write your thoughts here',
             // url: './learningZone/computerZone.html',
