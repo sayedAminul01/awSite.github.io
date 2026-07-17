@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
                 {
             id: 'css',
-            title: 'Cyber Security',
+            title: 'Soch inbox',
             icon: 'fa-solid fa-comment-dots',
             postCount: 1,
             description: 'write your thoughts here',
