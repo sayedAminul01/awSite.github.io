@@ -105,7 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-shield-virus',
             postCount: 1,
             description: 'Styling and animations',
-            // url: './learningZone/computerZone.html'
+            // url: './learningZone/computerZone.html',
+            url: './toolsDirectory/sochbox.html'
         },
         {
             id: 'css',
