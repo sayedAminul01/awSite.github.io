@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Cyber Security',
             icon: 'fa-solid fa-shield-virus',
             postCount: 1,
-            description: 'Styling and animations',
+            description: 'write your thoughts here',
             // url: './learningZone/computerZone.html',
             url: './toolsDirectory/sochbox.html'
         },
