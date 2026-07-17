@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>SochBox — Apne Dimag Ki Diary</title>
+<style>
+  :root{
+    --bg:#0f1115;
+    --surface:#171a21;
+    --surface2:#1f232c;
+    --border:#2a2f3a;
+    --text:#e8e6e1;
+    --muted:#8b8f9c;
+    --good:#ffb84d;
+    --good-bg:#3a2c14;
+    --bad:#ff6b6b;
+    --bad-bg:#3a1a1a;
+    --neutral:#7c9cff;
+    --neutral-bg:#1a2340;
+    --radius:14px;
+  }
+  [data-theme="light"]{
+    --bg:#f5f3ee;
+    --surface:#ffffff;
+    --surface2:#eeece5;
+    --border:#ddd8cc;
+    --text:#1c1c1c;
+    --muted:#6b675e;
+    --good-bg:#fff1d6;
+    --bad-bg:#ffe1e1;
+    --neutral-bg:#e4eaff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+    min-height:100vh;
+    transition:background .25s ease, color .25s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:16px 16px 100px;
+  }
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 2px 18px;
+  }
+  .logo{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .logo .title{
+    font-size:1.35rem;
+    font-weight:800;
+    letter-spacing:-0.02em;
+  }
+  .logo .title span{color:var(--neutral);}
+  .logo .sub{
+    font-size:.78rem;
+    color:var(--muted);
+  }
+  .theme-toggle{
+    width:52px;height:30px;
+    border-radius:20px;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    position:relative;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .theme-toggle .knob{
+    position:absolute;
+    top:3px;left:3px;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--neutral);
+    transition:left .2s ease;
+  }
+  [data-theme="light"] .theme-toggle .knob{left:27px;}
+
+  /* mood strip */
+  .strip-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:14px 14px 16px;
+    margin-bottom:16px;
+  }
+  .strip-label{
+    font-size:.72rem;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:10px;
+  }
+  .strip{
+    display:flex;
+    gap:4px;
+    flex-wrap:wrap;
+    min-height:14px;
+  }
+  .dot{
+    width:10px;height:10px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .dot.good{background:var(--good);}
+  .dot.bad{background:var(--bad);}
+  .dot.neutral{background:var(--neutral);}
+  .strip-empty{font-size:.82rem;color:var(--muted);}
+
+  .stats{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+  }
+  .stat{
+    flex:1;
+    text-align:center;
+    padding:8px 4px;
+    border-radius:10px;
+    background:var(--surface2);
+  }
+  .stat .num{font-weight:800;font-size:1.05rem;}
+  .stat .lbl{font-size:.68rem;color:var(--muted);}
+  .stat.good .num{color:var(--good);}
+  .stat.bad .num{color:var(--bad);}
+  .stat.neutral .num{color:var(--neutral);}
+
+  /* composer */
+  .composer{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:14px;
+    margin-bottom:18px;
+  }
+  textarea{
+    width:100%;
+    min-height:90px;
+    resize:vertical;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    color:var(--text);
+    font-size:1rem;
+    font-family:inherit;
+    padding:12px;
+    outline:none;
+  }
+  textarea:focus{border-color:var(--neutral);}
+  .tag-row{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+  }
+  .tag-btn{
+    flex:1;
+    padding:10px 6px;
+    border-radius:10px;
+    border:1.5px solid var(--border);
+    background:var(--surface2);
+    color:var(--muted);
+    font-size:.85rem;
+    font-weight:600;
+    cursor:pointer;
+    min-height:44px;
+  }
+  .tag-btn.active[data-tag="good"]{border-color:var(--good);background:var(--good-bg);color:var(--good);}
+  .tag-btn.active[data-tag="bad"]{border-color:var(--bad);background:var(--bad-bg);color:var(--bad);}
+  .tag-btn.active[data-tag="neutral"]{border-color:var(--neutral);background:var(--neutral-bg);color:var(--neutral);}
+
+  .save-btn{
+    width:100%;
+    margin-top:12px;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    background:var(--neutral);
+    color:#0f1115;
+    font-weight:800;
+    font-size:.95rem;
+    cursor:pointer;
+    min-height:48px;
+  }
+  .save-btn:active{opacity:.85;}
+
+  /* filters */
+  .filters{
+    display:flex;
+    gap:8px;
+    margin-bottom:14px;
+    overflow-x:auto;
+  }
+  .filter-btn{
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--muted);
+    font-size:.82rem;
+    font-weight:600;
+    cursor:pointer;
+    white-space:nowrap;
+    min-height:38px;
+  }
+  .filter-btn.active{
+    background:var(--neutral);
+    color:#0f1115;
+    border-color:var(--neutral);
+  }
+
+  /* entries */
+  .entry{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-left:4px solid var(--neutral);
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:10px;
+  }
+  .entry[data-tag="good"]{border-left-color:var(--good);}
+  .entry[data-tag="bad"]{border-left-color:var(--bad);}
+  .entry-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .entry-text{
+    font-size:.95rem;
+    line-height:1.5;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .entry-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:8px;
+  }
+  .entry-time{font-size:.7rem;color:var(--muted);}
+  .del-btn{
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-size:.75rem;
+    cursor:pointer;
+    padding:6px 8px;
+  }
+  .del-btn:hover{color:var(--bad);}
+  .badge{
+    font-size:.68rem;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:999px;
+    flex-shrink:0;
+  }
+  .badge.good{background:var(--good-bg);color:var(--good);}
+  .badge.bad{background:var(--bad-bg);color:var(--bad);}
+  .badge.neutral{background:var(--neutral-bg);color:var(--neutral);}
+
+  .empty-state{
+    text-align:center;
+    color:var(--muted);
+    font-size:.9rem;
+    padding:40px 10px;
+  }
+
+  /* backup bar */
+  .backup-bar{
+    display:flex;
+    gap:8px;
+    margin-top:20px;
+  }
+  .backup-btn{
+    flex:1;
+    padding:10px;
+    border-radius:10px;
+    border:1px dashed var(--border);
+    background:transparent;
+    color:var(--muted);
+    font-size:.78rem;
+    cursor:pointer;
+    min-height:40px;
+  }
+  .note{
+    font-size:.72rem;
+    color:var(--muted);
+    text-align:center;
+    margin-top:10px;
+    line-height:1.5;
+  }
+  input[type="file"]{display:none;}
+</style>
+</head>
+<body data-theme="dark">
+<div class="wrap">
+
+  <header>
+    <div class="logo">
+      <div class="title">Soch<span>Box</span></div>
+      <div class="sub">Apne dimag ki baatein, ek jagah</div>
+    </div>
+    <div class="theme-toggle" id="themeToggle" role="button" aria-label="Theme badlo">
+      <div class="knob"></div>
+    </div>
+  </header>
+
+  <div class="strip-card">
+    <div class="strip-label">Recent Soch Pattern</div>
+    <div class="strip" id="strip">
+      <div class="strip-empty">Abhi kuch likha nahi — pehli soch niche daalo</div>
+    </div>
+    <div class="stats">
+      <div class="stat good"><div class="num" id="cntGood">0</div><div class="lbl">Achha</div></div>
+      <div class="stat bad"><div class="num" id="cntBad">0</div><div class="lbl">Galat</div></div>
+      <div class="stat neutral"><div class="num" id="cntNeutral">0</div><div class="lbl">Neutral</div></div>
+    </div>
+  </div>
+
+  <div class="composer">
+    <textarea id="thoughtInput" placeholder="Abhi dimag mein kya chal raha hai? Yahan likho..."></textarea>
+    <div class="tag-row">
+      <button class="tag-btn" data-tag="good" onclick="selectTag('good')">✅ Achha</button>
+      <button class="tag-btn" data-tag="neutral" onclick="selectTag('neutral')">🤔 Neutral</button>
+      <button class="tag-btn" data-tag="bad" onclick="selectTag('bad')">❌ Galat</button>
+    </div>
+    <button class="save-btn" onclick="saveEntry()">Soch Save Karo</button>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">Sab</button>
+    <button class="filter-btn" data-filter="good" onclick="setFilter('good')">Achha</button>
+    <button class="filter-btn" data-filter="bad" onclick="setFilter('bad')">Galat</button>
+    <button class="filter-btn" data-filter="neutral" onclick="setFilter('neutral')">Neutral</button>
+  </div>
+
+  <div id="entryList"></div>
+
+  <div class="backup-bar">
+    <button class="backup-btn" onclick="exportData()">⬇ Backup Download Karo</button>
+    <button class="backup-btn" onclick="document.getElementById('importFile').click()">⬆ Backup Load Karo</button>
+    <input type="file" id="importFile" accept=".json" onchange="importData(event)">
+  </div>
+  <div class="note">Data sirf is browser tab ki memory mein hai — page refresh ya band karne se mit jayega. Isliye kaam khatam karne se pehle "Backup Download" zaroor daba lo, aur agli baar "Backup Load" se wapas la sakte ho.</div>
+
+</div>
+
+<script>
+  let entries = [];
+  let selectedTag = 'neutral';
+  let currentFilter = 'all';
+
+  function selectTag(tag){
+    selectedTag = tag;
+    document.querySelectorAll('.tag-btn').forEach(b=>{
+      b.classList.toggle('active', b.dataset.tag === tag);
+    });
+  }
+  selectTag('neutral');
+
+  function saveEntry(){
+    const input = document.getElementById('thoughtInput');
+    const text = input.value.trim();
+    if(!text) return;
+    entries.unshift({
+      id: Date.now(),
+      text,
+      tag: selectedTag,
+      time: new Date()
+    });
+    input.value = '';
+    render();
+  }
+
+  function deleteEntry(id){
+    entries = entries.filter(e => e.id !== id);
+    render();
+  }
+
+  function setFilter(f){
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b=>{
+      b.classList.toggle('active', b.dataset.filter === f);
+    });
+    render();
+  }
+
+  function fmtTime(d){
+    d = new Date(d);
+    return d.toLocaleDateString('hi-IN', {day:'numeric', month:'short'}) + ' · ' +
+           d.toLocaleTimeString('hi-IN', {hour:'2-digit', minute:'2-digit'});
+  }
+
+  function tagLabel(tag){
+    return tag === 'good' ? 'Achha' : tag === 'bad' ? 'Galat' : 'Neutral';
+  }
+
+  function render(){
+    // stats
+    const good = entries.filter(e=>e.tag==='good').length;
+    const bad = entries.filter(e=>e.tag==='bad').length;
+    const neutral = entries.filter(e=>e.tag==='neutral').length;
+    document.getElementById('cntGood').textContent = good;
+    document.getElementById('cntBad').textContent = bad;
+    document.getElementById('cntNeutral').textContent = neutral;
+
+    // strip (last 40, oldest to newest)
+    const strip = document.getElementById('strip');
+    if(entries.length === 0){
+      strip.innerHTML = '<div class="strip-empty">Abhi kuch likha nahi — pehli soch niche daalo</div>';
+    } else {
+      const recent = entries.slice(0,40).slice().reverse();
+      strip.innerHTML = recent.map(e => `<div class="dot ${e.tag}" title="${tagLabel(e.tag)}"></div>`).join('');
+    }
+
+    // list
+    const list = document.getElementById('entryList');
+    const filtered = currentFilter === 'all' ? entries : entries.filter(e=>e.tag===currentFilter);
+    if(filtered.length === 0){
+      list.innerHTML = '<div class="empty-state">Yahan abhi kuch nahi hai</div>';
+      return;
+    }
+    list.innerHTML = filtered.map(e => `
+      <div class="entry" data-tag="${e.tag}">
+        <div class="entry-top">
+          <div class="entry-text">${escapeHtml(e.text)}</div>
+          <span class="badge ${e.tag}">${tagLabel(e.tag)}</span>
+        </div>
+        <div class="entry-meta">
+          <span class="entry-time">${fmtTime(e.time)}</span>
+          <button class="del-btn" onclick="deleteEntry(${e.id})">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', ()=>{
+    const body = document.body;
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  });
+
+  // backup export/import
+  function exportData(){
+    const blob = new Blob([JSON.stringify(entries, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = `sochbox-backup-${stamp}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importData(evt){
+    const file = evt.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e){
+      try{
+        const data = JSON.parse(e.target.result);
+        if(Array.isArray(data)){
+          entries = data.map(d => ({...d, time: new Date(d.time)}));
+          render();
+        }
+      }catch(err){
+        alert('Ye file sahi backup format mein nahi hai.');
+      }
+    };
+    reader.readAsText(file);
+    evt.target.value = '';
+  }
+
+  render();
+</script>
+</body>
+</html>
