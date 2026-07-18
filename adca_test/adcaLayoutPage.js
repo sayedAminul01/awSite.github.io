@@ -54,17 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'test5',
             title: 'Shortcut Test',
             icon: 'fa-solid fa-globe',
-            postCount: 50,
+            postCount: 100,
             description: 'Web development skills test',
             url: '../adcaCourseTestContent/Alien_Institute_Shortcut_Test'
         },
         {
             id: 'test6',
-            title: 'Coming Soon',
+            title: 'Curriculum',
             icon: 'fa-solid fa-diagram-project',
-            postCount: 0,
-            description: 'Data structures and algorithms',
-            url: './tests/data-structures.html'
+            postCount: 220,
+            description: '220 Days Curriculam by aW',
+            url: '../adca/alien-institute-curriculum.html'
         },
         {
             id: 'test3',
