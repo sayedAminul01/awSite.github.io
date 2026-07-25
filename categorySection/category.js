@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const categories = [
         {
             id: 'node',
-            title: 'Biology HS 1st ',
+            title: 'Useful Tools',
             icon: 'fa-solid fa-brain',
             postCount: 01,
             description: 'Backend development',
