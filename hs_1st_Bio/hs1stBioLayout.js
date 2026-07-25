@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'test2',
             title: 'Loading...',
             // icon: 'fa-solid fa-code',
-             icon: 'fa-solid fa-calculator',
+             icon: 'fa-solid fa-screwdriver-wrench',
             postCount: "Biology MCQs ans & ",
             description: 'Practice lesson..',
             url: 'https://computer.alienweb.in/undefined'
