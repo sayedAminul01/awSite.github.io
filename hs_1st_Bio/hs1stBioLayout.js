@@ -26,14 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             url: 'https://computer.alienweb.in/toolsDirectory/sochbox.html'
         },
-         {
-            id: 'test1',
-            title: 'SochBox',
-            icon: 'fa-solid fa-book',
-            postCount: "Apne dimag ki baatein, ek jagah ",
-            // description: 'Practice lesson',
-            url: 'https://computer.alienweb.in/toolsDirectory/sochbox.html'
-        },
+        //  {
+        //     id: 'test1',
+        //     title: 'SochBox',
+        //     icon: 'fa-solid fa-book',
+        //     postCount: "Apne dimag ki baatein, ek jagah ",
+        //     // description: 'Practice lesson',
+        //     url: 'https://computer.alienweb.in/toolsDirectory/sochbox.html'
+        // },
         {
             id: 'test2',
             title: 'Loading...',
