@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // },
         {
             id: 'test1',
-            title: 'Lesson 1',
+            title: 'SochBox',
             icon: 'fa-solid fa-book',
-            postCount: "Biology MCQs ans & ",
+            postCount: "Apne dimag ki baatein, ek jagah ",
             description: 'Practice lesson',
             url: './lesson_1/lesson_1_1.html'
         },
