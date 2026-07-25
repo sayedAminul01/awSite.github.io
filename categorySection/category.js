@@ -4,11 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const categories = [
         {
             id: 'node',
-            title: 'Useful Tools',
-            icon: 'fa-solid fa-brain',
+            title: 'Note Book',
+            icon: 'fa-solid fa-book-open',
             postCount: 01,
             description: 'Backend development',
-            url: './hs_1st_Bio/hs1stBioLayout.html'
+            url: './toolsDirectory/notebook.html'
         },
         {
             id: 'node',
