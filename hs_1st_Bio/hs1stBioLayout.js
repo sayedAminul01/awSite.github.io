@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: 'fa-solid fa-book',
             postCount: "Apne dimag ki baatein, ek jagah ",
             description: 'Practice lesson',
-            url: './lesson_1/lesson_1_1.html'
+            url: 'https://computer.alienweb.in/toolsDirectory/sochbox.html'
+            // url: './lesson_1/lesson_1_1.html'
         },
         {
             id: 'test2',
