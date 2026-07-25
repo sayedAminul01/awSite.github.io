@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'SochBox',
             icon: 'fa-solid fa-book',
             postCount: "Apne dimag ki baatein, ek jagah ",
-            // description: 'Practice lesson',
+
             url: 'https://computer.alienweb.in/toolsDirectory/sochbox.html'
         },
          {
