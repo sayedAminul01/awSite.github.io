@@ -3,43 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alienweb ADCA Test Categories</title>
+
+    <!--
+      This page carries most of the site's search traffic — it sits around
+      position 6 for "adca online test" on roughly 15,000 impressions a quarter.
+      It previously had the title "Alienweb ADCA Test Categories", no meta
+      description, no h1, and no crawlable content (the cards are injected by
+      adcaLayoutPage.js), so Google had almost nothing to build a snippet from
+      and the click rate sat near 2%. Keep the title aligned with the phrase
+      people actually search: "adca online test".
+    -->
+    <title>ADCA Online Test — Free Mock Tests with Answers</title>
+    <meta name="description" content="Free ADCA online test series with answers — month-wise mock tests plus Tally, shortcut keys and troubleshooting practice. No signup, instant results.">
+    <link rel="canonical" href="https://computer.alienweb.in/adca_test/adcaLayoutPage.html">
+    <meta name="robots" content="index, follow, max-snippet:-1">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ADCA Online Test — Free Mock Tests with Answers">
+    <meta property="og:description" content="Free ADCA online test series with answers — month-wise mock tests plus Tally, shortcut keys and troubleshooting practice. No signup, instant results.">
+    <meta property="og:url" content="https://computer.alienweb.in/adca_test/adcaLayoutPage.html">
+    <meta property="og:site_name" content="Alien Institute of Computer">
+    <meta property="og:locale" content="en_IN">
+
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="adcaLayoutPage.css">
 
-<!-- Google Ads -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3056427584192481"
-     crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-layout="in-article"
-     data-ad-format="fluid"
-     data-ad-client="ca-pub-3056427584192481"
-     data-ad-slot="8067325454"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "ADCA Online Test — practice test series",
+      "description": "Free ADCA practice tests covering computer fundamentals, Tally, shortcut keys and troubleshooting.",
+      "url": "https://computer.alienweb.in/adca_test/adcaLayoutPage.html",
+      "numberOfItems": 9,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Month 1 - computer fundamentals (100 questions)", "url": "https://computer.alienweb.in/adca/index.html" },
+        { "@type": "ListItem", "position": 2, "name": "Month 2 - computer generations (50 questions)", "url": "https://computer.alienweb.in/adcaCourseTestContent/generation/index.html" },
+        { "@type": "ListItem", "position": 3, "name": "Welcome Test (50 questions)", "url": "https://computer.alienweb.in/adcaCourseTestContent/index.html" },
+        { "@type": "ListItem", "position": 4, "name": "Troubleshooting Test (50 questions)", "url": "https://computer.alienweb.in/adcaCourseTestContent/Troubleshooting/index.html" },
+        { "@type": "ListItem", "position": 5, "name": "Practice Tally (50 questions)", "url": "https://computer.alienweb.in/tally/index.html" },
+        { "@type": "ListItem", "position": 6, "name": "Shortcut Keys Test (100 questions)", "url": "https://computer.alienweb.in/adcaCourseTestContent/Alien_Institute_Shortcut_Test" },
+        { "@type": "ListItem", "position": 7, "name": "ADCA Curriculum (220 topics)", "url": "https://computer.alienweb.in/adca/alien-institute-curriculum.html" },
+        { "@type": "ListItem", "position": 8, "name": "Final Test (50 questions)", "url": "https://computer.alienweb.in/finalTest/index.html" },
+        { "@type": "ListItem", "position": 9, "name": "ADCA online test - 100 questions with answers", "url": "https://adca.alienweb.in/test/adca-online-test-100-questions.html" }
+      ]
+    }
+    </script>
 
-    
+    <!-- Google Ads -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3056427584192481"
+         crossorigin="anonymous"></script>
 </head>
 <body>
     <section class="categories-section">
         <div class="container">
-            <h2>Practice ADCA</h2>
-            
+            <h1>ADCA Online Test</h1>
+            <p class="intro">Free ADCA practice tests with answers, covering computer fundamentals, computer
+                generations, Tally, shortcut keys and troubleshooting. Every test scores instantly and no
+                signup is needed.</p>
+
+            <!-- The ad lives in the body rather than the head, where it used to sit.
+                 An <ins> element is not valid inside <head>; browsers relocate it, which
+                 left it rendering in an unpredictable place. -->
+            <ins class="adsbygoogle"
+                 style="display:block; text-align:center;"
+                 data-ad-layout="in-article"
+                 data-ad-format="fluid"
+                 data-ad-client="ca-pub-3056427584192481"
+                 data-ad-slot="8067325454"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+
             <div class="categories-filter">
                 <input type="text" id="categorySearch" placeholder="Search tests... " aria-label="Search tests">
             </div>
-            
+
+            <!--
+              adcaLayoutPage.js replaces this list on load. It is written out
+              statically so the tests exist in the HTML for crawlers and for
+              anyone whose JavaScript has not run — this container previously
+              shipped empty, leaving the page with no indexable content at all.
+            -->
             <div class="categories-grid" id="categoriesContainer">
-                <!-- Test cards will be dynamically inserted here -->
+                <ul class="static-test-list">
+                    <li><a href="../adca/index.html">Month 1 &mdash; computer fundamentals</a> &middot; 100 questions</li>
+                    <li><a href="../adcaCourseTestContent/generation/index.html">Month 2 &mdash; computer generations</a> &middot; 50 questions</li>
+                    <li><a href="../adcaCourseTestContent/index.html">Welcome Test</a> &middot; 50 questions</li>
+                    <li><a href="../adcaCourseTestContent/Troubleshooting/index.html">Troubleshooting Test</a> &middot; 50 questions</li>
+                    <li><a href="../tally/index.html">Practice Tally</a> &middot; 50 questions</li>
+                    <li><a href="../adcaCourseTestContent/Alien_Institute_Shortcut_Test">Shortcut Keys Test</a> &middot; 100 questions</li>
+                    <li><a href="../adca/alien-institute-curriculum.html">ADCA Curriculum</a> &middot; 220 topics</li>
+                    <li><a href="../finalTest/index.html">Final Test</a> &middot; 50 questions</li>
+                </ul>
             </div>
+
+            <p class="more-tests">
+                Want a full timed mock test with every answer listed?
+                <a href="https://adca.alienweb.in/test/adca-online-test-100-questions.html">Take the 100-question ADCA online test</a>,
+                or browse <a href="https://adca.alienweb.in/adca/">all ADCA topic tests</a> &mdash;
+                1,236 questions with answers, plus a
+                <a href="https://adca.alienweb.in/certificate.html">certificate at 40% off</a> for scores of 50% or more.
+            </p>
         </div>
     </section>
 
 <script src="adcaLayoutPage.js"></script>
 </body>
 </html>
-
-

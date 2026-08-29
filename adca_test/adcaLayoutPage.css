@@ -44,6 +44,7 @@ body {
     padding: 0 var(--spacing);
 }
 
+h1,
 h2 {
     text-align: center;
     color: var(--text-primary);
@@ -53,6 +54,7 @@ h2 {
     position: relative;
 }
 
+h1::after,
 h2::after {
     content: '';
     position: absolute;
@@ -223,3 +225,54 @@ h2::after {
 .category-test4 .category-icon { color: #4bc0c0; } /* Teal */
 .category-test5 .category-icon { color: #9966ff; } /* Purple */
 .category-test6 .category-icon { color: #ff9f40; } /* Orange */
+
+
+/* ---- added with the SEO fix: intro copy, the no-JS test list, and the
+   cross-link to the full test site on adca.alienweb.in ---- */
+h1 {
+    margin-bottom: 2rem;
+}
+.intro {
+    max-width: 60ch;
+    margin: 0 auto 2.5rem;
+    text-align: center;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+/* adcaLayoutPage.js replaces this list with the cards on load; it only shows
+   when JavaScript has not run yet. */
+.static-test-list {
+    grid-column: 1 / -1;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+}
+.static-test-list li {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    color: var(--text-secondary);
+}
+.static-test-list a {
+    color: var(--text-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+.static-test-list a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+.more-tests {
+    max-width: 62ch;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+.more-tests a {
+    color: var(--accent-color);
+    font-weight: 600;
+}
